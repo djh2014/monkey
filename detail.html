@@ -18,16 +18,6 @@
         <link href='http://fonts.googleapis.com/css?family=Ubuntu' rel='stylesheet' type='text/css'>
         -->
         <link href='css/font-arimo.css' rel='stylesheet' type='text/css'>
-        <!-- uncomment if you want use google cdn
-        <link href='http://fonts.googleapis.com/css?family=Arimo' rel='stylesheet' type='text/css'>
-        -->
-        <!-- End Font -->
-
-        <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
-        <!--[if lt IE 9]>
-          <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-        <![endif]-->
-
         <!-- Le fav and touch icons -->
         <link rel="shortcut icon" href="ico/favicon.ico">
         <link rel="apple-touch-icon-precomposed" sizes="144x144" href="ico/apple-touch-icon-144-precomposed.png">
@@ -49,7 +39,7 @@
 
     </head>
 
-    <body>
+    <body ng-app="mainApp" ng-controller="UserCtrl">
 
         <section id="main" class="container">
             <div class="row" style="margin-bottom: 20px">
@@ -82,73 +72,8 @@
                         </a>
 
                         <div class="nav-collapse">
-                            <!--<ul class="nav">
-                                <li class="active main-menu-element"><a href="#"><i class="icon-home"></i> Home</a></li>
-                            </ul>-->
-                            <!--<ul class="nav sf-menu">
-                                <li class="dropdown main-menu-element">
-                                    <a href="#category" class="dropdown-toggle"><i class="icon-th-list"></i> Categories  <b class="caret"></b></a>
-                                    <ul class="child-dropdown-menu">
-                                        <li><a href="categories.html">Books</a></li>
-                                        <li class="divider"></li>
-                                        <li>
-                                            <a href="categories.html">Electronics <i class="icon-circle-arrow-right pull-right"></i></a>
-                                            <ul class="child-dropdown-menu submenu">
-                                                <li><a href="category.html">TV & Video</a></li>
-                                                <li><a href="category.html">Cell Phones</a></li>
-                                                <li><a href="category.html">MP3 Players</a></li>
-                                                <li><a href="category.html">Video Games</a></li>
-                                                <li><a href="category.html">Software</a></li>
-                                            </ul>
-                                        </li>
-                                        <li class="divider"></li>
-                                        <li>
-                                            <a href="categories.html">Clothing <i class="icon-circle-arrow-right pull-right"></i></a>
-                                            <ul class="child-dropdown-menu submenu">
-                                                <li><a href="category.html">Clothing</a></li>
-                                                <li><a href="category.html">Shoes</a></li>
-                                                <li><a href="category.html">Handbags</a></li>
-                                                <li><a href="category.html">Accessories</a></li>
-                                            </ul>
-                                        </li>
-                                    </ul>
-                                </li>
-                            </ul>-->
-                            <!--<ul class="nav">
-                                <li class="dropdown main-menu-element">
-                                    <a data-toggle="dropdown" class="dropdown-toggle" href="#"><i class="icon-info-sign"></i> Demo Pages <b class="caret"></b></a>
-                                    <ul class="dropdown-menu">
-                                         <li><a href="categories.html">Categories</a></li>
-                                         <li><a href="category.html">Category</a></li>
-                                         <li><a href="detail.html">Detail</a></li>
-                                         <li><a href="about.html">About</a></li>
-                                         <li><a href="pricing.html">Pricing</a></li>
-                                         <li><a href="contact.html">Contact</a></li>
-                                    </ul>
-                                </li>
-                                <li class="divider-vertical"></li>
-                            </ul>-->
 
                             <form action="index.html" class="navbar-search pull-left">
-                                <!--<ul class="nav">
-                                    <li class="dropdown">
-                                        <a data-toggle="dropdown" class="dropdown-toggle" href="#"><span id="label-search-in">All</span> <b class="caret"></b></a>
-                                        <input type="hidden" value="" id="search-in-category"/>
-                                        <ul id="search-in-content" class="dropdown-menu">
-                                            <li data-value="cate0"><a href="javascript:;;" title="All Department">All Department</a></li>
-                                            <li data-value="cate1"><a href="javascript:;;" title="Baby">Baby</a></li>
-                                            <li data-value="cate2"><a href="javascript:;;" title="Beauty">Beauty</a></li>
-                                            <li data-value="cate3"><a href="javascript:;;" title="Books">Books</a></li>
-                                            <li data-value="cate4"><a href="javascript:;;" title="Cell phones">Cell phones</a></li>
-                                            <li data-value="cate5"><a href="javascript:;;" title="Computers">Computers</a></li>
-                                            <li data-value="cate6"><a href="javascript:;;" title="Gift Cards">Gift Cards</a></li>
-                                            <li data-value="cate7"><a href="javascript:;;" title="Movie">Movie</a></li>
-                                            <li data-value="cate8"><a href="javascript:;;" title="Music">Music</a></li>
-                                            <li data-value="cate9"><a href="javascript:;;" title="Shoes">Shoes</a></li>
-                                            <li data-value="cate10"><a href="javascript:;;" title="Software">Software</a></li>
-                                        </ul>
-                                    </li>
-                                </ul>-->
 
                                 <input type="text" placeholder="Search" class="search-query span2">
                                 <button type="submit" class="btn"><i class="icon-search"></i></button>
@@ -176,21 +101,6 @@
             <!-- Detail products -->
             
             <!-- breadcrumb -->
-            <!--<div class="row">
-                <div class="span12">                    
-                    <ul class="breadcrumb">
-                        <li>
-                            <a href="#">Home</a> <span class="divider">/</span>
-                        </li>
-                        <li>
-                            <a href="#">Developer</a> <span class="divider">/</span>
-                        </li>
-                        <li class="active">
-                            Person
-                        </li>
-                    </ul>
-                </div>
-            </div>-->
             <div class="row">
                 <section id="slider">
                     <div class="span5">
@@ -205,9 +115,6 @@
                                 <td>
                                     <span class="rating-static rating-45" style="float: right;"></span>
                                 </td>
-                                <!--<td>
-                                    (2,908 customer reviews)
-                                </td>-->
                             </tr>
                             <tr>
                                 <td>Company:</td>
@@ -227,12 +134,6 @@
                             <tr>
                                 <td colspan="1" style="text-align:left">
                                     <div class="btn-toolbar">
-                                        <!--<div class="btn-group">
-                                            <a href="#" class="btn"><i class="icon-heart"></i> Wishlist</a>
-                                        </div>
-                                        <div class="btn-group">
-                                            <a href="#" class="btn"><i class="icon-ok"></i> Compare</a>
-                                        </div>-->
                                         <div class="btn-group pull-left addition">
                                             <a class="btn" id="qty-minus" href="javascript:;;"><i class="icon-minus-sign"></i></a>
                                             <a class="btn active" href="#"><span id="item_qty">1</span></a>
@@ -305,141 +206,7 @@
                                     </ul>
                                 </div>
                             </div>
-                            <!--<div class="tab-pane" id="2">
-                                <div class="row">
-                                    <div class="span12">
-                                        <div class="page-header">
-                                            <h3>User Ratings</h3>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="span8">
-                                        <div class="well" id="average_rating">
-                                            <h4>Average rating</h4>
-                                            <h2>4.5</h2>
-                                            <p><span class="rating-static rating-45"></span></p>
-                                            <p>2,908</p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="span12">
-                                        <div class="page-header">
-                                            <h3>User Reviews <small><a class="btn pull-right" href="javascript:;;" id="writeReview"><i class="icon-pencil"></i> Write a review</a></small></h3>
-                                        </div>
-                                        <div id="reviewForm">
-                                            <form class="form-horizontal well">
-                                                <div class="control-group">
-                                                    <label class="control-label" for="input01">Name</label>
-                                                    <div class="controls">
-                                                        <input type="text" class="input-xlarge" id="input01">
-                                                    </div>
-                                                </div>
-                                                <div class="control-group">
-                                                    <label class="control-label" for="input01">Email</label>
-                                                    <div class="controls">
-                                                        <input type="text" class="input-xlarge" id="input02">
-                                                    </div>
-                                                </div>
-                                                <div class="control-group">
-                                                    <label class="control-label" for="input01">Title</label>
-                                                    <div class="controls">
-                                                        <input type="text" class="input-xlarge" id="input03">
-                                                    </div>
-                                                </div>
-                                                <div class="control-group">
-                                                    <label class="control-label" for="input01">Message</label>
-                                                    <div class="controls">
-                                                        <textarea class="input-xlarge" rows="3"></textarea>
-                                                    </div>
-                                                </div>
-                                                <div class="control-group">
-                                                    <label class="control-label" for="input01">Rating</label>
-                                                    <div class="controls">
-                                                        <div data-toggle="buttons-radio" class="btn-group">
-                                                            <a href="javascript:;;" class="btn"><i class="icon-star-empty"></i></a>
-                                                            <a href="javascript:;;" class="btn"><i class="icon-star-empty"></i></a>
-                                                            <a href="javascript:;;" class="btn"><i class="icon-star-empty"></i></a>
-                                                            <a href="javascript:;;" class="btn"><i class="icon-star-empty"></i></a>
-                                                            <a href="javascript:;;" class="btn"><i class="icon-star-empty"></i></a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="form-actions">
-                                                    <button class="btn btn-primary" type="submit">Send</button>
-                                                </div>
-                                            </form>
-                                        </div>
-                                        <div data-toggle="buttons-radio" class="btn-group">
-                                            <button class="btn active">Newest</button>
-                                            <button class="btn">Rating</button>
-                                            <button class="btn">Helpfulness</button>
-                                        </div>
-                                        <div class="clearfix">&nbsp;</div>
-                                        <table class="table">
-                                            <tr>
-                                                <td>
-                                                    <p><strong>Mr Smith</strong> - 15 August 2012 <span class="rating-static rating-25 pull-right"></span></p>
-                                                    <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. </p>
-                                                    <div class="btn-toolbar pull-right">
-                                                        <div class="btn-group">
-                                                            <a href="#" class="btn" rel="tooltip" title="Like"><i class="icon-thumbs-up"></i></a>
-                                                            <a href="#" class="btn" rel="tooltip" title="Dislike"><i class="icon-thumbs-down"></i></a>
-                                                            <a href="#" class="btn" rel="tooltip" title="Spam"><i class="icon-ban-circle"></i></a>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <p><strong>Mr Smith</strong> - 15 August 2012 <span class="rating-static rating-35 pull-right"></span></p>
-                                                    <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. </p>
-                                                    <div class="btn-toolbar pull-right">
-                                                        <div class="btn-group">
-                                                            <a href="#" class="btn" rel="tooltip" title="Like"><i class="icon-thumbs-up"></i></a>
-                                                            <a href="#" class="btn" rel="tooltip" title="Dislike"><i class="icon-thumbs-down"></i></a>
-                                                            <a href="#" class="btn" rel="tooltip" title="Spam"><i class="icon-ban-circle"></i></a>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <p><strong>Mr Smith</strong> - 15 August 2012 <span class="rating-static rating-45 pull-right"></span></p>
-                                                    <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. </p>
-                                                    <div class="btn-toolbar pull-right">
-                                                        <div class="btn-group">
-                                                            <a href="#" class="btn" rel="tooltip" title="Like"><i class="icon-thumbs-up"></i></a>
-                                                            <a href="#" class="btn" rel="tooltip" title="Dislike"><i class="icon-thumbs-down"></i></a>
-                                                            <a href="#" class="btn" rel="tooltip" title="Spam"><i class="icon-ban-circle"></i></a>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        </table>
-                                        <div class="pagination">
-                                            <ul>
-                                                <li><a href="#">Prev</a></li>
-                                                <li class="active">
-                                                    <a href="#">1</a>
-                                                </li>
-                                                <li><a href="#">2</a></li>
-                                                <li><a href="#">3</a></li>
-                                                <li><a href="#">4</a></li>
-                                                <li><a href="#">Next</a></li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="clearfix">&nbsp;</div> -->
-
+                           
             <!-- / main container -->
             <div class="pre-footer"></div>
         <footer>
