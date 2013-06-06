@@ -93,6 +93,15 @@ ul.socialize li a.youtube{
     background: url("../img/socialize/48x48/youtube.png");   
 }
 
+.addition {
+    clear:both;
+    padding:5px;
+}
+.profile-request {
+    padding-top:10px;
+    padding-left:5px;
+}
+
 /**
  * Section slider
  * @see: index.html
