@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en" ng-app="mainApp">
+<head>
+  <title>Admin</title>
+  <script src="components/angular/angular.js"></script>
+  <script src="js/firebase.js"></script>
+  <script src="components/angular-fire/angularFire.js"></script>
+  <script src="js/usersCtrl.js"></script>
+</head>
+<body ng-controller="UserCtrl">
+
+  // TEMP, this will be replace by edit page soon.
+
+  <form>
+    <input ng-model="newUser.name" placeholder="Name">
+    <input ng-model="newUser.email" placeholder="Email">
+    <textarea ng-model="newUser.about" placeholder="About Me"></textarea>
+    <textarea ng-model="newUser.skill" placeholder="Skill I can share"></textarea>
+    <input ng-model="newUser.img" placeholder="Image">
+    <img src="{{newUser.img}}">
+    <button ng-click="saveNewUser(newUser)">Add</button>
+  </form>
+
+  <div ng-cloak ng-repeat="user in users">
+    Name:{{user.name}}, 
+    Email:{{user.email}},
+    Skill:{{user.skill}},
+    About{{user.about}}
+    <img src="{{user.img}}">
+    <hr>
+  </div>
+
+  
+  
+</body>
+</html>
