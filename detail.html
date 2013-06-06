@@ -37,6 +37,12 @@
             });
         </script>
 
+         <script src="components/angular/angular.js"></script>
+  <script src="https://cdn.firebase.com/v0/firebase.js"></script>
+  <script src="components/angular-fire/angularFire.js"></script>
+  <script src="js/controllers/usersCtrl.js"></script>
+
+
     </head>
 
     <body ng-app="mainApp" ng-controller="UserCtrl">
@@ -106,7 +112,7 @@
                     <div class="span5">
                         <div class="page-header">
                             <h3>
-                                Alon Gutman
+                                {{userToView.name}}
                             </h3>
                         </div>
 
@@ -118,15 +124,15 @@
                             </tr>
                             <tr>
                                 <td>Company:</td>
-                                <td><span class="priceLarge">&nbsp;Google</span></td>
+                                <td><span class="priceLarge">&nbsp;{{userToView.company}}</span></td>
                             </tr>
                              <tr>
                                 <td>Skills:</td>
-                                <td><span class="priceLarge">&nbsp;Machine Learning, data visulaization, Node JS, Python, Management, goal oriented thinking, Data Analytics, brainstorming, task prioritization</span></td>
+                                <td><span class="priceLarge">&nbsp;{{userToView.skills}}</span></td>
                             </tr>
                             <tr>
                                 <td>Time Available:</td>
-                                <td><span class="priceLarge">&nbsp;5 Badgers</span></td>
+                                <td><span class="priceLarge">&nbsp;{{userToView.time}}</span></td>
                             </tr>
                             <tr>
                                 <td><span class="about_badger">Each Badger is a 15 minute time block</span></td>
@@ -163,10 +169,10 @@
                         <div class="carousel slide" id="myCarousel">
                             <div class="carousel-inner">
                                 <div class="active item">
-                                    <img alt="" src="demo/slider/large/gutman.png">
+                                    <img alt="" src="{{userToView.img}}">
                                 </div>
                                 <div class="item">
-                                    <img alt="" src="demo/slider/large/google.png">
+                                    <img alt="" src="{{userToView.companyImg}}">
                                 </div>
                             </div>
                             <a class="carousel-control left" href="#myCarousel" data-slide="prev">&lsaquo;</a>
@@ -187,23 +193,26 @@
                         <div class="tab-content">
                             <div class="tab-pane active" id="1">
                                 <div class="page-header"><h3>What I love</h3></div>
-                                <p>I love to automate data collection and provide analysis that can augment a humans understanding of the relevant data.</p>
+                                <p>{{userToView.love}}</p>
                                 <div class="page-header"><h3>Skill ideas</h3></div>
-                                <ul>
+                                {{userToView.skills}}
+                                <ul><!-- 
                                     <li>Machine learning algorithms</li>
                                     <li>Node JS HTML5 apps</li>
                                     <li>Idea feasability testing and timelines</li>
                                     <li>data analytics</li>
                                     <li>leading teams of programmers including leading remote teams</li>
-                                </ul>
+                                </ul> -->
                                 <div class="page-header"><h3>What I will do for you</h3></div>
-                                    <ul>
+                                {{userToView.canDo}}
+                                <!--     <ul>
                                         <li>Teach you basic algorithm</li>
                                         <li>Go over what algorithms you need to use in your situation</li>
                                         <li>Get you started on the algorithm design and training data</li>
                                         <li>Review and correct any existing code work</li>
                                         <li>Open to other suggestions</li>
                                     </ul>
+ -->
                                 </div>
                             </div>
                            
