@@ -4,10 +4,19 @@ angular.module('mainApp', ['firebase']).
     $routeProvider.
       when('/', {controller:HomeCtrl, templateUrl:'home.html'}).
       when('/detail/:userId', {controller:DetailCtrl, templateUrl:'detail.html'}).
+      when('/users', {controller:UsersCtrl, templateUrl:'users.html'}).
+      when('/edit/:userId', {controller:EditProfileCtrl, templateUrl:'editProfile.html'}).
       otherwise({redirectTo:'/'});
   })
 
-  function HomeCtrl($scope, $location, $routeParams, angularFireCollection) {
+
+  function EditProfileCtrl($scope, $routeParams){
+    var userId = $routeParams.userId;
+
+
+  }
+
+  function HomeCtrl($scope, $location, angularFireCollection) {
       var fullUrl = 'https://monkey-23.firebaseio-demo.com/users2/';
       var messageListRef = new Firebase(fullUrl);
       $scope.usersToView = [];
@@ -69,10 +78,7 @@ angular.module('mainApp', ['firebase']).
   }
 
 
-  function UserCtrl($scope, $location, $routeParams, angularFireCollection) {
-   
-      
-
+  function UsersCtrl($scope, $location, $routeParams, angularFireCollection) {
       // TODO(This is a list that can also update, when change,
       var url = 'https://monkey-23.firebaseio-demo.com/users2/';
       $scope.usersToEdit = angularFireCollection(new Firebase(url), function(usersToEdit) {
