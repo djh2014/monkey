@@ -20,7 +20,6 @@ angular.module('mainApp', ['firebase'])
             // For details.html page:
             $scope.userToView = snapshot.val();
             // For index.html page:
-            debugger;
             var users = [];
 
             var BIG_IMG = [600, 450, 6], MEDIUM_IMG = [260, 200, 3], SMALL_IMG = [225, 200, 3];
@@ -42,13 +41,14 @@ angular.module('mainApp', ['firebase'])
 
 
       // TODO(This is a list that can also update, when change,
-      // var url = 'https://monkey-23.firebaseio-demo.com/users2/';
-      // $scope.users = angularFireCollection(new Firebase(url), function(users) {
-      //   //debugger;
-      // });
+      var url = 'https://monkey-23.firebaseio-demo.com/users2/';
+      $scope.usersToEdit = angularFireCollection(new Firebase(url), function(usersToEdit) {
+        
+      });
 
       $scope.saveNewUser = function(newUser) {
-        $scope.users.add(newUser);
+        debugger;
+        $scope.usersToEdit.add(newUser);
         $scope.newUser = {'img':''};
       }
     }
