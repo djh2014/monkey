@@ -156,8 +156,9 @@
                         <div ng-repeat="userGroup in userGroupsToView" class="row">
                         <li ng-repeat="user in userGroup" class="span{{user.spanSize}}">
                             <div class="thumbnail">
+                                <a href="detail.html?user={{user.id}}" >
                                 <img alt="http://placehold.it/{{user.imgWidth}}x{{user.imgHeight}}"
-                                 src="https://i.embed.ly/1/display/resize?key=dc65793b3f1249bdb9952a491874d27e&url={{user.img}}&width={{user.imgWidth}}&height={{user.imgHeight}}&grow=true">
+                                 src="https://i.embed.ly/1/display/resize?key=dc65793b3f1249bdb9952a491874d27e&url={{user.img}}&width={{user.imgWidth}}&height={{user.imgHeight}}&grow=true"></a>
                                 <div class="caption">
                                     <p><span class="name">{{user.name}}<span>:</span></span>{{user.skills}}</p>
                                     <h4>{{user.canDO}}</h4>
