@@ -9,20 +9,29 @@ angular.module('mainApp', ['firebase']).
       otherwise({redirectTo:'/'});
   })
 
-  function EditProfileCtrl($scope, $routeParams){
+  function EditProfileCtrl($scope, $routeParams, $location){
       //TODO(guti): make it a service:
       var userId = $routeParams.userId;
-      var userFBURL = 'https://monkey-23.firebaseio-demo.com/users2/' + userId;
-      var userFBRef = new Firebase(userFBURL);
+      if (userId) {
+        var userFBURL = 'https://monkey-23.firebaseio-demo.com/users2/' + userId;
+        var userFBRef = new Firebase(userFBURL);
 
-      userFBRef.on('value', function(FBUser) {
-            $scope.user = FBUser.val();
-            $scope.$apply();
-      });
+        userFBRef.on('value', function(FBUser) {
+              $scope.user = FBUser.val();
+              $scope.$apply();
+        });
+      }
 
       $scope.saveUser = function() {
-        //debugger;
-        userFBRef.update($scope.user);
+        debugger;
+        if (userId) {
+          userFBRef.update($scope.user);
+        } else {
+          var listFBURL = 'https://monkey-23.firebaseio-demo.com/users2/';
+          var listFBRef = new Firebase(listFBURL);
+          var res = listFBRef.push($scope.user);
+          $location.path('/');
+        }
       }
   }
 
@@ -66,10 +75,11 @@ angular.module('mainApp', ['firebase']).
 
       messageListRef.on('value', function(snapshot) {
             $scope.userToView = snapshot.val();
+            $scope.userToView.id = userId;
             $scope.$apply();
       });
 
-      $scope.email = ''
+      $scope.email = '';
       // Should be shared by both.
       $scope.saveEmail = function() {
         if ($scope.email) {
