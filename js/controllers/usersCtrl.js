@@ -48,7 +48,11 @@ angular.module('mainApp', ['firebase'])
 
       $scope.apply = function() {
         if ($scope.email) {
-          // TODO: save at mix-panel, and firebase.
+          //Push to fire base:
+          var listRef = new Firebase('https://monkey-23.firebaseio-demo.com/apply');
+          var newPushRef = listRef.push();
+          newPushRef.set({email: $scope.email});
+          // TODO: save at mix-panel.
           $scope.email = "";
           window.alert("Thanks we will get back to you soon");
         } else {
