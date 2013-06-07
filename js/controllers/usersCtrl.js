@@ -46,6 +46,16 @@ angular.module('mainApp', ['firebase'])
       });
 
 
+      $scope.apply = function() {
+        if ($scope.email) {
+          // TODO: save at mix-panel, and firebase.
+          $scope.email = "";
+          window.alert("Thanks we will get back to you soon");
+        } else {
+          $scope.email = "Mm.. apply with your email";          
+        } 
+      }
+
       // TODO(This is a list that can also update, when change,
       var url = 'https://monkey-23.firebaseio-demo.com/users2/';
       $scope.usersToEdit = angularFireCollection(new Firebase(url), function(usersToEdit) {

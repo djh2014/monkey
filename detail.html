@@ -146,26 +146,34 @@
                                 <!--<td>
                                     (2,908 customer reviews)
                                 </td>-->
-                            </tr>-->
+                            </tr>
                             <tr>
                                 <td><span class="about_badger">Each Badger is a 15 minute time block</span></td>
                             </tr>
                             <tr>
                                 <td colspan="1" style="text-align:left">
                                     <div class="btn-toolbar">
-                                        <div class="btn-group pull-left addition">
-                                            <a class="btn" id="qty-minus" href="javascript:;;"><i class="icon-minus-sign"></i></a>
-                                            <a class="btn active" href="#"><span id="item_qty">1</span></a>
-                                            <a class="btn " id="qty-plus" href="javascript:;;"><i class="icon-plus-sign"></i></a>&nbsp;
-                                        </div>
-                                    </br>
                                         <div class="btn-group pull-left profile-request">
-                                            <a href="#" class="btn btn-info"><i class="icon-shopping-cart icon-white"></i> Request Now</a>
+                                            <a role="button" href="#myModal" data-toggle="modal" class="btn btn-info"><i class="icon-shopping-cart icon-white"></i> Request Now</a>
                                         </div>
                                     </div>
                                 </td>
                             </tr>
                         </table>
+
+<!-- Modal -->
+<div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3 id="myModalLabel">We are in beta, invite Only - Apply Now</h3>
+    <input ng-model="email" type="text" id="inputUsername" placeholder="Email"/>
+    <button ng-click="apply()" type="submit" class="btn btn-success">Apply Now</button>  
+</div>
+</div>
+
+
+
+
 
                         <hr>
                         <!-- AddThis Button BEGIN -->
@@ -201,48 +209,19 @@
                     <div class="tabbable">
                         <ul class="nav nav-tabs">
                             <li class="active"><a href="#1" data-toggle="tab">Description</a></li>
-                            <!--<li><a href="#2" data-toggle="tab">User Reviews</a></li>-->
                         </ul>
                         <div class="tab-content">
                             <div class="tab-pane active" id="1">
-<<<<<<< HEAD
-                                <div class="page-header"><h3>What I love to do</h3></div>
-                                <p>I love to automate data collection and provide analysis that can augment a humans understanding of the relevant data.</p>
-                                <div class="page-header"><h3>Skills</h3></div>
-                                <ul>
-                                    <li>Machine learning</li>
-                                    <li>Node JS</li>
-                                    <lu>HTML5 apps</li>
-                                    <li>Idea feasability testing and timelines</li>
-                                    <li>data analytics</li>
-                                    <li>leading teams of programmers including leading remote teams</li>
-                                </ul>
-=======
                                 <div class="page-header"><h3>What I love</h3></div>
                                 <p>{{userToView.love}}</p>
                                 <div class="page-header"><h3>Skill ideas</h3></div>
                                 {{userToView.skills}}
-                                <ul><!-- 
-                                    <li>Machine learning algorithms</li>
-                                    <li>Node JS HTML5 apps</li>
-                                    <li>Idea feasability testing and timelines</li>
-                                    <li>data analytics</li>
-                                    <li>leading teams of programmers including leading remote teams</li>
-                                </ul> -->
+                                <ul>
                                 <div class="page-header"><h3>What I will do for you</h3></div>
                                 {{userToView.canDo}}
-                                <!--     <ul>
-                                        <li>Teach you basic algorithm</li>
-                                        <li>Go over what algorithms you need to use in your situation</li>
-                                        <li>Get you started on the algorithm design and training data</li>
-                                        <li>Review and correct any existing code work</li>
-                                        <li>Open to other suggestions</li>
-                                    </ul>
- -->
                                 </div>
->>>>>>> c6719a80ad27def6ef8ea91d1bf86d7e7d91b44f
-                            </div>
-                           
+
+                            </div>z
             <!-- / main container -->
             <div class="pre-footer"></div>
         <footer>
@@ -264,42 +243,6 @@
                                 <a href="mailto:#">danny@getbadgers.com</a>
                             </address>
                         </div>                        
-                        <!--<div class="span2">
-                            <div class="page-header">
-                                <h2>Demo Page</h2>
-                            </div>
-                            <ul>
-                                <li><a href="categories.html">Categories</a></li>
-                                <li><a href="category.html">Category</a></li>
-                                <li><a href="detail.html">Detail</a></li>
-                                <li><a href="about.html">About</a></li>
-                                <li><a href="pricing.html">Pricing</a></li>
-                                <li><a href="contact.html">Contact</a></li>
-                            </ul>
-                        </div>
-                        <div class="span2">
-                            <div class="page-header">
-                                <h2>Service</h2>
-                            </div>
-                            <ul>
-                                <li><a href="index.html">Home</a></li>
-                                <li><a href="about.html">My Account</a></li>
-                                <li><a href="about.html">Order History</a></li>
-                                <li><a href="about.html">Wish list</a></li>
-                            </ul>
-                        </div>
-                        <div class="span2">
-                            <div class="page-header">
-                                <h2>Extras</h2>
-                            </div>
-                            <ul>
-                                <li><a href="about.html">Brands</a></li>
-                                <li><a href="about.html">Gift Vouchers</a></li>
-                                <li><a href="about.html">Affiliates</a></li>
-                                <li><a href="about.html">Specials</a></li>
-                              </ul>
-                        </div>
-                    </div>-->
                 </div>
                 <div id="copyright">
                     <div class="container">
