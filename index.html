@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>Star Shop</title>
+    <title>Budgers</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
@@ -14,19 +14,7 @@
 
     <!--Font-->
     <link href="css/font-ubuntu.css" rel="stylesheet">
-    <!-- uncomment if you want use google cdn
-    <link href='http://fonts.googleapis.com/css?family=Ubuntu' rel='stylesheet' type='text/css'>
-    -->
     <link href='css/font-arimo.css' rel='stylesheet' type='text/css'>
-    <!-- uncomment if you want use google cdn
-    <link href='http://fonts.googleapis.com/css?family=Arimo' rel='stylesheet' type='text/css'>
-    -->
-    <!-- End Font -->
-
-    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
-    <!--[if lt IE 9]>
-      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
 
     <!-- Le fav and touch icons -->
     <link rel="shortcut icon" href="ico/favicon.ico">
@@ -41,10 +29,14 @@
     <!-- super fish menu -->
     <link rel="stylesheet" type="text/css" href="css/superfish.css" media="screen">
 
+  <script src="components/angular/angular.js"></script>
+  <script src="js/firebase.js"></script>
+  <script src="components/angular-fire/angularFire.js"></script>
+  <script src="js/controllers/usersCtrl.js"></script>
 
   </head>
 
-  <body>
+  <body ng-app="mainApp" ng-controller="UserCtrl">
 
     <section id="main" class="container">
         <div class="row" style="margin-bottom: 20px">
@@ -77,74 +69,8 @@
                         </a>
 
                         <div class="nav-collapse">
-                            <!--<ul class="nav">
-                                <li class="active main-menu-element"><a href="#"><i class="icon-home"></i> Home</a></li>
-                            </ul>-->
-                            <!--<ul class="nav sf-menu">
-                                <li class="dropdown main-menu-element">
-                                    <a href="#category" class="dropdown-toggle"><i class="icon-th-list"></i> Categories  <b class="caret"></b></a>
-                                    <ul class="child-dropdown-menu">
-                                        <li><a href="categories.html">Books</a></li>
-                                        <li class="divider"></li>
-                                        <li>
-                                            <a href="categories.html">Electronics <i class="icon-circle-arrow-right pull-right"></i></a>
-                                            <ul class="child-dropdown-menu submenu">
-                                                <li><a href="category.html">TV & Video</a></li>
-                                                <li><a href="category.html">Cell Phones</a></li>
-                                                <li><a href="category.html">MP3 Players</a></li>
-                                                <li><a href="category.html">Video Games</a></li>
-                                                <li><a href="category.html">Software</a></li>
-                                            </ul>
-                                        </li>
-                                        <li class="divider"></li>
-                                        <li>
-                                            <a href="categories.html">Clothing <i class="icon-circle-arrow-right pull-right"></i></a>
-                                            <ul class="child-dropdown-menu submenu">
-                                                <li><a href="category.html">Clothing</a></li>
-                                                <li><a href="category.html">Shoes</a></li>
-                                                <li><a href="category.html">Handbags</a></li>
-                                                <li><a href="category.html">Accessories</a></li>
-                                            </ul>
-                                        </li>
-                                    </ul>
-                                </li>
-                            </ul>-->
-                            <!--<ul class="nav">
-                                <li class="dropdown main-menu-element">
-                                    <a data-toggle="dropdown" class="dropdown-toggle" href="#"><i class="icon-info-sign"></i> Demo Pages <b class="caret"></b></a>
-                                    <ul class="dropdown-menu">
-                                         <li><a href="categories.html">Categories</a></li>
-                                         <li><a href="category.html">Category</a></li>
-                                         <li><a href="detail.html">Detail</a></li>
-                                         <li><a href="about.html">About</a></li>
-                                         <li><a href="pricing.html">Pricing</a></li>
-                                         <li><a href="contact.html">Contact</a></li>
-                                    </ul>
-                                </li>
-                                <li class="divider-vertical"></li>
-                            </ul>-->
 
                             <form class="navbar-search pull-left" action="detail.html">
-                                <!--<ul class="nav">
-                                        <li class="dropdown">
-                                            <a data-toggle="dropdown" class="dropdown-toggle" href="#"><span id="label-search-in">All</span> <b class="caret"></b></a>
-                                            <input type="hidden" value="" id="search-in-category"/>
-                                            <ul id="search-in-content" class="dropdown-menu">
-                                                <li data-value="cate0"><a href="javascript:;;" title="All Department">All Department</a></li>
-                                                <li data-value="cate1"><a href="javascript:;;" title="Baby">Baby</a></li>
-                                                <li data-value="cate2"><a href="javascript:;;" title="Beauty">Beauty</a></li>
-                                                <li data-value="cate3"><a href="javascript:;;" title="Books">Books</a></li>
-                                                <li data-value="cate4"><a href="javascript:;;" title="Cell phones">Cell phones</a></li>
-                                                <li data-value="cate5"><a href="javascript:;;" title="Computers">Computers</a></li>
-                                                <li data-value="cate6"><a href="javascript:;;" title="Gift Cards">Gift Cards</a></li>
-                                                <li data-value="cate7"><a href="javascript:;;" title="Movie">Movie</a></li>
-                                                <li data-value="cate8"><a href="javascript:;;" title="Music">Music</a></li>
-                                                <li data-value="cate9"><a href="javascript:;;" title="Shoes">Shoes</a></li>
-                                                <li data-value="cate10"><a href="javascript:;;" title="Software">Software</a></li>
-                                            </ul>
-                                        </li>
-                                </ul><-->
-
                                 <input type="text" placeholder="Search" class="search-query span2">
                                 <button type="submit" class="btn btn-inverse"><i class="icon-search icon-white"></i></button>
                             </form>
@@ -206,20 +132,6 @@
                                 <h3>Only</h3>
                             </div>
                         </li>
-                        <!--<li>
-                            <a href="detail.html"><img src="demo/slider/large/5.jpg" alt="image05"/></a>
-                            <div class="ei-title">
-                                <h2>Loving</h2>
-                                <h3>Rebel</h3>
-                            </div>
-                        </li>
-                        <li>
-                            <a href="detail.html"><img src="demo/slider/large/7.jpg" alt="image07"/></a>
-                            <div class="ei-title">
-                                <h2>Crazy</h2>
-                                <h3>Friend</h3>
-                            </div>
-                        </li>-->
                     </ul><!-- ei-slider-large -->
                     <ul class="ei-slider-thumbs">
                         <li class="ei-slider-element">Current</li>
@@ -228,31 +140,9 @@
                         <li><a href="#">Slide 2</a><img src="demo/slider/thumbs/2.jpg" alt="thumb02" /></li>
                         <li><a href="#">Slide 3</a><img src="demo/slider/thumbs/3.jpg" alt="thumb03" /></li>
                         <li><a href="#">Slide 4</a><img src="demo/slider/thumbs/4.jpg" alt="thumb04" /></li>
-                        <!--<li><a href="#">Slide 5</a><img src="demo/slider/thumbs/5.jpg" alt="thumb05" /></li>
-                        <li><a href="#">Slide 7</a><img src="demo/slider/thumbs/7.jpg" alt="thumb07" /></li>-->
                     </ul><!-- ei-slider-thumbs -->
                 </div><!-- ei-slider -->
             </section>
-
-            <!-- Feature products -->
-             <!--<div class="row">
-                <div class="span12">
-                    <div class="page-header promote_banner">
-                        <div class="row">
-                            <div class="span6">
-                                <div class="thumbnail">
-                                    <a href="detail.html"><img src="demo/limit_offer.png" alt=""/></a>
-                                </div>
-                            </div>
-                            <div class="span6">
-                                <div class="thumbnail">
-                                    <a href="detail.html"><img src="demo/free_delivery.png" alt=""/></a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>-->
             <div class="row">
                 <div class="span12">
                     <div class="page-header">
@@ -265,12 +155,12 @@
                     <ul class="thumbnails">
                         <li class="span6">
                             <div class="thumbnail">
-                                <img alt="" src="http://placehold.it/600x450">
+                                <img alt="http://placehold.it/600x450" src="{{user1.img}}">
                                 <div class="caption">
-                                    <p><span class="name">Alon Gutman<span>:</span></span> Elite participant of a program created for the most intelligent high school students in Israel. Former search quality engineer at Google.  Currently startup dude.  I love to break it down.</p>
-                                    <h4>Machine learning, general web development, computer vision, emotional training, dancing, fitness training</h4>
+                                    <p><span class="name">{{user1.name}}<span>:</span></span>{{user1.skills}}</p>
+                                    <h4>{{user1.canDO}}</h4>
                                     <p><span class="rating-static rating-45"></span></p>
-                                    <p><a class="btn btn-primary" href="detail.html"><i class="icon-shopping-cart icon-white"></i> Request</a> <a class="btn pull-right" href="detail.html">more...</a></p>
+                                    <p><a class="btn btn-primary" href="detail.html?user={{user1.id}}"><i class="icon-shopping-cart icon-white"></i> Request</a> <a class="btn pull-right" href="detail.html?user={{user1.id}}">more...</a></p>
                                 </div>
                             </div>
                         </li>
@@ -397,42 +287,6 @@
                                 <a href="mailto:#">danny@getbadgers.com</a>
                             </address>
                         </div>                        
-                        <!--<div class="span2">
-                            <div class="page-header">
-                                <h2>Demo Page</h2>
-                            </div>
-                            <ul>
-                                <li><a href="categories.html">Categories</a></li>
-                                <li><a href="category.html">Category</a></li>
-                                <li><a href="detail.html">Detail</a></li>
-                                <li><a href="about.html">About</a></li>
-                                <li><a href="pricing.html">Pricing</a></li>
-                                <li><a href="contact.html">Contact</a></li>
-                            </ul>
-                        </div>
-                        <div class="span2">
-                            <div class="page-header">
-                                <h2>Service</h2>
-                            </div>
-                            <ul>
-                                <li><a href="index.html">Home</a></li>
-                                <li><a href="about.html">My Account</a></li>
-                                <li><a href="about.html">Order History</a></li>
-                                <li><a href="about.html">Wish list</a></li>
-                            </ul>
-                        </div>
-                        <div class="span2">
-                            <div class="page-header">
-                                <h2>Extras</h2>
-                            </div>
-                            <ul>
-                                <li><a href="about.html">Brands</a></li>
-                                <li><a href="about.html">Gift Vouchers</a></li>
-                                <li><a href="about.html">Affiliates</a></li>
-                                <li><a href="about.html">Specials</a></li>
-                              </ul>
-                        </div>
-                    </div>-->
                 </div>
                 <div id="copyright">
                     <div class="container">
