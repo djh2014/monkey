@@ -9,11 +9,21 @@ angular.module('mainApp', ['firebase']).
       otherwise({redirectTo:'/'});
   })
 
-
   function EditProfileCtrl($scope, $routeParams){
-    var userId = $routeParams.userId;
+      //TODO(guti): make it a service:
+      var userId = $routeParams.userId;
+      var userFBURL = 'https://monkey-23.firebaseio-demo.com/users2/' + userId;
+      var userFBRef = new Firebase(userFBURL);
 
+      userFBRef.on('value', function(FBUser) {
+            $scope.user = FBUser.val();
+            $scope.$apply();
+      });
 
+      $scope.saveUser = function() {
+        //debugger;
+        userFBRef.update($scope.user);
+      }
   }
 
   function HomeCtrl($scope, $location, angularFireCollection) {
