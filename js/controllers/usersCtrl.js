@@ -20,22 +20,28 @@ angular.module('mainApp', ['firebase'])
             // For details.html page:
             $scope.userToView = snapshot.val();
             // For index.html page:
-            var users = [];
-
             var BIG_IMG = [600, 450, 6], MEDIUM_IMG = [260, 200, 3], SMALL_IMG = [225, 200, 3];
-            var IMG_SIZES = [BIG_IMG, MEDIUM_IMG, MEDIUM_IMG, MEDIUM_IMG, MEDIUM_IMG, BIG_IMG, SMALL_IMG, SMALL_IMG, SMALL_IMG, SMALL_IMG];
+            var IMG_SIZES = [[BIG_IMG, MEDIUM_IMG, MEDIUM_IMG], [MEDIUM_IMG, MEDIUM_IMG, BIG_IMG], [SMALL_IMG, SMALL_IMG, SMALL_IMG, SMALL_IMG]];
             var usersObject = snapshot.val();
             var ids = Object.keys(usersObject);
-
-            for (var i = 0; i < ids.length && i< IMG_SIZES.length; i++) {
-              var user = usersObject[ids[i]];
-              user.imgWidth = IMG_SIZES[i][0];
-              user.imgHeight = IMG_SIZES[i][1];
-              user.spanSize = IMG_SIZES[i][2];
-              user.id = ids[i];
-              users.push(user);
+            var userGroups = []
+            for (var i = 0; i < IMG_SIZES.length; i++) {
+              var userGroup = []
+              for (var j = 0; j < IMG_SIZES[i].length; j++) {
+                if(ids.length <= 0){
+                  break;
+                }
+                var id = ids.pop();
+                var user = usersObject[id];
+                user.imgWidth = IMG_SIZES[i][j][0];
+                user.imgHeight = IMG_SIZES[i][j][1];
+                user.spanSize = IMG_SIZES[i][j][2];
+                user.id = id;
+                userGroup.push(user);
+              };
+              userGroups.push(userGroup);
             };
-            $scope.usersToView = users; 
+            $scope.userGroupsToView = userGroups; 
         });
       });
 

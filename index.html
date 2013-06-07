@@ -153,7 +153,8 @@
             <div class="row">
                 <div class="span12">
                     <ul class="thumbnails">
-                        <li ng-repeat="user in usersToView" class="span{{user.spanSize}}">
+                        <div ng-repeat="userGroup in userGroupsToView" class="row">
+                        <li ng-repeat="user in userGroup" class="span{{user.spanSize}}">
                             <div class="thumbnail">
                                 <img alt="http://placehold.it/{{user.imgWidth}}x{{user.imgHeight}}"
                                  src="https://i.embed.ly/1/display/resize?key=dc65793b3f1249bdb9952a491874d27e&url={{user.img}}&width={{user.imgWidth}}&height={{user.imgHeight}}&grow=true">
@@ -165,6 +166,7 @@
                                 </div>
                             </div>
                         </li>
+                        </div>
                     </ul>
                 </div>
             </div>
