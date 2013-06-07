@@ -153,19 +153,32 @@
                             <tr>
                                 <td colspan="1" style="text-align:left">
                                     <div class="btn-toolbar">
-                                        <div class="btn-group pull-left addition">
-                                            <a class="btn" id="qty-minus" href="javascript:;;"><i class="icon-minus-sign"></i></a>
-                                            <a class="btn active" href="#"><span id="item_qty">1</span></a>
-                                            <a class="btn " id="qty-plus" href="javascript:;;"><i class="icon-plus-sign"></i></a>&nbsp;
-                                        </div>
-                                    </br>
                                         <div class="btn-group pull-left profile-request">
-                                            <a href="#" class="btn btn-info"><i class="icon-shopping-cart icon-white"></i> Request Now</a>
+                                            <a role="button" href="#myModal" data-toggle="modal" class="btn btn-info"><i class="icon-shopping-cart icon-white"></i> Request Now</a>
                                         </div>
                                     </div>
                                 </td>
                             </tr>
                         </table>
+
+<!-- Modal -->
+<div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3 id="myModalLabel">Modal header</h3>
+  </div>
+  <div class="modal-body">
+    <p>One fine body…</p>
+  </div>
+  <div class="modal-footer">
+    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+    <button class="btn btn-primary">Save changes</button>
+  </div>
+</div>
+
+
+
+
 
                         <hr>
                         <!-- AddThis Button BEGIN -->

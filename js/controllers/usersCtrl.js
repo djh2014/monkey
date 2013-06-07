@@ -46,6 +46,10 @@ angular.module('mainApp', ['firebase'])
       });
 
 
+      $scope.getRequest = function() {
+        window.alert("Hello world");
+      }
+
       // TODO(This is a list that can also update, when change,
       var url = 'https://monkey-23.firebaseio-demo.com/users2/';
       $scope.usersToEdit = angularFireCollection(new Firebase(url), function(usersToEdit) {
