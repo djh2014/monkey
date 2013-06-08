@@ -52,7 +52,7 @@ angular.module('mainApp', ['firebase']).
       //TODO(guti): make it a service:
       var userId = $routeParams.userId;
       if (userId) {
-        var userFBURL = 'https://monkey-23.firebaseio-demo.com/users2/' + userId;
+        var userFBURL = 'https://monkey-23.firebaseio.com/users/' + userId;
         var userFBRef = new Firebase(userFBURL);
 
         userFBRef.on('value', function(FBUser) {
@@ -66,7 +66,7 @@ angular.module('mainApp', ['firebase']).
         if (userId) {
           userFBRef.update($scope.user);
         } else {
-          var listFBURL = 'https://monkey-23.firebaseio-demo.com/users2/';
+          var listFBURL = 'https://monkey-23.firebaseio.com/users/';
           var listFBRef = new Firebase(listFBURL);
           var res = listFBRef.push($scope.user);
           $location.path('/');
@@ -75,7 +75,7 @@ angular.module('mainApp', ['firebase']).
   }
 
   function HomeCtrl($scope, $location, angularFireCollection) {
-      var fullUrl = 'https://monkey-23.firebaseio-demo.com/users2/';
+      var fullUrl = 'https://monkey-23.firebaseio.com/users/';
       var messageListRef = new Firebase(fullUrl);
       $scope.usersToView = [];
 
@@ -109,7 +109,7 @@ angular.module('mainApp', ['firebase']).
   }
   function DetailCtrl($scope, $rootScope, $location, $routeParams, angularFireCollection) {
       var userId = $routeParams.userId;
-      var fullUrl = 'https://monkey-23.firebaseio-demo.com/users2/' + userId;
+      var fullUrl = 'https://monkey-23.firebaseio.com/users/' + userId;
       var messageListRef = new Firebase(fullUrl);
 
       messageListRef.on('value', function(snapshot) {
@@ -127,29 +127,28 @@ angular.module('mainApp', ['firebase']).
         }
       }
 
-
       $scope.email = '';
       // Should be shared by both.
-      $scope.saveEmail = function() {
-        if ($scope.email) {
-          //Push to fire base:
-          var listRef = new Firebase('https://monkey-23.firebaseio-demo.com/apply');
-          var newPushRef = listRef.push();
-          newPushRef.set({email: $scope.email});
-          // TODO: save at mix-panel.
-          $scope.email = "";
-          window.alert("Thanks we will get back to you soon");
-        } else {
-          $scope.email = "Mm.. apply with your email";          
-        } 
-      }
+      // TODO(guti): remove:
+      // $scope.saveEmail = function() {
+      //   if ($scope.email) {
+      //     //Push to fire base:
+      //     var listRef = new Firebase('https://monkey-23.firebaseio.com/apply');
+      //     var newPushRef = listRef.push();
+      //     newPushRef.set({email: $scope.email});
+      //     // TODO: save at mix-panel.
+      //     $scope.email = "";
+      //     window.alert("Thanks we will get back to you soon");
+      //   } else {
+      //     $scope.email = "Mm.. apply with your email";          
+      //   } 
+      // }
 
   }
 
-
   function UsersCtrl($scope, $location, $routeParams, angularFireCollection) {
-      // TODO(This is a list that can also update, when change,
-      var url = 'https://monkey-23.firebaseio-demo.com/users2/';
+      // TODO(This is a list that can also update, when change).
+      var url = 'https://monkey-23.firebaseio.com/users/';
       $scope.usersToEdit = angularFireCollection(new Firebase(url), function(usersToEdit) {
         
       });
