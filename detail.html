@@ -54,6 +54,13 @@ ga('send', 'pageview');
                                 <a role="button" ng-click="setRequest()" href="#myModal" data-toggle="modal" class="btn btn-info"><i class="icon-shopping-cart icon-white"></i> Request Now</a>
                             </div>
                         </div>
+                        Got Requests from:
+                        <ol>
+                            <li ng-repeat="request in userToView.requests">
+                                {{request}}
+                            </li>
+                        </ol>
+
                     </td>
                 </tr>
             </table>

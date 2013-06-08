@@ -132,13 +132,16 @@ angular.module('mainApp', ['firebase']).
             debugger;
             $scope.userToView = viewedUser.val();
             $scope.userToView.id = userId;
+            if($scope.userToView.requests) {
+              $scope.userToView.requests = Object.keys($scope.userToView.requests);
+            }
             $scope.$apply();
       });
 
       $scope.setRequest = function() {
         debugger;
         if($rootScope.currentUserRef) {
-          $scope.viewedUserRef.child("requests").child($rootScope.currentUser.username).set("request");
+          $scope.viewedUserRef.child("requests").child($rootScope.currentUser.name).set("request");
           window.alert("request was added, will come back to you soon.");
         } else {
           window.alert("you need to sign in first");
