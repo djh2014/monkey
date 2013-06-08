@@ -10,28 +10,38 @@ angular.module('mainApp', ['firebase']).
   })
 
   function LoginCtrl($rootScope, $scope, $location) {
-    var fBRef = new Firebase('https://monkey-23.firebaseio-demo.com');
-    // debugger;
-    var authClient = new FirebaseAuthClient(fBRef, function(error, user) { 
-      $rootScope.currentUser = null;
-      if (user) { 
-        $rootScope.currentUser = user;
-      } 
-    });
+    var fBRef = new Firebase('https://monkey-23.firebaseio.com');
+    $scope.authClient = null;
+    $scope.updateCurrentUser = function() {
+      authClient = new FirebaseAuthClient(fBRef, function(error, user) { 
+        $rootScope.currentUser = null;
+        if (user) { 
+          $rootScope.currentUser = user;
+        } 
+      });
+    }
+    $scope.updateCurrentUser();
+
+    $scope.facebookLogin = function() {
+      authClient.login('facebook');
+      //$scope.updateCurrentUser();
+    }
+
+    $scope.logOut = function() {
+      authClient.logout();
+      //$scope.updateCurrentUser();
+    }
 
     $scope.user = {};
-    // TODO(gutman): see how it works:
     $scope.signin = function() {
       authClient.login('password', {
         email: $scope.user.email,
         password: $scope.user.password,
         rememberMe: true
       });
-      debugger;
     }
 
     $scope.signup = function() { 
-      debugger;
       authClient.createUser($scope.user.email, $scope.user.password, function(error, user) {
         if (!error) {
           $rootScope.currentUser = user;
