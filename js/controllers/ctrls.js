@@ -1,3 +1,8 @@
+var fbUrl = 'https://monkey-23.firebaseio.com';
+var fbRef = new Firebase(fbUrl);
+var fbUsersRef = new Firebase(fbUrl + '/users');
+
+
 angular.module('mainApp', ['firebase']).
   config(function($routeProvider) {
     $routeProvider.
@@ -10,17 +15,27 @@ angular.module('mainApp', ['firebase']).
   })
 
   function LoginCtrl($rootScope, $scope, $location) {
-    var fBRef = new Firebase('https://monkey-23.firebaseio.com');
-    $scope.authClient = authClient = new FirebaseAuthClient(fBRef, function(error, user) { 
+    $scope.authClient = authClient = new FirebaseAuthClient(fbRef, function(error, user) { 
+        debugger;
         $rootScope.currentUser = null;
         if (user) {
           $rootScope.currentUser = user;
+          if ($scope.directToEditPage) {
+            $scope.directToEditPage = false;
+            var user = fbRef.child("users").child($rootScope.currentUser.username)
+            user.child("user").set($rootScope.currentUser.username);
+            user.child("name").set($rootScope.currentUser.name);
+            user.child("email").set($rootScope.currentUser.email);
+            user.child("facebook").set($rootScope.currentUser);
+            user.child("img").set("http://graph.facebook.com/"+ $rootScope.currentUser.id+"/picture");
+            $location.path('edit/'+ $rootScope.currentUser.username+"/");
+          }
         } 
     });
 
     $scope.facebookLogin = function() {
+      $scope.directToEditPage = true;
       authClient.login('facebook');
-      history.back();
     }
 
     $scope.logOut = function() {
