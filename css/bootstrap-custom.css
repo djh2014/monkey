@@ -101,6 +101,17 @@ ul.socialize li a.youtube{
     padding-top:10px;
     padding-left:5px;
 }
+.title-center {
+    text-align: center;
+    color:#333;
+}
+#mission {
+    font-family: Helvetica, Arial, sans-serif;
+    font-weight:400;
+    font-size: 16px;
+    color:black;
+    text-align: center;
+}
 
 /**
  * Section slider
