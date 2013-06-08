@@ -1,37 +1,47 @@
-var chatRef = new Firebase('https://monkey-23.firebaseio-demo.com');
-debugger;
-var authClient = new FirebaseAuthClient(chatRef, function(error, user) {
-  if (error) {
-    debugger;
-    console.log(error);
-  } else if (user) {
-    debugger;
-    console.log('User ID: ' + user.id + ', Provider: ' + user.provider);
-  } else {
-    debugger;
-    //authClient.login('facebook');
-  }
-});
-
-debugger;
-authClient.login('facebook', {
-  rememberMe: true,
-  scope: 'email,user_likes'
-});
-
-
-
-
-
 angular.module('mainApp', ['firebase']).
   config(function($routeProvider) {
     $routeProvider.
       when('/', {controller:HomeCtrl, templateUrl:'home.html'}).
       when('/detail/:userId', {controller:DetailCtrl, templateUrl:'detail.html'}).
       when('/users', {controller:UsersCtrl, templateUrl:'users.html'}).
+      when('/login', {controller:LoginCtrl, templateUrl:'login.html'}).
       when('/edit/:userId', {controller:EditProfileCtrl, templateUrl:'editProfile.html'}).
       otherwise({redirectTo:'/'});
   })
+
+  function LoginCtrl($rootScope, $scope, $location) {
+    var fBRef = new Firebase('https://monkey-23.firebaseio-demo.com');
+    // debugger;
+    var authClient = new FirebaseAuthClient(fBRef, function(error, user) { 
+      $rootScope.currentUser = null;
+      if (user) { 
+        $rootScope.currentUser = user;
+      } 
+    });
+
+    $scope.user = {};
+    // TODO(gutman): see how it works:
+    $scope.signin = function() {
+      authClient.login('password', {
+        email: $scope.user.email,
+        password: $scope.user.password,
+        rememberMe: true
+      });
+      debugger;
+    }
+
+    $scope.signup = function() { 
+      debugger;
+      authClient.createUser($scope.user.email, $scope.user.password, function(error, user) {
+        if (!error) {
+          $rootScope.currentUser = user;
+          rootScope = $rootScope;
+          window.alert("thanks for sign-up");
+          location.replace('/');
+        }
+      }); 
+    }    
+  }
 
   function EditProfileCtrl($scope, $routeParams, $location){
       //TODO(guti): make it a service:
