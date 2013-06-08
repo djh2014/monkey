@@ -1,3 +1,27 @@
+var chatRef = new Firebase('https://monkey-23.firebaseio-demo.com');
+debugger;
+var authClient = new FirebaseAuthClient(chatRef, function(error, user) {
+  if (error) {
+    debugger;
+    console.log(error);
+  } else if (user) {
+    debugger;
+    console.log('User ID: ' + user.id + ', Provider: ' + user.provider);
+  } else {
+    debugger;
+    //authClient.login('facebook');
+  }
+});
+
+debugger;
+authClient.login('facebook', {
+  rememberMe: true,
+  scope: 'email,user_likes'
+});
+
+
+
+
 
 angular.module('mainApp', ['firebase']).
   config(function($routeProvider) {
