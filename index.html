@@ -32,15 +32,15 @@
   <script src="components/angular/angular.js"></script>
   <script src="js/firebase.js"></script>
   <script src="components/angular-fire/angularFire.js"></script>
-  <script src="js/controllers/usersCtrl.js"></script>
+  <script src="js/controllers/ctrls.js"></script>
 
   </head>
 
-  <body ng-app="mainApp" ng-controller="UserCtrl">
+  <body ng-app="mainApp">
 
     <section id="main" class="container">
         <div class="row" style="margin-bottom: 20px">
-                <div class="span6"><a href='index.html'><img src="img/badgerlogo.png" alt="" /></a></div>
+                <div class="span6"><a href='/'><img src="img/badgerlogo.png" alt="" /></a></div>
                 <div class="span6">
                     <ul class="socialize pull-right">
                         <li>
@@ -74,8 +74,9 @@
                                 <input type="text" placeholder="Search" class="search-query span2">
                                 <button type="submit" class="btn btn-inverse"><i class="icon-search icon-white"></i></button>
                             </form>
+
+<!-- 
                             <ul class="nav pull-right">
-                                <!--<li class="main-menu-element"><a href="#"><i class="icon-shopping-cart"></i> Your Cart</a></li>-->
                                 <li class="divider-vertical"></li>
                                 <li class="dropdown main-menu-element">
                                     <a data-toggle="dropdown" class="dropdown-toggle" href="#"><i class="icon-user"></i> Sign In <b class="caret"></b></a>
@@ -88,11 +89,14 @@
                                         <li><a href="#">Edit Profile</a></li>
                                     </ul>
                                 </li>
-                            </ul>
+                            </ul> -->
+
+
                         </div><!-- /.nav-collapse -->
                     </div>
                 </div><!-- /navbar-inner -->
             </div>
+<<<<<<< HEAD
             <!-- Main hero unit for a primary marketing message or call to action -->
             <section id="slider">
                 <div id="ei-slider" class="ei-slider">
@@ -180,8 +184,17 @@
                         </div>
                     </ul>
                 </div>
+=======
+
+
+
+
+            <div ng-view>
+>>>>>>> 604bf8245e1e8a44da19d05c1a38c0669fe6fc86
             </div>
-             <!-- / main container -->
+
+
+
             <div class="pre-footer"></div>
             <footer>
                 <div class="container">
