@@ -11,25 +11,20 @@ angular.module('mainApp', ['firebase']).
 
   function LoginCtrl($rootScope, $scope, $location) {
     var fBRef = new Firebase('https://monkey-23.firebaseio.com');
-    $scope.authClient = null;
-    $scope.updateCurrentUser = function() {
-      authClient = new FirebaseAuthClient(fBRef, function(error, user) { 
+    $scope.authClient = authClient = new FirebaseAuthClient(fBRef, function(error, user) { 
         $rootScope.currentUser = null;
-        if (user) { 
+        if (user) {
           $rootScope.currentUser = user;
         } 
-      });
-    }
-    $scope.updateCurrentUser();
+    });
 
     $scope.facebookLogin = function() {
       authClient.login('facebook');
-      //$scope.updateCurrentUser();
+      history.back();
     }
 
     $scope.logOut = function() {
       authClient.logout();
-      //$scope.updateCurrentUser();
     }
 
     $scope.user = {};
@@ -112,7 +107,7 @@ angular.module('mainApp', ['firebase']).
             $scope.$apply();
       });
   }
-  function DetailCtrl($scope, $location, $routeParams, angularFireCollection) {
+  function DetailCtrl($scope, $rootScope, $location, $routeParams, angularFireCollection) {
       var userId = $routeParams.userId;
       var fullUrl = 'https://monkey-23.firebaseio-demo.com/users2/' + userId;
       var messageListRef = new Firebase(fullUrl);
@@ -122,6 +117,16 @@ angular.module('mainApp', ['firebase']).
             $scope.userToView.id = userId;
             $scope.$apply();
       });
+      $scope.setRequest = function() {
+        debugger;
+        if($rootScope.currentUser) {
+          //TODO.
+        } else {
+          window.alert("you need to sign in first");
+          $location.path('login/');
+        }
+      }
+
 
       $scope.email = '';
       // Should be shared by both.
