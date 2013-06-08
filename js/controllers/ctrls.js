@@ -1,4 +1,4 @@
-var fbUrl = 'https://monkey-23.firebaseio.com';
+var fbUrl = 'https://getbadgers.firebaseio.com';
 var fbRef = new Firebase(fbUrl);
 var fbUsersRef = new Firebase(fbUrl + '/users');
 
@@ -68,7 +68,7 @@ angular.module('mainApp', ['firebase']).
       //TODO(guti): make it a service:
       var userId = $routeParams.userId;
       if (userId) {
-        var userFBURL = 'https://monkey-23.firebaseio.com/users/' + userId;
+        var userFBURL = 'https://getbadgers.firebaseio.com/users/' + userId;
         var userFBRef = new Firebase(userFBURL);
 
         userFBRef.on('value', function(FBUser) {
@@ -82,7 +82,7 @@ angular.module('mainApp', ['firebase']).
         if (userId) {
           userFBRef.update($scope.user);
         } else {
-          var listFBURL = 'https://monkey-23.firebaseio.com/users/';
+          var listFBURL = 'https://getbadgers.firebaseio.com/users/';
           var listFBRef = new Firebase(listFBURL);
           var res = listFBRef.push($scope.user);
           $location.path('/');
@@ -91,7 +91,7 @@ angular.module('mainApp', ['firebase']).
   }
 
   function HomeCtrl($scope, $location, angularFireCollection) {
-      var fullUrl = 'https://monkey-23.firebaseio.com/users/';
+      var fullUrl = 'https://getbadgers.firebaseio.com/users/';
       var messageListRef = new Firebase(fullUrl);
       $scope.usersToView = [];
 
@@ -125,7 +125,7 @@ angular.module('mainApp', ['firebase']).
   }
   function DetailCtrl($scope, $rootScope, $location, $routeParams, angularFireCollection) {
       var userId = $routeParams.userId;
-      var fullUrl = 'https://monkey-23.firebaseio.com/users/' + userId;
+      var fullUrl = 'https://getbadgers.firebaseio.com/users/' + userId;
       $scope.viewedUserRef = new Firebase(fullUrl);
 
       $scope.viewedUserRef.on('value', function(viewedUser) {
@@ -152,7 +152,7 @@ angular.module('mainApp', ['firebase']).
 
   function UsersCtrl($scope, $location, $routeParams, angularFireCollection) {
       // TODO(This is a list that can also update, when change).
-      var url = 'https://monkey-23.firebaseio.com/users/';
+      var url = 'https://getbadgers.firebaseio.com/users/';
       $scope.usersToEdit = angularFireCollection(new Firebase(url), function(usersToEdit) {
         
       });
