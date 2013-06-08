@@ -20,14 +20,15 @@ angular.module('mainApp', ['firebase']).
         $rootScope.currentUser = null;
         if (user) {
           $rootScope.currentUser = user;
+          $rootScope.currentUserRef = fbRef.child("users").child($rootScope.currentUser.username);
           if ($scope.directToEditPage) {
             $scope.directToEditPage = false;
-            var user = fbRef.child("users").child($rootScope.currentUser.username)
-            user.child("user").set($rootScope.currentUser.username);
-            user.child("name").set($rootScope.currentUser.name);
-            user.child("email").set($rootScope.currentUser.email);
-            user.child("facebook").set($rootScope.currentUser);
-            user.child("img").set("http://graph.facebook.com/"+ $rootScope.currentUser.id+"/picture");
+            $rootScope.currentUserRef.update({
+              user:$rootScope.currentUser.username,
+              name:$rootScope.currentUser.name,
+              email:$rootScope.currentUser.email,
+              facebook:$rootScope.currentUser,
+              img:"http://graph.facebook.com/"+ $rootScope.currentUser.id+"/picture"});
             $location.path('edit/'+ $rootScope.currentUser.username+"/");
           }
         } 
@@ -35,7 +36,7 @@ angular.module('mainApp', ['firebase']).
 
     $scope.facebookLogin = function() {
       $scope.directToEditPage = true;
-      authClient.login('facebook');
+      authClient.login('facebook', {rememberMe: true});
     }
 
     $scope.logOut = function() {
@@ -125,40 +126,25 @@ angular.module('mainApp', ['firebase']).
   function DetailCtrl($scope, $rootScope, $location, $routeParams, angularFireCollection) {
       var userId = $routeParams.userId;
       var fullUrl = 'https://monkey-23.firebaseio.com/users/' + userId;
-      var messageListRef = new Firebase(fullUrl);
+      $scope.viewedUserRef = new Firebase(fullUrl);
 
-      messageListRef.on('value', function(snapshot) {
-            $scope.userToView = snapshot.val();
+      $scope.viewedUserRef.on('value', function(viewedUser) {
+            debugger;
+            $scope.userToView = viewedUser.val();
             $scope.userToView.id = userId;
             $scope.$apply();
       });
+
       $scope.setRequest = function() {
         debugger;
-        if($rootScope.currentUser) {
-          //TODO.
+        if($rootScope.currentUserRef) {
+          $scope.viewedUserRef.child("requests").child($rootScope.currentUser.username).set("request");
+          window.alert("request was added, will come back to you soon.");
         } else {
           window.alert("you need to sign in first");
           $location.path('login/');
         }
       }
-
-      $scope.email = '';
-      // Should be shared by both.
-      // TODO(guti): remove:
-      // $scope.saveEmail = function() {
-      //   if ($scope.email) {
-      //     //Push to fire base:
-      //     var listRef = new Firebase('https://monkey-23.firebaseio.com/apply');
-      //     var newPushRef = listRef.push();
-      //     newPushRef.set({email: $scope.email});
-      //     // TODO: save at mix-panel.
-      //     $scope.email = "";
-      //     window.alert("Thanks we will get back to you soon");
-      //   } else {
-      //     $scope.email = "Mm.. apply with your email";          
-      //   } 
-      // }
-
   }
 
   function UsersCtrl($scope, $location, $routeParams, angularFireCollection) {
