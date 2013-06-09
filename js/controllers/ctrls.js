@@ -15,30 +15,30 @@ angular.module('mainApp', ['firebase']).
   })
 
   function LoginCtrl($rootScope, $scope, $location) {
-    $scope.authClient = authClient = new FirebaseAuthClient(fbRef, function(error, facebookUser) { 
-        $rootScope.currentUserRef = null;
+        $scope.authClient = authClient = new FirebaseAuthClient(fbRef, function(error, facebookUser) { 
+        debugger;
         $rootScope.currentUser = null;
         if (facebookUser) {
-          $rootScope.currentUserRef = fbRef.child("users").child(facebookUser.username);
-          $rootScope.currentUserRef.facebook = facebookUser;
-          $rootScope.currentUserRef.id = facebookUser.username;
-          $rootScope.currentUserRef.on('value', function(FBUser) {
-              $rootScope.currentUser = FBUser.val();
-              $rootScope.currentUser.id = facebookUser.username;
+          var id = facebookUser.username || facebookUser.id;
+          id = id.replace(/\./g,' ').replace(/\#/g,' ').replace(/\$/g,' ').replace(/\[/g,' ').replace(/\]/g,' ');
 
-              if ($scope.directToEditPage) {
-                $scope.directToEditPage = false;
-                // Copy basic info from fb, to the facebookUser.
-                $rootScope.currentUserRef.update({
-                  user:facebookUser.username,
-                  name:facebookUser.name,
-                  id:facebookUser.username,
-                  email:facebookUser.email,
-                  facebook:$rootScope.currentUser,
-                  img:"http://graph.facebook.com/"+ facebookUser.id+"/picture"});
-                // Direct to the profile page:
-                $location.path('edit/'+ $rootScope.currentUser.id+"/");
-                debugger;
+          var currentUserRef = fbRef.child("users").child(id);
+          currentUserRef.set({id:""});
+          currentUserRef.on('value', function(FBUser) {
+              $rootScope.currentUser = FBUser.val();
+              // new user: copy info from fb.
+              if ($rootScope.currentUser.id == "") {
+                currentUserRef.update({
+                  user: facebookUser.username || "",
+                  name: facebookUser.name || "",
+                  id: id,
+                  email: facebookUser.email || "",
+                  facebook: facebookUser || "",
+                  img: "http://graph.facebook.com/"+ facebookUser.id+"/picture" || ""});
+                if ($scope.directToEditPage) {
+                  $scope.directToEditPage = false;
+                  $location.path('edit/'+ $rootScope.currentUser.id+"/");   
+                }
               }
               $scope.$apply();
           });
@@ -56,22 +56,22 @@ angular.module('mainApp', ['firebase']).
 
     $scope.user = {};
     $scope.signin = function() {
-      authClient.login('password', {
-        email: $scope.user.email,
-        password: $scope.user.password,
-        rememberMe: true
-      });
+      // authClient.login('password', {
+      //   email: $scope.user.email,
+      //   password: $scope.user.password,
+      //   rememberMe: true
+      // });
     }
 
     $scope.signup = function() { 
-      authClient.createUser($scope.user.email, $scope.user.password, function(error, user) {
-        if (!error) {
-          $rootScope.currentUser = user;
-          rootScope = $rootScope;
-          window.alert("thanks for sign-up");
-          location.replace('/');
-        }
-      }); 
+      // authClient.createUser($scope.user.email, $scope.user.password, function(error, user) {
+      //   if (!error) {
+      //     $rootScope.currentUser = user;
+      //     rootScope = $rootScope;
+      //     window.alert("thanks for sign-up");
+      //     location.replace('/');
+      //   }
+      // }); 
     }
   }
 
@@ -148,7 +148,7 @@ angular.module('mainApp', ['firebase']).
       });
 
       $scope.setRequest = function() {
-        if($rootScope.currentUserRef) {
+        if($rootScope.currentUser) {
           $scope.viewedUserRef.child("requests").child($rootScope.currentUser.name).set("request");
           window.alert("request was added, will come back to you soon.");
         } else {
