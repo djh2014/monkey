@@ -12,14 +12,35 @@ ga('send', 'pageview');
 <section id="slider">
     <div id="ei-slider" class="ei-slider">
         <ul class="ei-slider-large">
-                <a href="detail.html"><img src="demo/slider/large/hero.png" alt="image06"/></a>
+                <a href="detail.html"><img src="demo/slider/large/updatedhero.png" alt="image06"/></a>
         </ul>
     </div><!-- ei-slider -->
 </section>
+<hr/>
 <div class="row">
     <div class="span12">
         <div class="page-header">
-            <h2><span class="orange">Featured</span> People</h2>
+            <h2 class="title-center"><span class="orange">Our</span> Mission</h2>
+                <p id="mission">
+                Do what you are great at and leave your wallet home.  Through our platform you earn Badgers, which are 15 minute units of time by helping out others.  You can then spend your Badgers on anything that would make you a more productive, happier, and overall better person.  Apply for an invite below.
+                </p>
+                <div class="row">
+                    <div class="span12">
+                        <form class="form-inline title-center" id="form-one">
+                            <input type="text" class="input-small" placeholder="First Name">
+                            <input type="text" class="input-small" placeholder="Last Name">
+                            <input type="text" class="input-large" placeholder="Email">
+                            <button type="button" class="btn">Submit</button>
+                        </form>
+                    </div>
+                </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="span12">
+        <div class="page-header">
+            <h2 class="title-center"><span class="orange">Featured</span> People</h2>
         </div>
     </div>
 </div>
@@ -36,7 +57,7 @@ ga('send', 'pageview');
                         <p><span class="name">{{user.name}}<span>:</span></span>{{user.skills}}</p>
                         <h4>{{user.canDO}}</h4>
                         <p><span class="rating-static rating-45"></span></p>
-                        <p><a class="btn btn-primary" href="#/detail/{{user.id}}"><i class="icon-shopping-cart icon-white"></i> Request</a> <a class="btn pull-right" href="#/detail/{{user.id}}">more...</a></p>
+                        <!--<p><a class="btn btn-primary" href="#/detail/{{user.id}}"><i class="icon-shopping-cart icon-white"></i> Request</a> <a class="btn pull-right" href="#/detail/{{user.id}}">more...</a></p>-->
                     </div>
                 </div>
             </li>
