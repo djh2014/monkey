@@ -79,7 +79,20 @@
                                 <input type="text" placeholder="Search" class="search-query span2">
                                 <button type="submit" class="btn btn-inverse"><i class="icon-search icon-white"></i></button>
                             </form>
-
+                          <ul class="nav pull-right">
+                                <!--<li class="main-menu-element"><a href="#"><i class="icon-shopping-cart"></i> Your Cart</a></li>-->
+                                <li class="divider-vertical"></li>
+                                <li class="dropdown main-menu-element">
+                                     <div ng-switch on="currentUser != null" >
+                                        <span ng-switch-when="true">
+                                            <img src="{{currentUser.img}}"/>{{currentUser.name}} (<a ng-click="logOut()">logout</a>)
+                                        </span>
+                                        <span ng-switch-default>
+                                            <a ng-click="facebookLogin()"><i class="icon-user"></i> Sign In</a>
+                                        </span>
+                                    </div>
+                                </li>
+                            </ul>
 
                         </div><!-- /.nav-collapse -->
                     </div>
