@@ -15,20 +15,30 @@ angular.module('mainApp', ['firebase']).
   })
 
   function LoginCtrl($rootScope, $scope, $location) {
-    $scope.authClient = authClient = new FirebaseAuthClient(fbRef, function(error, user) { 
-        debugger;
+    $scope.authClient = authClient = new FirebaseAuthClient(fbRef, function(error, facebookUser) { 
+        $rootScope.currentUserRef = null;
         $rootScope.currentUser = null;
-        if (user) {
-          $rootScope.currentUser = user;
-          $rootScope.currentUserRef = fbRef.child("users").child($rootScope.currentUser.username);
+        if (facebookUser) {
+          $rootScope.currentUserRef = fbRef.child("users").child(facebookUser.username);
+          $rootScope.currentUserRef.facebook = facebookUser;
+          $rootScope.currentUserRef.id = facebookUser.username;
+          $rootScope.currentUserRef.on('value', function(FBUser) {
+              $rootScope.currentUser = FBUser.val();
+              $rootScope.currentUser.id = facebookUser.username;
+              $scope.$apply();
+          });
+
           if ($scope.directToEditPage) {
             $scope.directToEditPage = false;
+            // Copy basic info from fb, to the facebookUser.
             $rootScope.currentUserRef.update({
-              user:$rootScope.currentUser.username,
-              name:$rootScope.currentUser.name,
-              email:$rootScope.currentUser.email,
+              user:facebookUser.username,
+              name:facebookUser.name,
+              id:facebookUser.username,
+              email:facebookUser.email,
               facebook:$rootScope.currentUser,
-              img:"http://graph.facebook.com/"+ $rootScope.currentUser.id+"/picture"});
+              img:"http://graph.facebook.com/"+ facebookUser.id+"/picture"});
+            // Direct to the profile page:
             $location.path('edit/'+ $rootScope.currentUser.username+"/");
           }
         } 

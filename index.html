@@ -85,7 +85,8 @@
                                 <li class="dropdown main-menu-element">
                                      <div ng-switch on="currentUser != null" >
                                         <span ng-switch-when="true">
-                                            <img src="{{currentUser.img}}"/>{{currentUser.name}} (<a ng-click="logOut()">logout</a>)
+                                            <img src="{{currentUser.img}}"/>
+                                            <a href="#/detail/{{currentUser.id}}">{{currentUser.name}}</a> (<a ng-click="logOut()">logout</a>)
                                         </span>
                                         <span ng-switch-default>
                                             <a ng-click="facebookLogin()"><i class="icon-user"></i> Sign In</a>
