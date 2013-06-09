@@ -3,7 +3,7 @@ var fbRef = new Firebase(fbUrl);
 var fbUsersRef = new Firebase(fbUrl + '/users');
 
 
-angular.module('mainApp', ['firebase']).
+angular.module('mainApp', ['firebase', '$strap.directives']).
   config(function($routeProvider) {
     $routeProvider.
       when('/', {controller:HomeCtrl, templateUrl:'home.html'}).
@@ -11,13 +11,39 @@ angular.module('mainApp', ['firebase']).
       when('/users', {controller:UsersCtrl, templateUrl:'users.html'}).
       when('/login', {controller:LoginCtrl, templateUrl:'login.html'}).
       when('/edit/:userId', {controller:EditProfileCtrl, templateUrl:'editProfile.html'}).
+      when('/sessions/:userId', {controller:SessionsCtrl, templateUrl:'sessions.html'}).
       otherwise({redirectTo:'/'});
   })
+
+
+  function SessionsCtrl($rootScope, $routeParams, $scope, $location) {
+      var userId = $routeParams.userId;
+      if (userId) {
+        fbRef.child("users").child(userId).on('value', function(user) {
+              $scope.viewedUser = user.val();
+              $scope.newSession = {teacher:$scope.viewedUser.id}
+              $scope.$apply();
+        });
+      }
+
+      $scope.addNewSession = function() {
+        debugger;
+        $scope.newSession.student = $rootScope.currentUser.id
+        var sessionRef = fbRef.child("sessions").push($scope.newSession);
+      }
+
+      // fbRef.child("sessions").on("value", function(sessions) {
+      //   $scope.sessions = 
+      //   $scope.apply();
+      // });
+  }
+
+
+
 
   function LoginCtrl($rootScope, $scope, $location) {
         $scope.authClient = authClient = new FirebaseAuthClient(fbRef, function(error, facebookUser) { 
         debugger;
-        $rootScope.currentUser = null;
         if (facebookUser) {
           var id = facebookUser.username || facebookUser.id;
           id = id.replace(/\./g,' ').replace(/\#/g,' ').replace(/\$/g,' ').replace(/\[/g,' ').replace(/\]/g,' ');
@@ -42,7 +68,9 @@ angular.module('mainApp', ['firebase']).
               }
               $scope.$apply();
           });
-        } 
+        } else {
+          $rootScope.currentUser = null;
+        }
     });
 
     $scope.facebookLogin = function() {
@@ -52,26 +80,6 @@ angular.module('mainApp', ['firebase']).
 
     $scope.logOut = function() {
       authClient.logout();
-    }
-
-    $scope.user = {};
-    $scope.signin = function() {
-      // authClient.login('password', {
-      //   email: $scope.user.email,
-      //   password: $scope.user.password,
-      //   rememberMe: true
-      // });
-    }
-
-    $scope.signup = function() { 
-      // authClient.createUser($scope.user.email, $scope.user.password, function(error, user) {
-      //   if (!error) {
-      //     $rootScope.currentUser = user;
-      //     rootScope = $rootScope;
-      //     window.alert("thanks for sign-up");
-      //     location.replace('/');
-      //   }
-      // }); 
     }
   }
 
