@@ -4,10 +4,18 @@ Sessions:
 	Request Message: <input type="text" ng-model="newSession.request" /><br />
     Date : <input type="text" ng-model="newSession.date" /><br />
     Time : <input type="text" ng-model="newSession.time" /><br />
-
 	<button ng-click="addNewSession()">Sent Request</button>
 </form>
 <!-- Sessions -->
+<ul>
+	<li ng-repeat="session in sessions">
+		<img src="{{session.student.img}}"/>>
+		Requester: {{session.student.name}}.
+		Date: {{session.date}}
+		Time: {{session.time}}
+		Request: {{session.request}}
+	</li>
+</ul>
 
 
 <!-- TODO: -->

@@ -21,21 +21,21 @@ angular.module('mainApp', ['firebase', '$strap.directives']).
       if (userId) {
         fbRef.child("users").child(userId).on('value', function(user) {
               $scope.viewedUser = user.val();
-              $scope.newSession = {teacher:$scope.viewedUser.id}
+              $scope.newSession = {}
               $scope.$apply();
         });
       }
 
       $scope.addNewSession = function() {
-        debugger;
-        $scope.newSession.student = $rootScope.currentUser.id
+        $scope.newSession.student = $rootScope.currentUser;
+        $scope.newSession.teacher = $scope.viewedUser;
         var sessionRef = fbRef.child("sessions").push($scope.newSession);
+        $scope.newSession = {}
       }
-
-      // fbRef.child("sessions").on("value", function(sessions) {
-      //   $scope.sessions = 
-      //   $scope.apply();
-      // });
+      fbRef.child("sessions").on("value", function(sessions) {
+        $scope.sessions = sessions.val();
+        $scope.$apply();
+      });
   }
 
 
@@ -43,7 +43,6 @@ angular.module('mainApp', ['firebase', '$strap.directives']).
 
   function LoginCtrl($rootScope, $scope, $location) {
         $scope.authClient = authClient = new FirebaseAuthClient(fbRef, function(error, facebookUser) { 
-        debugger;
         if (facebookUser) {
           var id = facebookUser.username || facebookUser.id;
           id = id.replace(/\./g,' ').replace(/\#/g,' ').replace(/\$/g,' ').replace(/\[/g,' ').replace(/\]/g,' ');
