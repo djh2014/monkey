@@ -42,8 +42,6 @@ angular.module('mainApp', ['firebase']).
               }
               $scope.$apply();
           });
-
-          
         } 
     });
 
@@ -74,7 +72,7 @@ angular.module('mainApp', ['firebase']).
           location.replace('/');
         }
       }); 
-    }    
+    }
   }
 
   function EditProfileCtrl($scope, $routeParams, $location){
