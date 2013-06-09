@@ -108,9 +108,13 @@ ul.socialize li a.youtube{
 #mission {
     font-family: Helvetica, Arial, sans-serif;
     font-weight:400;
-    font-size: 16px;
+    font-size: 22px;
+    line-height: 2;
     color:black;
     text-align: center;
+}
+#form-one {
+    padding-top:20px;
 }
 
 /**

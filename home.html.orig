@@ -12,11 +12,25 @@ ga('send', 'pageview');
 <section id="slider">
     <div id="ei-slider" class="ei-slider">
         <ul class="ei-slider-large">
+<<<<<<< HEAD
                 <a href="detail.html"><img src="demo/slider/large/updatedhero.png" alt="image06"/></a>
+=======
+                <a href="#"><img src="demo/slider/large/hero.png" alt="image06"/></a>
+>>>>>>> 8b2004de9381ce88ab9a1caccb9c2b7922d3fe67
         </ul>
     </div><!-- ei-slider -->
 </section>
 <hr/>
+<div class="row">
+                <div class="span12">
+                    <div class="page-header">
+                        <h2 class="title-center">Our Mission</h2>
+                            <p id="mission">
+                            Our goal is to have people share valuable skills.  To create a platform that would enable anybody to share strenghts.  Do what you are great at and leave your wallet at home.  Through our platform you gain Badgers, which are 15 minute units of time by helping out others.  You can then spend your Badgers on anything that would make you a more productive, happier, and overall better person.  
+                            </p>
+                    </div>
+                </div>
+            </div>
 <div class="row">
     <div class="span12">
         <div class="page-header">

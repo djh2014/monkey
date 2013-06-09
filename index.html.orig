@@ -37,8 +37,6 @@
   </script>
   <script src="js/controllers/ctrls.js"></script>
 
-
-
   </head>
 
   <body ng-app="mainApp" ng-controller="LoginCtrl">
@@ -109,7 +107,7 @@
             </div>
             <div ng-view>
 
->>>>>>> b2e51eac30437a883cbfcb60f47aa701ef4ab144
+>>>>>>> 8b2004de9381ce88ab9a1caccb9c2b7922d3fe67
             </div>
 
 
