@@ -12,7 +12,7 @@
  * License for the specific language governing permissions and limitations under
  * the License
 -->
-        <ModulePrefs title="Hangout Starter">
+        <ModulePrefs title="Get Badgers">
                 <Require feature="rpc" />
                 <Require feature="views" />
                 <Require feature="locked-domain" />
