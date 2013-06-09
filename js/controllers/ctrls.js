@@ -1,3 +1,7 @@
+var fbUrl = 'https://getbadgers.firebaseio.com';
+var fbRef = new Firebase(fbUrl);
+var fbUsersRef = new Firebase(fbUrl + '/users');
+
 
 angular.module('mainApp', ['firebase']).
   config(function($routeProvider) {
@@ -5,15 +9,77 @@ angular.module('mainApp', ['firebase']).
       when('/', {controller:HomeCtrl, templateUrl:'home.html'}).
       when('/detail/:userId', {controller:DetailCtrl, templateUrl:'detail.html'}).
       when('/users', {controller:UsersCtrl, templateUrl:'users.html'}).
+      when('/login', {controller:LoginCtrl, templateUrl:'login.html'}).
       when('/edit/:userId', {controller:EditProfileCtrl, templateUrl:'editProfile.html'}).
       otherwise({redirectTo:'/'});
   })
+
+  function LoginCtrl($rootScope, $scope, $location) {
+    $scope.authClient = authClient = new FirebaseAuthClient(fbRef, function(error, facebookUser) { 
+        $rootScope.currentUserRef = null;
+        $rootScope.currentUser = null;
+        if (facebookUser) {
+          $rootScope.currentUserRef = fbRef.child("users").child(facebookUser.username);
+          $rootScope.currentUserRef.facebook = facebookUser;
+          $rootScope.currentUserRef.id = facebookUser.username;
+          $rootScope.currentUserRef.on('value', function(FBUser) {
+              $rootScope.currentUser = FBUser.val();
+              $rootScope.currentUser.id = facebookUser.username;
+
+              if ($scope.directToEditPage) {
+                $scope.directToEditPage = false;
+                // Copy basic info from fb, to the facebookUser.
+                $rootScope.currentUserRef.update({
+                  user:facebookUser.username,
+                  name:facebookUser.name,
+                  id:facebookUser.username,
+                  email:facebookUser.email,
+                  facebook:$rootScope.currentUser,
+                  img:"http://graph.facebook.com/"+ facebookUser.id+"/picture"});
+                // Direct to the profile page:
+                $location.path('edit/'+ $rootScope.currentUser.id+"/");
+                debugger;
+              }
+              $scope.$apply();
+          });
+        } 
+    });
+
+    $scope.facebookLogin = function() {
+      $scope.directToEditPage = true;
+      authClient.login('facebook', {rememberMe: true});
+    }
+
+    $scope.logOut = function() {
+      authClient.logout();
+    }
+
+    $scope.user = {};
+    $scope.signin = function() {
+      authClient.login('password', {
+        email: $scope.user.email,
+        password: $scope.user.password,
+        rememberMe: true
+      });
+    }
+
+    $scope.signup = function() { 
+      authClient.createUser($scope.user.email, $scope.user.password, function(error, user) {
+        if (!error) {
+          $rootScope.currentUser = user;
+          rootScope = $rootScope;
+          window.alert("thanks for sign-up");
+          location.replace('/');
+        }
+      }); 
+    }
+  }
 
   function EditProfileCtrl($scope, $routeParams, $location){
       //TODO(guti): make it a service:
       var userId = $routeParams.userId;
       if (userId) {
-        var userFBURL = 'https://monkey-23.firebaseio-demo.com/users2/' + userId;
+        var userFBURL = 'https://getbadgers.firebaseio.com/users/' + userId;
         var userFBRef = new Firebase(userFBURL);
 
         userFBRef.on('value', function(FBUser) {
@@ -23,11 +89,10 @@ angular.module('mainApp', ['firebase']).
       }
 
       $scope.saveUser = function() {
-        debugger;
         if (userId) {
           userFBRef.update($scope.user);
         } else {
-          var listFBURL = 'https://monkey-23.firebaseio-demo.com/users2/';
+          var listFBURL = 'https://getbadgers.firebaseio.com/users/';
           var listFBRef = new Firebase(listFBURL);
           var res = listFBRef.push($scope.user);
           $location.path('/');
@@ -36,7 +101,7 @@ angular.module('mainApp', ['firebase']).
   }
 
   function HomeCtrl($scope, $location, angularFireCollection) {
-      var fullUrl = 'https://monkey-23.firebaseio-demo.com/users2/';
+      var fullUrl = 'https://getbadgers.firebaseio.com/users/';
       var messageListRef = new Firebase(fullUrl);
       $scope.usersToView = [];
 
@@ -68,39 +133,34 @@ angular.module('mainApp', ['firebase']).
             $scope.$apply();
       });
   }
-  function DetailCtrl($scope, $location, $routeParams, angularFireCollection) {
+  function DetailCtrl($scope, $rootScope, $location, $routeParams, angularFireCollection) {
       var userId = $routeParams.userId;
-      var fullUrl = 'https://monkey-23.firebaseio-demo.com/users2/' + userId;
-      var messageListRef = new Firebase(fullUrl);
+      var fullUrl = 'https://getbadgers.firebaseio.com/users/' + userId;
+      $scope.viewedUserRef = new Firebase(fullUrl);
 
-      messageListRef.on('value', function(snapshot) {
-            $scope.userToView = snapshot.val();
+      $scope.viewedUserRef.on('value', function(viewedUser) {
+            $scope.userToView = viewedUser.val();
             $scope.userToView.id = userId;
+            if($scope.userToView.requests) {
+              $scope.userToView.requests = Object.keys($scope.userToView.requests);
+            }
             $scope.$apply();
       });
 
-      $scope.email = '';
-      // Should be shared by both.
-      $scope.saveEmail = function() {
-        if ($scope.email) {
-          //Push to fire base:
-          var listRef = new Firebase('https://monkey-23.firebaseio-demo.com/apply');
-          var newPushRef = listRef.push();
-          newPushRef.set({email: $scope.email});
-          // TODO: save at mix-panel.
-          $scope.email = "";
-          window.alert("Thanks we will get back to you soon");
+      $scope.setRequest = function() {
+        if($rootScope.currentUserRef) {
+          $scope.viewedUserRef.child("requests").child($rootScope.currentUser.name).set("request");
+          window.alert("request was added, will come back to you soon.");
         } else {
-          $scope.email = "Mm.. apply with your email";          
-        } 
+          window.alert("you need to sign in first");
+          $location.path('login/');
+        }
       }
-
   }
 
-
   function UsersCtrl($scope, $location, $routeParams, angularFireCollection) {
-      // TODO(This is a list that can also update, when change,
-      var url = 'https://monkey-23.firebaseio-demo.com/users2/';
+      // TODO(This is a list that can also update, when change).
+      var url = 'https://getbadgers.firebaseio.com/users/';
       $scope.usersToEdit = angularFireCollection(new Firebase(url), function(usersToEdit) {
         
       });

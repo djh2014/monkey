@@ -32,11 +32,14 @@
   <script src="components/angular/angular.js"></script>
   <script src="js/firebase.js"></script>
   <script src="components/angular-fire/angularFire.js"></script>
+  <script type='text/javascript'
+        src='https://cdn.firebase.com/v0/firebase-auth-client.js'>
+  </script>
   <script src="js/controllers/ctrls.js"></script>
 
   </head>
 
-  <body ng-app="mainApp">
+  <body ng-app="mainApp" ng-controller="LoginCtrl">
 
     <section id="main" class="container">
         <div class="row" style="margin-bottom: 20px">
@@ -74,12 +77,28 @@
                                 <input type="text" placeholder="Search" class="search-query span2">
                                 <button type="submit" class="btn btn-inverse"><i class="icon-search icon-white"></i></button>
                             </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
+                          <ul class="nav pull-right">
+                                <!--<li class="main-menu-element"><a href="#"><i class="icon-shopping-cart"></i> Your Cart</a></li>-->
+                                <li class="divider-vertical"></li>
+                                <li class="dropdown main-menu-element">
+                                     <div ng-switch on="currentUser != null" >
+                                        <span ng-switch-when="true">
+                                            <img src="{{currentUser.img}}"/>
+                                            <a href="#/detail/{{currentUser.id}}">{{currentUser.name}}</a> (<a ng-click="logOut()">logout</a>)
+                                        </span>
+                                        <span ng-switch-default>
+                                            <a ng-click="facebookLogin()"><i class="icon-user"></i> Sign In</a>
+                                        </span>
+                                    </div>
+                                </li>
+                            </ul>
 
+                        </div><!-- /.nav-collapse -->
+                    </div>
+                </div><!-- /navbar-inner -->
+            </div>
             <div ng-view>
+
             </div>
 
 
