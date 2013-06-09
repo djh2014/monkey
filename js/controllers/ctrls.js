@@ -25,22 +25,25 @@ angular.module('mainApp', ['firebase']).
           $rootScope.currentUserRef.on('value', function(FBUser) {
               $rootScope.currentUser = FBUser.val();
               $rootScope.currentUser.id = facebookUser.username;
+
+              if ($scope.directToEditPage) {
+                $scope.directToEditPage = false;
+                // Copy basic info from fb, to the facebookUser.
+                $rootScope.currentUserRef.update({
+                  user:facebookUser.username,
+                  name:facebookUser.name,
+                  id:facebookUser.username,
+                  email:facebookUser.email,
+                  facebook:$rootScope.currentUser,
+                  img:"http://graph.facebook.com/"+ facebookUser.id+"/picture"});
+                // Direct to the profile page:
+                $location.path('edit/'+ $rootScope.currentUser.id+"/");
+                debugger;
+              }
               $scope.$apply();
           });
 
-          if ($scope.directToEditPage) {
-            $scope.directToEditPage = false;
-            // Copy basic info from fb, to the facebookUser.
-            $rootScope.currentUserRef.update({
-              user:facebookUser.username,
-              name:facebookUser.name,
-              id:facebookUser.username,
-              email:facebookUser.email,
-              facebook:$rootScope.currentUser,
-              img:"http://graph.facebook.com/"+ facebookUser.id+"/picture"});
-            // Direct to the profile page:
-            $location.path('edit/'+ $rootScope.currentUser.username+"/");
-          }
+          
         } 
     });
 
@@ -88,7 +91,6 @@ angular.module('mainApp', ['firebase']).
       }
 
       $scope.saveUser = function() {
-        debugger;
         if (userId) {
           userFBRef.update($scope.user);
         } else {
@@ -139,7 +141,6 @@ angular.module('mainApp', ['firebase']).
       $scope.viewedUserRef = new Firebase(fullUrl);
 
       $scope.viewedUserRef.on('value', function(viewedUser) {
-            debugger;
             $scope.userToView = viewedUser.val();
             $scope.userToView.id = userId;
             if($scope.userToView.requests) {
@@ -149,7 +150,6 @@ angular.module('mainApp', ['firebase']).
       });
 
       $scope.setRequest = function() {
-        debugger;
         if($rootScope.currentUserRef) {
           $scope.viewedUserRef.child("requests").child($rootScope.currentUser.name).set("request");
           window.alert("request was added, will come back to you soon.");
