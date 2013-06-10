@@ -1,0 +1,37 @@
+{
+  "name": "angular-ui-calendar",
+  "version": "0.1.3",
+  "description": "A complete AngularJS directive for the Arshaw FullCalendar.",
+  "author": {
+    "name": "https://github.com/angular-ui/ui-calendar/graphs/contributors"
+  },
+  "license": "MIT",
+  "homepage": "http://angular-ui.github.com",
+  "main": "./ui-calendar.js",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "components",
+    "test*",
+    "demo*",
+    "gruntFile.js",
+    "package.json"
+  ],
+  "dependencies": {
+    "angular": "~1.x",
+    "jquery": "~1.x",
+    "jquery-ui": ">= 1.9",
+    "fullcalendar": "~1.x"
+  },
+  "devDependencies": {
+    "angular-mocks": "~1.x"
+  },
+  "gitHead": "a90fbca3dcb147880b617332d50a532ac4f210db",
+  "readme": "# ui-calendar directive [![Build Status](https://travis-ci.org/angular-ui/ui-calendar.png)](https://travis-ci.org/angular-ui/ui-calendar)\r\n\r\nA complete AngularJS directive for the Arshaw FullCalendar.\r\n\r\n# Requirements\r\n- ([fullcalendar.css](https://raw.github.com/angular-ui/angular-ui.github.com/master/lib/calendar/fullcalendar.css))\r\n- ([JQuery](http://arshaw.com/js/fullcalendar-1.5.3/fullcalendar/gcal.js))\r\n- ([JQueryUI](http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js))\r\n- ([AngularJS](http://code.angularjs.org/1.0.4/angular.js))\r\n- ([fullcalendar.js](https://raw.github.com/angular-ui/angular-ui.github.com/master/lib/calendar/fullcalendar.js))\r\n- optional - ([gcal-plugin](http://arshaw.com/js/fullcalendar-1.5.3/fullcalendar/gcal.js))\r\n\r\n# Testing\r\n\r\nWe use testacular and jshint to ensure the quality of the code.  The easiest way to run these checks is to use grunt:\r\n\r\n  npm install -g grunt-cli\r\n  npm install\r\n  bower install\r\n  grunt\r\n\r\n# Usage\r\n\r\nWe use [bower](http://twitter.github.com/bower/) for dependency management.  Add\r\n\r\n    dependencies: {\r\n        \"angular-ui-calendar\": \"latest\"\r\n    }\r\n\r\nTo your `components.json` file. Then run\r\n\r\n    bower install\r\n\r\nThis will copy the ui-calendar files into your `components` folder, along with its dependencies. Load the script files in your application:\r\n\r\n    <script type=\"text/javascript\" src=\"components/jquery/jquery.js\"></script>\r\n    <script type=\"text/javascript\" src=\"components/jquery-ui\\ui\\jquery-ui.custom.js\"></script>\r\n    <script type=\"text/javascript\" src=\"components/angular/angular.js\"></script>\r\n    <script type=\"text/javascript\" src=\"components/angular-ui-calendar/calendar.js\"></script>\r\n\r\nAdd the calendar module as a dependency to your application module:\r\n\r\n    var myAppModule = angular.module('MyApp', ['ui.calendar'])\r\n\r\nApply the directive to your div elements:\r\n\r\n    <div ui-calendar>\r\n\r\n## Options\r\n\r\nAll the Arshaw Fullcalendar options can be passed through the directive. This even means function objects that are declared on the scope. \r\n\r\n\tmyAppModule.controller('MyController', function($scope) {\r\n\t\t/* config object */\r\n    $scope.calendarConfig = {\r\n        height: 450,\r\n        editiable: true,\r\n        dayClick: $scope.alertEventOnClick\r\n    };\r\n\t});\r\n\r\n    <div ui-calendar=\"calendarOptions\" ng-model=\"eventSources\">\r\n\r\n## Working with ng-model\r\n\r\nThe ui-calendar directive plays nicely with ng-model.\r\n\r\nAn Event Sources objects needs to be created to pass into ng-model. This object will be watched for changes and update the calendar accordingly, giving the calendar some Angular Magic. \r\n\r\n_The ui-calendar directive expects the eventSources object to be any type allowed in the documentation for the fullcalendar._ [docs](http://arshaw.com/fullcalendar/docs/event_data/Event_Source_Object/)\r\n\r\n## Documentation for the Calendar\r\n\r\nThe calendar works alongside of all the documentation represented [here](http://arshaw.com/fullcalendar/docs)\r\n\r\n## PR's R always Welcome                                                                                                                                                \r\nPR's are welcome at any time. \r\nMake sure that if a new feature is added, that the proper tests are created.\r\nWe are following a linear approach to this directives history, so PR's are never merged through github's client. \r\n",
+  "readmeFilename": "README.md",
+  "_id": "angular-ui-calendar@0.1.3",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/angular-ui/ui-calendar.git"
+  }
+}
