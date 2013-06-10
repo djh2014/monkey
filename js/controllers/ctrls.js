@@ -10,6 +10,7 @@ angular.module('mainApp', ['firebase']).
       when('/detail/:userId', {controller:DetailCtrl, templateUrl:'detail.html'}).
       when('/users', {controller:UsersCtrl, templateUrl:'users.html'}).
       when('/login', {controller:LoginCtrl, templateUrl:'login.html'}).
+      when('/request/:userId', {templateUrl:'request.html'}).
       when('/edit/:userId', {controller:EditProfileCtrl, templateUrl:'editProfile.html'}).
       otherwise({redirectTo:'/'});
   })

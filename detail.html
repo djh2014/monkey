@@ -22,6 +22,13 @@ ga('send', 'pageview');
                         <span ng-switch-default></span>
                     </span>
                 </h3>
+                <h3>
+                    {{userToView.name}} 
+                    <span ng-switch on="userToView.id == currentUser.id">
+                        <span ng-switch-when="true"><a href="#/requests/{{userToView.id}}"class="btn" >Requests</a></span>
+                        <span ng-switch-default></span>
+                    </span>
+                </h3>
             </div>
 
             <table class="product">
@@ -30,7 +37,7 @@ ga('send', 'pageview');
                     <td><span class="priceLarge">&nbsp;{{userToView.company}}</span></td>
                 </tr>
                  <tr>
-                    <td>Skills:</td>
+                    <td>My Skills:</td>
                     <td><span class="priceLarge">&nbsp;{{userToView.skills}}</span></td>
                 </tr>
                 <tr>
@@ -91,8 +98,12 @@ ga('send', 'pageview');
         </div>
     </section>
 </div>
-
-
+<div class="row">
+    <div class="span6" id="number_badgers">
+        <h4>Number of Badgers</h4>
+        <img src="./img/numberbadgers.png">
+    </div>
+</div>
 <div class="row">
     <div class="span12">
         <div class="tabbable">
@@ -101,9 +112,9 @@ ga('send', 'pageview');
             </ul>
             <div class="tab-content">
                 <div class="tab-pane active" id="1">
-                    <div class="profile-title"><h3>About Me</h3></div>
+                    <div class="profile-title"><h3>About Me:</h3></div>
                     <p>{{userToView.love}}</p>
-                    <div class="profile-title"><h3>What I can do:</h3></div>
+                    <div class="profile-title"><h3>Areas I would like to learn more in:</h3></div>
                     {{userToView.skills}}
                     <ul>
 
