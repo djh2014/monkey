@@ -3,8 +3,8 @@ var fbRef = new Firebase(fbUrl);
 var fbUsersRef = new Firebase(fbUrl + '/users');
 
 
-angular.module('mainApp', ['firebase', '$strap.directives']).
-  config(function($routeProvider) {
+angular.module('mainApp', ['firebase', '$strap.directives'])
+  .config(function($routeProvider) {
     $routeProvider.
       when('/', {controller:HomeCtrl, templateUrl:'home.html'}).
       when('/detail/:userId', {controller:DetailCtrl, templateUrl:'detail.html'}).
@@ -13,7 +13,8 @@ angular.module('mainApp', ['firebase', '$strap.directives']).
       when('/edit/:userId', {controller:EditProfileCtrl, templateUrl:'editProfile.html'}).
       when('/sessions/:userId', {controller:SessionsCtrl, templateUrl:'sessions.html'}).
       otherwise({redirectTo:'/'});
-  })
+  });
+  
 
 
   function SessionsCtrl($rootScope, $routeParams, $scope, $location) {
@@ -22,9 +23,25 @@ angular.module('mainApp', ['firebase', '$strap.directives']).
         fbRef.child("users").child(userId).on('value', function(user) {
               $scope.viewedUser = user.val();
               $scope.newSession = {}
+
+              fbRef.child("sessions").on("value", function(sessions) {
+                $scope.sessions = sessions.val();
+                // TODO: replace with nice angular filter:
+                filterSessions = []; 
+                for(var key in $scope.sessions) {
+                  var session = $scope.sessions[key];
+                  if (session.teacher.username == $scope.viewedUser.username) {
+                    filterSessions.push(session);
+                  }
+                }
+                debugger;
+                $scope.sessions = filterSessions;
+                $scope.$apply();
+              });
               $scope.$apply();
         });
       }
+
 
       $scope.addNewSession = function() {
         $scope.newSession.student = $rootScope.currentUser;
@@ -32,10 +49,7 @@ angular.module('mainApp', ['firebase', '$strap.directives']).
         var sessionRef = fbRef.child("sessions").push($scope.newSession);
         $scope.newSession = {}
       }
-      fbRef.child("sessions").on("value", function(sessions) {
-        $scope.sessions = sessions.val();
-        $scope.$apply();
-      });
+      
   }
 
 
