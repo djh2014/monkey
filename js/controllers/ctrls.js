@@ -149,6 +149,16 @@ angular.module('mainApp', ['firebase', '$strap.directives'])
       var messageListRef = new Firebase(fullUrl);
       $scope.usersToView = [];
 
+      $scope.applicant = {}
+      debugger;
+      $scope.apply = function() {
+        debugger;
+        fbRef.child("applicants").push($scope.applicant);
+        $scope.applicant = {}
+        window.alert("Thanks we will get back to you shortly.");
+        $scope.$apply()
+      }
+
       messageListRef.on('value', function(snapshot) {
             // For index.html page:
             var BIG_IMG = [600, 450, 6], MEDIUM_IMG = [260, 200, 3], SMALL_IMG = [225, 200, 3];

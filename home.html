@@ -27,10 +27,10 @@ ga('send', 'pageview');
                 <div class="row">
                     <div class="span12">
                         <form class="form-inline title-center" id="form-one">
-                            <input type="text" class="input-small" placeholder="First Name">
-                            <input type="text" class="input-small" placeholder="Last Name">
-                            <input type="text" class="input-large" placeholder="Email">
-                            <button type="button" class="btn">Submit</button>
+                            <input type="text" ng-model="applicant.fname" class="input-small" placeholder="First Name">
+                            <input type="text" ng-model="applicant.lname" class="input-small" placeholder="Last Name">
+                            <input type="text" ng-model="applicant.email" class="input-large" placeholder="Email">
+                            <button type="button" ng-click="apply()" class="btn">Submit</button>
                         </form>
                     </div>
                 </div>
