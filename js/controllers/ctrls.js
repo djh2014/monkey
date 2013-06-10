@@ -17,6 +17,8 @@ angular.module('mainApp', ['firebase', '$strap.directives'])
   
   function SessionsCtrl($rootScope, $routeParams, $scope, $location) {
       var userId = $routeParams.userId;
+      var APPROVED = "APPROVED", REJECT= "REJECT", NEW ="NEW", DONE = "DONE";
+
       if (userId) {
         fbRef.child("users").child(userId).on('value', function(user) {
               $scope.viewedUser = user.val();
@@ -32,7 +34,6 @@ angular.module('mainApp', ['firebase', '$strap.directives'])
                     filterSessions.push(session);
                   }
                 }
-                debugger;
                 $scope.sessions = filterSessions;
                 $scope.$apply();
               });
@@ -40,10 +41,24 @@ angular.module('mainApp', ['firebase', '$strap.directives'])
         });
       }
 
+      $scope.approve = function(session) {
+        fbRef.child("sessions").child(session.id).update({status:APPROVED});
+        $scope.$apply();
+      }
+      
+      $scope.reject = function(session) {
+        fbRef.child("sessions").child(session.id).update({status:REJECT});
+        $scope.$apply();
+      }
+
       $scope.addNewSession = function() {
+        var sessionRef = fbRef.child("sessions").push()
         $scope.newSession.student = $rootScope.currentUser;
         $scope.newSession.teacher = $scope.viewedUser;
-        var sessionRef = fbRef.child("sessions").push($scope.newSession);
+        $scope.newSession.status = NEW;
+        $scope.newSession.id = sessionRef.name();
+        sessionRef.update($scope.newSession);
+        
         $scope.newSession = {}
       }
   }

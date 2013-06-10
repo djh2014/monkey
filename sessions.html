@@ -13,14 +13,40 @@ Sessions:
 <!-- Sessions -->
 <ul>
 	<li ng-repeat="session in sessions | filter:onlyViewed">
-		<img src="{{session.student.img}}"/>>
+		<img src="{{session.student.img}}"/>
 		Requester: {{session.student.name}}.
 		Date: {{session.date}}
 		Time: {{session.time}}
 		Request: {{session.request}}
+		<!-- Status -->
+		Status:
+		<span ng-switch on="session.status" >
+	        <span ng-switch-when="APPROVED">Approved</span>
+	        <span ng-switch-when="REJECT">Rejected</span>
+	        <span ng-switch-when="DONE">Done</span>
+	        <!-- Not Approved yet: -->
+	        <span ng-switch-default>
+	        	<span ng-switch on="viewedUser.id == currentUser.id" >
+	        	  <span ng-switch-when="true">
+	        	   <button ng-click="approve(session)" >Approve</button>
+					<button ng-click="reject(session)" >REJECT</button>
+	        	  </span>
+	        	  <span ng-switch-default>Waiting for approval...</span>
+	        	</span>
+	        </span>
+	    </span>
 	</li>
 </ul>
 
+    <!-- Messages -->
+    <ul>
+    	<li ng-repeat="message in session.messages">
+    		{{message.sender.img}} {{massage.text}}		
+    	</li>
+    </ul>
+    
+
+        
 
 <!-- TODO: -->
 <!-- Is online -->
