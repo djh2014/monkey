@@ -18,6 +18,14 @@ angular.module('mainApp', ['firebase', '$strap.directives'])
   function SessionsCtrl($rootScope, $routeParams, $scope, $location) {
       var userId = $routeParams.userId;
       var APPROVED = "APPROVED", REJECT= "REJECT", NEW ="NEW", DONE = "DONE";
+      $rootScope.getFacebookUser(function(facebookUser) {
+        debugger;
+        if (!facebookUser) {
+          window.alert("you need to sign in first");
+          $location.path('login/'); 
+        }
+      }); 
+      
 
       if (userId) {
         fbRef.child("users").child(userId).on('value', function(user) {
@@ -45,7 +53,7 @@ angular.module('mainApp', ['firebase', '$strap.directives'])
         fbRef.child("sessions").child(session.id).update({status:APPROVED});
         $scope.$apply();
       }
-      
+
       $scope.reject = function(session) {
         fbRef.child("sessions").child(session.id).update({status:REJECT});
         $scope.$apply();
@@ -64,7 +72,7 @@ angular.module('mainApp', ['firebase', '$strap.directives'])
   }
 
   function LoginCtrl($rootScope, $scope, $location) {
-        $scope.authClient = authClient = new FirebaseAuthClient(fbRef, function(error, facebookUser) { 
+        $scope.authClient = new FirebaseAuthClient(fbRef, function(error, facebookUser) { 
         if (facebookUser) {
           var id = facebookUser.username || facebookUser.id;
           id = id.replace(/\./g,' ').replace(/\#/g,' ').replace(/\$/g,' ').replace(/\[/g,' ').replace(/\]/g,' ');
@@ -94,13 +102,19 @@ angular.module('mainApp', ['firebase', '$strap.directives'])
         }
     });
 
+    $rootScope.getFacebookUser = function(cb) {
+      new FirebaseAuthClient(fbRef, function(error, facebookUser) { 
+        cb(facebookUser);
+      });
+    }
+
     $scope.facebookLogin = function() {
       $scope.directToEditPage = true;
-      authClient.login('facebook', {rememberMe: true});
+      $scope.authClient.login('facebook', {rememberMe: true});
     }
 
     $scope.logOut = function() {
-      authClient.logout();
+      $scope.authClient.logout();
     }
   }
 
