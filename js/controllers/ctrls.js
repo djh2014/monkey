@@ -171,7 +171,8 @@ angular.module('mainApp', ['firebase', '$strap.directives'])
       $scope.setRequest = function() {
         if($rootScope.currentUser) {
           $scope.viewedUserRef.child("requests").child($rootScope.currentUser.name).set("request");
-          window.alert("request was added, will come back to you soon.");
+          $location.path('sessions/' + $routeParams.userId);
+          //window.alert("request was added, will come back to you soon.");
         } else {
           window.alert("you need to sign in first");
           $location.path('login/');
