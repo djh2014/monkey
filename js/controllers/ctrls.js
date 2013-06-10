@@ -15,8 +15,6 @@ angular.module('mainApp', ['firebase', '$strap.directives'])
       otherwise({redirectTo:'/'});
   });
   
-
-
   function SessionsCtrl($rootScope, $routeParams, $scope, $location) {
       var userId = $routeParams.userId;
       if (userId) {
@@ -42,18 +40,13 @@ angular.module('mainApp', ['firebase', '$strap.directives'])
         });
       }
 
-
       $scope.addNewSession = function() {
         $scope.newSession.student = $rootScope.currentUser;
         $scope.newSession.teacher = $scope.viewedUser;
         var sessionRef = fbRef.child("sessions").push($scope.newSession);
         $scope.newSession = {}
       }
-      
   }
-
-
-
 
   function LoginCtrl($rootScope, $scope, $location) {
         $scope.authClient = authClient = new FirebaseAuthClient(fbRef, function(error, facebookUser) { 
@@ -125,7 +118,6 @@ angular.module('mainApp', ['firebase', '$strap.directives'])
       var fullUrl = 'https://getbadgers.firebaseio.com/users/';
       var messageListRef = new Firebase(fullUrl);
       $scope.usersToView = [];
-
 
       messageListRef.on('value', function(snapshot) {
             // For index.html page:
