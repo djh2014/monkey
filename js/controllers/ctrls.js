@@ -15,12 +15,26 @@ angular.module('mainApp', ['firebase', '$strap.directives'])
       when('/sessions/:userId', {controller:SessionsCtrl, templateUrl:'sessions.html'}).
       otherwise({redirectTo:'/'});
   });
+
+  function SearchCtrl($rootScope, $routeParams, $scope, $location) {
+    // TODO: see why not wroking.
+    $scope.query  = {};
+    $scope.$watch('query', function() {
+      //debugger;
+    })
+    $scope.search = function() {
+      $scope.query.user = $rootScope.currentUser;
+      fbRef.child("serches").push({query:$scope.query});
+      $scope.query = {};
+      $location.path('/');
+      $scope.$apply();
+    }
+  }
   
   function SessionsCtrl($rootScope, $routeParams, $scope, $location) {
       var userId = $routeParams.userId;
       var APPROVED = "APPROVED", REJECT= "REJECT", NEW ="NEW", DONE = "DONE";
       $rootScope.getFacebookUser(function(facebookUser) {
-        debugger;
         if (!facebookUser) {
           window.alert("you need to sign in first");
           $location.path('login/'); 
@@ -150,9 +164,7 @@ angular.module('mainApp', ['firebase', '$strap.directives'])
       $scope.usersToView = [];
 
       $scope.applicant = {}
-      debugger;
       $scope.apply = function() {
-        debugger;
         fbRef.child("applicants").push($scope.applicant);
         $scope.applicant = {}
         window.alert("Thanks we will get back to you shortly.");
