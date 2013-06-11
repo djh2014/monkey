@@ -11,7 +11,7 @@ angular.module('mainApp', ['firebase', '$strap.directives'])
       when('/users', {controller:UsersCtrl, templateUrl:'users.html'}).
       when('/login', {controller:LoginCtrl, templateUrl:'login.html'}).
       when('/video/:userId', {controller:VideoCtrl, templateUrl:'video.html'}).
-      when('/request/:userId', {templateUrl:'request.html'}).
+      when('/requests/:userId', {templateUrl:'request.html'}).
       when('/edit/:userId', {controller:EditProfileCtrl, templateUrl:'editProfile.html'}).
       when('/sessions/:userId', {controller:SessionsCtrl, templateUrl:'sessions.html'}).
       otherwise({redirectTo:'/'});

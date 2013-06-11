@@ -1,5 +1,5 @@
 
-<img src="{{viewedUser.img}}"/>
+<img src="{{viewedUser.img}}"/><br/>
 Sessions:
 <!--  New Session -->
 <hr>
@@ -13,7 +13,7 @@ Sessions:
 <!-- Sessions -->
 <ul>
 	<li ng-repeat="session in sessions | filter:onlyViewed">
-		<img src="{{session.student.img}}"/>
+		<img src="https://i.embed.ly/1/display/resize?key=dc65793b3f1249bdb9952a491874d27e&url={{session.student.img}}&width=50&height=50&grow=true"/>
 		Requester: {{session.student.name}}.
 		Date: {{session.date}}
 		Time: {{session.time}}
