@@ -113,7 +113,7 @@ ga('send', 'pageview');
                                 <li class="dropdown main-menu-element">
                                      <div ng-switch on="currentUser != null" >
                                         <span ng-switch-when="true">
-                                            <img src="{{currentUser.img}}"/>
+                                            <img src="https://i.embed.ly/1/display/resize?key=dc65793b3f1249bdb9952a491874d27e&url={{currentUser.img}}&width=50&height=50&grow=true"/>
                                             <a href="#/detail/{{currentUser.id}}">{{currentUser.name}}</a> (<a ng-click="logOut()">logout</a>)
                                         </span>
                                         <span ng-switch-default>

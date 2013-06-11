@@ -104,7 +104,7 @@ angular.module('mainApp', ['firebase', '$strap.directives'])
                   id: id,
                   email: facebookUser.email || "",
                   facebook: facebookUser || "",
-                  img: "http://graph.facebook.com/"+ facebookUser.id+"/picture" || ""});
+                  img: "http://graph.facebook.com/"+ facebookUser.id+"/picture?type=large" || ""});
                 if ($scope.directToEditPage) {
                   $scope.directToEditPage = false;
                   $location.path('edit/'+ $rootScope.currentUser.id+"/");   
