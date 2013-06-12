@@ -42,7 +42,7 @@ angular.module('mainApp', ['firebase', '$strap.directives'])
       }
       $scope.$apply();
       $scope.userToView
-      
+
 
     });
   }
@@ -109,11 +109,11 @@ angular.module('mainApp', ['firebase', '$strap.directives'])
           id = id.replace(/\./g,' ').replace(/\#/g,' ').replace(/\$/g,' ').replace(/\[/g,' ').replace(/\]/g,' ');
 
           var currentUserRef = fbRef.child("users").child(id);
-          currentUserRef.set({id:""});
           currentUserRef.on('value', function(FBUser) {
-              $rootScope.currentUser = FBUser.val();
+              debugger;
+              $rootScope.currentUser = jQuery.extend($rootScope.currentUser, FBUser.val());;
               // new user: copy info from fb.
-              if ($rootScope.currentUser.id == "") {
+              if (!$rootScope.currentUser.facebook) {
                 currentUserRef.update({
                   user: facebookUser.username || "",
                   name: facebookUser.name || "",
@@ -121,7 +121,7 @@ angular.module('mainApp', ['firebase', '$strap.directives'])
                   email: facebookUser.email || "",
                   facebook: facebookUser || "",
                   img: "http://graph.facebook.com/"+ facebookUser.id+"/picture?type=large" || ""});
-                if ($scope.directToEditPage) {
+                if ($scope.directToEditPage && !$rootScope.currentUser.skills) {
                   $scope.directToEditPage = false;
                   $location.path('edit/'+ $rootScope.currentUser.id+"/");   
                 }
@@ -158,6 +158,7 @@ angular.module('mainApp', ['firebase', '$strap.directives'])
 
         userFBRef.on('value', function(FBUser) {
               $scope.user = FBUser.val();
+              debugger;
               $scope.$apply();
         });
       }
@@ -214,14 +215,12 @@ angular.module('mainApp', ['firebase', '$strap.directives'])
             $scope.$apply();
       });
   }
-  function DetailCtrl($scope, $rootScope, $location, $routeParams, angularFireCollection) {
-      var userId = $routeParams.userId;
-      var fullUrl = 'https://getbadgers.firebaseio.com/users/' + userId;
-      $scope.viewedUserRef = new Firebase(fullUrl);
+  function DetailCtrl($scope, $rootScope, $location, $routeParams, angularFireCollection) {      
+      $scope.viewedUserRef = fbRef.child("users").child($routeParams.userId);
 
-      $scope.viewedUserRef.on('value', function(viewedUser) {
+      $scope.viewedUserRef.on('value', function(viewedUser) { 
             $scope.userToView = viewedUser.val();
-            $scope.userToView.id = userId;
+            $scope.userToView.id = $routeParams.userId;
             if($scope.userToView.requests) {
               $scope.userToView.requests = Object.keys($scope.userToView.requests);
             }

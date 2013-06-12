@@ -18,7 +18,7 @@ ga('send', 'pageview');
                 <h3>
                     {{userToView.name}} 
                     <span ng-switch on="userToView.id == currentUser.id">
-                        <span ng-switch-when="true"><a href="#/sessions/{{userToView.id}}"class="btn" >Requests</a></span>
+                        <span ng-switch-when="true"><a href="#/edit/{{userToView.id}}"class="btn" >Edit</a></span>
                         <span ng-switch-default></span>
                     </span>
                 </h3>
