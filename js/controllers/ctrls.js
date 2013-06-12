@@ -15,48 +15,41 @@ angular.module('mainApp', ['firebase', '$strap.directives'])
       when('/sessions/:userId', {controller:SessionsCtrl, templateUrl:'sessions.html'}).
       when('/stream', {controller:StreamCtrl, templateUrl:'stream.html'}).
       otherwise({redirectTo:'/'});
-  }).filter('testFilter', function() {
-    return function(request, index) {
-      if(request.index > index) {
-        return request; 
-      }
-    };
   });
 
   function StreamCtrl($rootScope, $routeParams, $scope, $location) {
+    var LENGTH = 5;
+
     var requestsRef = fbRef.child('requests')
     $scope.requests = []
-    requestsRef.on('value', function(requests) {
+    $scope.otherRequests = []
+    requestsRef.once('value', function(requests) {
        $scope.requests = []
        for(var key in requests.val()) {
           var request = requests.val()[key];
-          request.index = $scope.requests.length;
-          $scope.requests.push(request);
+          if ($scope.requests.length <= LENGTH) {
+            $scope.requests.unshift(request);
+          } else {
+            $scope.otherRequests.unshift(request);
+          }
        };
+       $scope.$apply();
     });
 
-    // $scope.dynamicFilter = function(request) {
-    //   if(request.index > 3) {
-    //     return request; 
-    //   }
-    // };
+    requestsRef.on('child_added', function(request) {
+       $scope.requests.unshift(request.val());
+       $scope.otherRequests.unshift($scope.requests.pop());
+    });
 
-    // var timer = setInterval(function() {
-    //   $scope.dynamicFilter = function() { 
-    //     return function(request, numberString) {
-        
-    //       if(numberString) {
+    $scope.min = 0;
 
-    //         var number = parseInt(numberString);
-    //         if(request.index > number) {
-    //           return request; 
-    //         }
-    //       }
-    //     }
-    //   };
+    var timer = setInterval(function() {
+      $scope.requests.unshift($scope.otherRequests.pop());
+      $scope.otherRequests.unshift($scope.requests.pop());
 
-    //   $scope.$apply();
-    // }, 3000);
+
+      $scope.$apply();
+    }, 3000);
 
     $scope.newRequest = {}
     $scope.addNewRequest = function() {
@@ -261,7 +254,6 @@ angular.module('mainApp', ['firebase', '$strap.directives'])
       });
   }
   function DetailCtrl($scope, $rootScope, $location, $routeParams, angularFireCollection) {      
-      debugger;
       $scope.viewedUserRef = fbRef.child("users").child($routeParams.userId);
 
       $scope.viewedUserRef.on('value', function(viewedUser) { 

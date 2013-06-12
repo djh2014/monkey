@@ -1,39 +1,8 @@
 <form>
-
 	<input type="text" ng-model="newRequest.text">
-
 	<input ng-click="addNewRequest()" class="btn btn-success" type="submit" value="Add">
-	<input ng-model="number" type="number">
 </form>
-<ul>
+
+<ul ng-animate="'slide'">
 	<li ng-animate="'slide'" ng-repeat="request in requests">{{request.user.name}} Ask for : {{request.text}}</li>
 </ul>
-
-
-<div class="well" style="height: 500px;">
-	    <form>
-		    <div class="input-append">
-			  <input ng-model="search" type="text" class="fix-input-height" style="width: 150px;">
-			  <span class="add-on"><i style="margin-top: 3px" class="icon-search"></i></span>
-			</div>
-		    <ul class="nav nav-pills nav-stacked">
-		        <li ng-animate="'animate'" ng-repeat="name in ['alon','bob'] | filter:search">
-		          <a href="#" ng-bind="name">{{name}}</a>
-		        </li> 
-		    </ul>
-	    </form>
-	</div>
-
-  <div class="well" style="margin-top: 30px; width: 200px; overflow: hidden;">
-    <form class="form-search"> 
-        <div class="input-append">
-          <input type="text" ng-model="search" class="search-query" style="width: 80px">
-          <button type="submit" class="btn">Search</button>
-        </div>
-        <ul class="nav nav-pills nav-stacked">
-          <li ng-animate="'animate'" ng-repeat="name in names | filter:search">
-            <a href="#"> {{name}} </a>
-          </li> 
-      </ul>
-    </form>
-  </div>
