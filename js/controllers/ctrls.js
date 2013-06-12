@@ -90,12 +90,12 @@ angular.module('mainApp', ['firebase', '$strap.directives'])
   function SessionsCtrl($rootScope, $routeParams, $scope, $location) {
       var userId = $routeParams.userId;
       var APPROVED = "APPROVED", REJECT= "REJECT", NEW ="NEW", DONE = "DONE";
-      $rootScope.getFacebookUser(function(facebookUser) {
-        if (!facebookUser) {
-          window.alert("you need to sign in first");
-          $location.path('login/'); 
-        }
-      }); 
+      // $rootScope.getFacebookUser(function(facebookUser) {
+      //   if (!facebookUser) {
+      //     window.alert("you need to sign in first");
+      //     $location.path('login/'); 
+      //   }
+      // }); 
       
 
       if (userId) {
