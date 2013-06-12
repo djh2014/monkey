@@ -4,5 +4,8 @@
 </form>
 
 <ul ng-animate="'slide'">
-	<li ng-animate="'slide'" ng-repeat="request in requests">{{request.user.name}} Ask for : {{request.text}}</li>
+	<li ng-animate="'slide'" ng-repeat="request in requests">
+		<img src="https://i.embed.ly/1/display/resize?key=dc65793b3f1249bdb9952a491874d27e&url={{request.user.img}}&width=50&height=50&grow=true" title="{{request.user.name}}"/>
+		  {{request.text}}
+	</li>
 </ul>
