@@ -104,12 +104,12 @@ angular.module('mainApp', ['firebase', '$strap.directives'])
               $scope.newSession = {}
 
               fbRef.child("sessions").on("value", function(sessions) {
-                $scope.sessions = sessions.val();
+                var allSessions = sessions.val();
                 // TODO: replace with nice angular filter:
                 filterSessions = []; 
-                for(var key in $scope.sessions) {
-                  var session = $scope.sessions[key];
-                  if (session.teacher.username == $scope.viewedUser.username) {
+                for(var key in allSessions) {
+                  var session = allSessions[key];
+                  if (session.teacher.id != null && session.teacher.id == $scope.viewedUser.id) {
                     filterSessions.push(session);
                   }
                 }
@@ -131,14 +131,18 @@ angular.module('mainApp', ['firebase', '$strap.directives'])
       }
 
       $scope.addNewSession = function() {
-        var sessionRef = fbRef.child("sessions").push()
-        $scope.newSession.student = $rootScope.currentUser;
-        $scope.newSession.teacher = $scope.viewedUser;
-        $scope.newSession.status = NEW;
-        $scope.newSession.id = sessionRef.name();
-        sessionRef.update($scope.newSession);
-        
-        $scope.newSession = {}
+        if ($rootScope.currentUser) {
+          var sessionRef = fbRef.child("sessions").push()
+          $scope.newSession.student = $rootScope.currentUser;
+          $scope.newSession.teacher = $scope.viewedUser;
+          $scope.newSession.status = NEW;
+          $scope.newSession.id = sessionRef.name();
+          sessionRef.update($scope.newSession);
+          $scope.newSession = {}
+        } else {
+          window.alert("You need to login first, in order to send a request.");
+        }
+
       }
   }
 
