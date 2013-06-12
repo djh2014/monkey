@@ -21,7 +21,7 @@ Sessions:
 		<!-- Status -->
 		Status:
 		<span ng-switch on="session.status" >
-	        <span ng-switch-when="APPROVED">Approved</span>
+	        <span ng-switch-when="APPROVED">Approved. <a href="#/video/{{viewedUser.id}}">Start Video Session</a> </span>
 	        <span ng-switch-when="REJECT">Rejected</span>
 	        <span ng-switch-when="DONE">Done</span>
 	        <!-- Not Approved yet: -->
@@ -40,7 +40,7 @@ Sessions:
 
     <!-- Messages -->
     <ul>
-    	<form><input type="text"><input type="Submit"></form>
+    	<form>Write New Message:<input ng-model="newMessagetype="text"><input type="Submit"></form>
     	<li ng-repeat="message in session.messages">
     		<img src="{{message.sender.img}}">
     		<p>{{massage.text}}</p> 		
