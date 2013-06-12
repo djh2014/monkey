@@ -40,8 +40,10 @@ Sessions:
 
     <!-- Messages -->
     <ul>
+    	<form><input type="text"><input type="Submit"></form>
     	<li ng-repeat="message in session.messages">
-    		{{message.sender.img}} {{massage.text}}		
+    		<img src="{{message.sender.img}}">
+    		<p>{{massage.text}}</p> 		
     	</li>
     </ul>
     

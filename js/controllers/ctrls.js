@@ -210,6 +210,7 @@ angular.module('mainApp', ['firebase', '$strap.directives'])
           var res = listFBRef.push($scope.user);
           $location.path('/');
         }
+        window.alert("Changes Saved");
       }
   }
 
