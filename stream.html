@@ -1,0 +1,9 @@
+<form>
+
+	<input type="text" ng-model="newRequest.text">
+
+	<input ng-click="addNewRequest()" class="btn btn-success" type="submit" value="Add">
+</form>
+<ul>
+	<li ng-repeat="request in requests">{{request.user.name}} Ask for : {{request.text}}</li>
+</ul>

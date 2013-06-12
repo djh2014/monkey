@@ -13,8 +13,23 @@ angular.module('mainApp', ['firebase', '$strap.directives'])
       when('/requests/:userId', {templateUrl:'request.html'}).
       when('/edit/:userId', {controller:EditProfileCtrl, templateUrl:'editProfile.html'}).
       when('/sessions/:userId', {controller:SessionsCtrl, templateUrl:'sessions.html'}).
+      when('/stream', {controller:StreamCtrl, templateUrl:'stream.html'}).
       otherwise({redirectTo:'/'});
   });
+
+  function StreamCtrl($rootScope, $routeParams, $scope, $location) {
+    var requestsRef = fbRef.child('requests')
+    requestsRef.on('value', function(requests) {
+       $scope.requests = requests.val(); 
+    });
+
+    $scope.newRequest = {}
+    $scope.addNewRequest = function() {
+      $scope.newRequest.user = $rootScope.currentUser;
+      requestsRef.push($scope.newRequest);
+      $scope.newRequest = {}
+    }
+  }
 
   function SearchCtrl($rootScope, $routeParams, $scope, $location) {
     // TODO: see why not wroking.
