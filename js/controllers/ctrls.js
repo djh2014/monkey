@@ -2,7 +2,6 @@ var fbUrl = 'https://getbadgers.firebaseio.com';
 var fbRef = new Firebase(fbUrl);
 var fbUsersRef = new Firebase(fbUrl + '/users');
 
-
 angular.module('mainApp', ['firebase', '$strap.directives'])
   .config(function($routeProvider) {
     $routeProvider.
@@ -21,7 +20,7 @@ angular.module('mainApp', ['firebase', '$strap.directives'])
     // TODO: see why not wroking.
     $scope.query  = {};
     $scope.$watch('query', function() {
-      //debugger;
+    
     })
     $scope.search = function() {
       $scope.query.user = $rootScope.currentUser;
@@ -42,8 +41,6 @@ angular.module('mainApp', ['firebase', '$strap.directives'])
       }
       $scope.$apply();
       $scope.userToView
-
-
     });
   }
   
@@ -110,7 +107,6 @@ angular.module('mainApp', ['firebase', '$strap.directives'])
 
           var currentUserRef = fbRef.child("users").child(id);
           currentUserRef.on('value', function(FBUser) {
-              debugger;
               $rootScope.currentUser = jQuery.extend($rootScope.currentUser, FBUser.val());;
               // new user: copy info from fb.
               if (!$rootScope.currentUser.facebook) {
@@ -158,7 +154,6 @@ angular.module('mainApp', ['firebase', '$strap.directives'])
 
         userFBRef.on('value', function(FBUser) {
               $scope.user = FBUser.val();
-              debugger;
               $scope.$apply();
         });
       }
@@ -247,7 +242,6 @@ angular.module('mainApp', ['firebase', '$strap.directives'])
       });
 
       $scope.saveNewUser = function(newUser) {
-        debugger;
         $scope.usersToEdit.add(newUser);
         $scope.newUser = {'img':''};
       }
