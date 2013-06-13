@@ -3,11 +3,6 @@
 <ol>
 	<li>
 		Copy {{userToView.name}} email: <u>{{userToView.email}}</u>. </li>
-
-		<!-- 
-		<img src="https://i.embed.ly/1/display/resize?key=dc65793b3f1249bdb9952a491874d27e&url={{userToView.img}}&width=50&height=50&grow=true"/>  
- -->
-		
 	<li>
 		Start the hangout
 		<a href="https://plus.google.com/hangouts/_?gid=1033174975819" style="text-decoration:none;">
@@ -19,4 +14,17 @@
 	<li>
 		Paste the email in the Hangout Add People.	
 	</li>
+
+	<form>
+		<profile user="currentUser"/>
+		<input type="text" ng-model="newItem.text">
+		<input ng-click="addNew()" class="btn btn-success" type="submit" value="Add">
+    <form>
+    <ul>
+    	<li ng-repeat="item in items">
+    		{{item.user.name}}:
+    		<profile user="item.user"/>
+					{{item.text}}
+    	</li>
+    </ul>
 </ol>

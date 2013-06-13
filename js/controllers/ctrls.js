@@ -2,6 +2,15 @@ var fbUrl = 'https://getbadgers.firebaseio.com';
 var fbRef = new Firebase(fbUrl);
 var fbUsersRef = new Firebase(fbUrl + '/users');
 
+function listValues(listObject) {
+  var res = []
+  for(key in listObject.val()) {
+    res.push(listObject.val()[key]);
+  }
+  return res;
+}
+
+
 angular.module('mainApp', ['firebase', '$strap.directives'])
   .config(function($routeProvider) {
     $routeProvider.
@@ -104,6 +113,21 @@ angular.module('mainApp', ['firebase', '$strap.directives'])
   }
 
   function VideoCtrl($rootScope, $routeParams, $scope, $location) {
+    
+    $scope.newItem = {};
+    $scope.listRef = fbRef.child("videoMessages");
+
+    $scope.addNew = function() { 
+      $scope.newItem.user = $rootScope.currentUser;
+      $scope.listRef.push($scope.newItem);
+      $scope.newItem = {};      
+    }
+
+    $scope.listRef.on("value", function(messages) {
+      $scope.items  = listValues(messages);
+    });
+
+
     $scope.viewedUserRef = fbRef.child("users").child($routeParams.userId);
     $scope.viewedUserRef.on('value', function(viewedUser) {
       $scope.userToView = viewedUser.val();
