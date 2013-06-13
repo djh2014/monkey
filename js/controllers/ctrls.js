@@ -222,10 +222,12 @@ angular.module('mainApp', ['firebase', '$strap.directives'])
                   $location.path('edit/'+ $rootScope.currentUser.id+"/");   
                 }
               }
+              $(window).trigger("currentUser");
               $scope.$apply();
           });
         } else {
           $rootScope.currentUser = null;
+          $(window).trigger("currentUser");
         }
     });
 
@@ -271,10 +273,17 @@ angular.module('mainApp', ['firebase', '$strap.directives'])
       }
   }
 
-  function HomeCtrl($scope, $location, angularFireCollection) {
+  function HomeCtrl($scope, $location, angularFireCollection, $rootScope) {
       var fullUrl = 'https://getbadgers.firebaseio.com/users/';
       var messageListRef = new Firebase(fullUrl);
       $scope.usersToView = [];
+      
+      $(window).on("currentUser", function() {
+        if ($rootScope.currentUser) {
+          $location.path('stream');
+          $scope.$apply();
+        }
+      });
 
       $scope.applicant = {}
       $scope.apply = function() {
