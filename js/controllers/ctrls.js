@@ -66,6 +66,11 @@ angular.module('mainApp', ['firebase', '$strap.directives'])
           $scope.$apply();
         }, 3000);
 
+        $scope.accept = function(item) {
+          $location.path('video/' + item.user.id);
+          $scope.$apply();
+        }
+
         $scope.newItem = {}
         $scope.addNew = function() {
           $scope.newItem.user = $rootScope.currentUser;
