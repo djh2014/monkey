@@ -21,7 +21,7 @@ angular.module('mainApp', ['firebase', '$strap.directives'])
       template: '<img src="https://i.embed.ly/1/display/resize?key=dc65793b3f1249bdb9952a491874d27e&url={{user.img}}&width={{width}}&height={{height}}&grow=true" title="{{user.name}}"/>',
       replace: true,
       restrict: 'E',
-      scope: { user: '='}, 
+      scope: { user: '=', currentUser: '='}, 
       link:  function(scope, iElement, iAttrs, controller) {
         scope.width = iAttrs.width || 50;
         scope.height = iAttrs.height || 50;
@@ -73,7 +73,7 @@ angular.module('mainApp', ['firebase', '$strap.directives'])
           $scope.newItem = {}
         }
       },
-      scope: { list: '@', currentUser: '='}, 
+      scope: { list: '@', currentUser: '@'}, 
       link:  function(scope, iElement, iAttrs, controller) {
         scope.list = iAttrs.list;
       }
