@@ -22,20 +22,9 @@ ga('send', 'pageview');
                         <span ng-switch-default></span>
                     </span>
                 </h3>
-                <h3>
-                    {{userToView.name}} 
-                    <span ng-switch on="userToView.id == currentUser.id">
-                        <span ng-switch-when="true"><a href="#/requests/{{userToView.id}}"class="btn" >Requests</a></span>
-                        <span ng-switch-default></span>
-                    </span>
-                </h3>
             </div>
 
             <table class="product">
-                <tr>
-                    <td>Company:</td>
-                    <td><span class="priceLarge">&nbsp;{{userToView.company}}</span></td>
-                </tr>
                  <tr>
                     <td>My Skills:</td>
                     <td><span class="priceLarge">&nbsp;{{userToView.skills}}</span></td>
@@ -57,7 +46,7 @@ ga('send', 'pageview');
                     <td colspan="1" style="text-align:left">
                         <div class="btn-toolbar">
                             <div class="btn-group pull-left profile-request">
-                                <a role="button" ng-click="setRequest()" href="#myModal" data-toggle="modal" class="btn btn-info"> Request Now</a>
+                                <a role="button" href="#/sessions/{{userToView.id}}" data-toggle="modal" class="btn btn-info"> Request Now</a>
                             </div>
                         </div>
                         Got Requests from:
@@ -66,7 +55,6 @@ ga('send', 'pageview');
                                 {{request}}
                             </li>
                         </ol>
-
                     </td>
                 </tr>
             </table>
@@ -86,6 +74,9 @@ ga('send', 'pageview');
             <div class="carousel slide" id="myCarousel">
                 <div class="carousel-inner">
                     <div class="active item">
+<!-- TODO: why not working.
+                        <profile user="{{userToView}}" width="800" height="500" ></profile>
+                         -->
                         <img alt="" src="https://i.embed.ly/1/display/resize?key=dc65793b3f1249bdb9952a491874d27e&url={{userToView.img}}&width=800&height=500&grow=true">
                     </div>
                     <div class="item">

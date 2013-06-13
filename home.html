@@ -17,28 +17,26 @@ ga('send', 'pageview');
     </div><!-- ei-slider -->
 </section>
 <!--<hr/>-->
-<section>
-    <div class="row" id="ourmission">
-        <div class="span12 first-orange">
-            <div class="page-header">
-                <h2 class="title-center"><span class="white">Our</span> Mission</h2>
-                    <p id="mission">
-                    Do what you are great at and leave your wallet home.  Through our platform you earn Badgers, which are 15 minute units of time by helping out others.  You can then spend your Badgers on anything that would make you a more productive, happier, and overall better person.  Apply for an invite below.
-                    </p>
-                    <div class="row">
-                        <div class="span12">
-                            <form class="form-inline title-center" id="form-one">
-                                <input type="text" class="input-small" placeholder="First Name">
-                                <input type="text" class="input-small" placeholder="Last Name">
-                                <input type="text" class="input-large" placeholder="Email">
-                                <button type="button" class="btn">Submit</button>
-                            </form>
-                        </div>
+<div class="row">
+    <div class="span12 first-orange">
+        <div class="page-header">
+            <h2 class="title-center"><span class="white">Our</span> Mission</h2>
+                <p id="mission">
+                Do what you are great at and leave your wallet home.  Through our platform you earn Badgers, which are 15 minute units of time by helping out others.  You can then spend your Badgers on anything that would make you a more productive, happier, and overall better person.  Apply for an invite below.
+                </p>
+                <div class="row">
+                    <div class="span12">
+                        <form class="form-inline title-center" id="form-one">
+                            <input type="text" ng-model="applicant.fname" class="input-small" placeholder="First Name">
+                            <input type="text" ng-model="applicant.lname" class="input-small" placeholder="Last Name">
+                            <input type="text" ng-model="applicant.email" class="input-large" placeholder="Email">
+                            <button type="button" ng-click="apply()" class="btn">Submit</button>
+                        </form>
                     </div>
             </div>
         </div>
     </div>
-</section>
+</div>
 <div class="row">
     <div class="span12">
         <div class="page-header">
