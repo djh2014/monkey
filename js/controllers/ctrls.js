@@ -15,6 +15,15 @@ angular.module('mainApp', ['firebase', '$strap.directives'])
       when('/sessions/:userId', {controller:SessionsCtrl, templateUrl:'sessions.html'}).
       when('/stream', {controller:StreamCtrl, templateUrl:'stream.html'}).
       otherwise({redirectTo:'/'});
+  })
+  .directive('profile', function() {
+    var directiveDefinitionObject = {
+      template: '<img src="https://i.embed.ly/1/display/resize?key=dc65793b3f1249bdb9952a491874d27e&url={{user.img}}&width=50&height=50&grow=true" title="{{user.name}}"/>',
+      replace: true,
+      restrict: 'E',
+      scope: { user: '='}
+    };
+    return directiveDefinitionObject;
   });
 
   function StreamCtrl($rootScope, $routeParams, $scope, $location) {

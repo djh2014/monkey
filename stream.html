@@ -1,11 +1,15 @@
 <form>
+	<profile user="currentUser"/>
 	<input type="text" ng-model="newRequest.text">
 	<input ng-click="addNewRequest()" class="btn btn-success" type="submit" value="Add">
 </form>
 
 <ul ng-animate="'slide'">
-	<li ng-animate="'slide'" ng-repeat="request in requests">
-		<img src="https://i.embed.ly/1/display/resize?key=dc65793b3f1249bdb9952a491874d27e&url={{request.user.img}}&width=50&height=50&grow=true" title="{{request.user.name}}"/>
-		  {{request.text}}
+	<li ng-animate="'slide'" ng-cloak ng-repeat="request in requests">
+		<profile user="request.user"/>
+			{{request.text}}
 	</li>
 </ul>
+Hello
+
+World
