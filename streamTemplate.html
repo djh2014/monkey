@@ -1,16 +1,23 @@
 <div>
-	<h1>{{list}}</h1>
-	<form>
+	<h1>Post {{list}}</h1>
+	<form class="well">
 		<!-- TODO: I wonder why it is not working: -->
 		<profile user="currentUser"/>
 
 		<input type="text" ng-model="newItem.text">
 		<input ng-click="addNew()" class="btn btn-success" type="submit" value="Add">
 	</form>
-	<ul ng-animate="'slide'">
-		<li ng-animate="'slide'" ng-cloak ng-repeat="item in items">
-			<profile user="item.user"/>
-				{{item.text}}
-		</li>
-	</ul>
+	<!-- <ul ng-animate="'slide'"> -->
+		<div ng-animate="'slide'" ng-cloak ng-repeat="item in items">
+			<div class="row-fluid well">
+				<span class="span4">
+				<profile user="item.user"/>
+					{{item.text}}
+				</span>
+				<span class="span1">
+					<input class="btn-min btn btn-success" ng-click="accept()" type="text" value="I can help"/>
+				</span>
+			</div>
+		</div>
+	<!-- </ul> -->
 </div>
