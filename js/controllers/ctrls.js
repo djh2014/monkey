@@ -17,13 +17,17 @@ angular.module('mainApp', ['firebase', '$strap.directives'])
       otherwise({redirectTo:'/'});
   })
   .directive('profile', function() {
-    var directiveDefinitionObject = {
-      template: '<img src="https://i.embed.ly/1/display/resize?key=dc65793b3f1249bdb9952a491874d27e&url={{user.img}}&width=50&height=50&grow=true" title="{{user.name}}"/>',
+    return {
+      template: '<img src="https://i.embed.ly/1/display/resize?key=dc65793b3f1249bdb9952a491874d27e&url={{user.img}}&width={{width}}&height={{height}}&grow=true" title="{{user.name}}"/>',
       replace: true,
       restrict: 'E',
-      scope: { user: '='}
+      scope: { user: '='}, 
+      link:  function(scope, iElement, iAttrs, controller) {
+        debugger;
+        scope.width = iAttrs.width || 50;
+        scope.height = iAttrs.height || 50;
+      }
     };
-    return directiveDefinitionObject;
   });
 
   function StreamCtrl($rootScope, $routeParams, $scope, $location) {
