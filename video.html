@@ -1,5 +1,18 @@
+<h3>Chat with {{userToView.name}}</h3>
 
-<h3>3 steps to start the video session with {{userToView.name}}:</h3>
+	<form>
+		<profile user="currentUser"/>
+		<input type="text" ng-model="newItem.text">
+		<input ng-click="addNew()" class="btn btn-success" type="submit" value="Add">
+    <form>
+    <ul>
+    	<li ng-repeat="item in items">
+    		<profile user="item.user"/>:
+					{{item.text}}
+    	</li>
+    </ul>
+<hr/>
+<h3>Start the video hangout with {{userToView.name}} in 3 steps:</h3>
 <ol>
 	<li>
 		Copy {{userToView.name}} email: <u>{{userToView.email}}</u>. </li>
@@ -15,16 +28,6 @@
 		Paste the email in the Hangout Add People.	
 	</li>
 
-	<form>
-		<profile user="currentUser"/>
-		<input type="text" ng-model="newItem.text">
-		<input ng-click="addNew()" class="btn btn-success" type="submit" value="Add">
-    <form>
-    <ul>
-    	<li ng-repeat="item in items">
-    		{{item.user.name}}:
-    		<profile user="item.user"/>
-					{{item.text}}
-    	</li>
-    </ul>
+	
+
 </ol>

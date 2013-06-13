@@ -5,7 +5,7 @@ var fbUsersRef = new Firebase(fbUrl + '/users');
 function listValues(listObject) {
   var res = []
   for(key in listObject.val()) {
-    res.push(listObject.val()[key]);
+    res.unshift(listObject.val()[key]);
   }
   return res;
 }
