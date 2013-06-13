@@ -68,7 +68,7 @@ sub {
 
 img {
   height: auto;
-  width: 100%;
+  max-width: 100%;
   vertical-align: middle;
   border: 0;
   -ms-interpolation-mode: bicubic;
