@@ -1,7 +1,7 @@
 body {
     padding-top: 40px;
     padding-bottom: 40px;
-    background: white url(../img/pattern.png) repeat top left;
+    background: whitesmoke;
     color: #999999;
     font-family: 'Arimo', sans-serif;
 }
@@ -9,15 +9,65 @@ body {
 /**
  *  Override some bootstrap style
  **/
- .first-orange {
+
+.first-orange {
     background: #FAA732;
+    padding-right: 50px;
+    margin-left: 0px;
+    margin-right: 0px;
+}
+.first-name {
+    position: absolute;
+    margin-top: 10px;
+    padding-top: 20px;
+    padding-left: 10px;
+    color: white;
+    text-decoration: none;
+    font-family: Helvetica, Arial, sans-serif;
+    font-weight: 600;
+}
+.money-shot {
+    position: absolute;
+    display: block;
+    margin-top: -40px;
+    padding-left: 10px;
+    color: white;
+    text-decoration: none;
+    font-family:Helvetica, Arial, sans-serif;
+    font-weight:600;
+}
+.stars {
+    display: block;
+    position: absolute;
+    margin-top: -20px;
+    padding-left:10px;
+}
+.home-button {
+    margin-right:10px;
+    font-weight: bolder;
 }
 .white {
     color:white;
 }
+#ourmission {
+    margin-top: 20px;
+}
 #number_badgers {
     padding-bottom: 20px;
 }
+.large {
+    width: 360px;
+    height: 251px;
+    border:2px solid #333;
+    display:block;
+}
+.small {
+    width:360px;
+    height: 120px;
+    border:2px solid #333;
+    display: block;
+}
+
 h3 {
     font-size: 18px;
     line-height: 27px;
@@ -774,4 +824,8 @@ footer div#copyright{
     padding: 10px 20px; 
     border-radius: 0px 0px 5px 5px; 
     background-color: rgb(255, 255, 255);
+}
+.no-left {
+    margin-left:0px;
+    margin-bottom:0px;
 }

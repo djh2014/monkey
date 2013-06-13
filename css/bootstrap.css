@@ -68,7 +68,7 @@ sub {
 
 img {
   height: auto;
-  max-width: 100%;
+  width: 100%;
   vertical-align: middle;
   border: 0;
   -ms-interpolation-mode: bicubic;
@@ -166,13 +166,13 @@ body {
 }
 
 a {
-  color: #0088cc;
+  color: white;
   text-decoration: none;
 }
 
 a:hover {
   color: #005580;
-  text-decoration: underline;
+  text-decoration: none;
 }
 
 .img-rounded {
@@ -215,7 +215,7 @@ a:hover {
 
 [class*="span"] {
   float: left;
-  margin-left: 20px;
+  /*margin-left: 20px;*/
 }
 
 .container,
@@ -680,8 +680,8 @@ h4 small {
 }
 
 .page-header {
-  padding-bottom: 9px;
-  margin: 20px 0 30px;
+  /*padding-bottom: 9px; */
+  margin: 20px 0 5px;
   border-bottom: 1px solid #eeeeee;
 }
 
@@ -5091,7 +5091,7 @@ input[type="submit"].btn.btn-mini {
   display: block;
   padding: 4px;
   line-height: 20px;
-  border: 1px solid #ddd;
+  /*border: 1px solid #ddd;*/
   -webkit-border-radius: 4px;
      -moz-border-radius: 4px;
           border-radius: 4px;

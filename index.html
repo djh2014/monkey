@@ -63,9 +63,9 @@
   <body ng-app="mainApp" ng-controller="LoginCtrl">
 
     <section id="main" class="container">
-        <div class="row" style="margin-bottom: 20px">
-                <div class="span6"><a href='/'><img src="img/badgerlogo.png" alt="" /></a></div>
-                <div class="span6">
+        <div class="row" style="margin-bottom: 10px">
+                <div class="span3"><a href='/'><img src="img/badgerlogo.png" alt="" /></a></div>
+                <div class="span9">
                     <ul class="socialize pull-right">
                         <li>
                             <a href="#" class="flickr"><span>Flickr</span></a>
@@ -108,7 +108,10 @@
                                             <a href="#/detail/{{currentUser.id}}">{{currentUser.name}}</a> (<a ng-click="logOut()">logout</a>)
                                         </span>
                                         <span ng-switch-default>
-                                            <a ng-click="facebookLogin()"><i class="icon-user"></i> Sign In</a>
+                                            <button class="btn btn-danger home-button"><a ng-click="facebookLogin()">Register</a>
+                                            </button>
+                                            <button class="btn btn-success home-button"><a ng-click="facebookLogin()">Login</a>
+                                            </button>
                                         </span>
                                     </div>
                                 </li>
