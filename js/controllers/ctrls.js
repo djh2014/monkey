@@ -23,53 +23,64 @@ angular.module('mainApp', ['firebase', '$strap.directives'])
       restrict: 'E',
       scope: { user: '='}, 
       link:  function(scope, iElement, iAttrs, controller) {
-        debugger;
         scope.width = iAttrs.width || 50;
         scope.height = iAttrs.height || 50;
+      }
+    };
+  })
+  .directive('stream', function() {
+    return {
+      templateUrl: 'streamTemplate.html',
+      replace: true,
+      restrict: 'E',
+      controller: function($rootScope, $element, $attrs, $transclude, $scope, $location) {
+        var LENGTH = 5;
+        var itemsRef = fbRef.child($attrs.list)
+        $scope.items = []
+        $scope.hiddenItems = []
+
+        itemsRef.once('value', function(items) {
+           $scope.items = []
+           for(var key in items.val()) {
+              var item = items.val()[key];
+              if ($scope.items.length <= LENGTH) {
+                $scope.items.unshift(item);
+              } else {
+                $scope.hiddenItems.unshift(item);
+              }
+           };
+           $scope.$apply();
+        });
+
+        itemsRef.on('child_added', function(item) {
+           $scope.items.unshift(item.val());
+           $scope.hiddenItems.unshift($scope.items.pop());
+        });
+
+        $scope.min = 0;
+
+        var timer = setInterval(function() {
+          $scope.currentUser = $rootScope.currentUser;
+          $scope.items.unshift($scope.hiddenItems.pop());
+          $scope.hiddenItems.unshift($scope.items.pop());
+          $scope.$apply();
+        }, 3000);
+
+        $scope.newItem = {}
+        $scope.addNew = function() {
+          $scope.newItem.user = $rootScope.currentUser;
+          itemsRef.push($scope.newItem);
+          $scope.newItem = {}
+        }
+      },
+      scope: { list: '@', currentUser: '='}, 
+      link:  function(scope, iElement, iAttrs, controller) {
+        scope.list = iAttrs.list;
       }
     };
   });
 
   function StreamCtrl($rootScope, $routeParams, $scope, $location) {
-    var LENGTH = 5;
-
-    var requestsRef = fbRef.child('requests')
-    $scope.requests = []
-    $scope.otherRequests = []
-    requestsRef.once('value', function(requests) {
-       $scope.requests = []
-       for(var key in requests.val()) {
-          var request = requests.val()[key];
-          if ($scope.requests.length <= LENGTH) {
-            $scope.requests.unshift(request);
-          } else {
-            $scope.otherRequests.unshift(request);
-          }
-       };
-       $scope.$apply();
-    });
-
-    requestsRef.on('child_added', function(request) {
-       $scope.requests.unshift(request.val());
-       $scope.otherRequests.unshift($scope.requests.pop());
-    });
-
-    $scope.min = 0;
-
-    var timer = setInterval(function() {
-      $scope.requests.unshift($scope.otherRequests.pop());
-      $scope.otherRequests.unshift($scope.requests.pop());
-
-
-      $scope.$apply();
-    }, 3000);
-
-    $scope.newRequest = {}
-    $scope.addNewRequest = function() {
-      $scope.newRequest.user = $rootScope.currentUser;
-      requestsRef.push($scope.newRequest);
-      $scope.newRequest = {}
-    }
   }
 
   function SearchCtrl($rootScope, $routeParams, $scope, $location) {

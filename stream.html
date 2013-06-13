@@ -1,12 +1,8 @@
-<form>
-	<profile user="currentUser"/>
-	<input type="text" ng-model="newRequest.text">
-	<input ng-click="addNewRequest()" class="btn btn-success" type="submit" value="Add">
-</form>
-
-<ul ng-animate="'slide'">
-	<li ng-animate="'slide'" ng-cloak ng-repeat="request in requests">
-		<profile user="request.user"/>
-			{{request.text}}
-	</li>
-</ul>
+<div class="row">
+<div class="span6">
+  <stream list="requests"></stream>
+</div>
+<div class="span6">
+  <stream list="offers"></stream>
+</div>
+</div>
