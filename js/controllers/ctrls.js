@@ -73,7 +73,7 @@ angular.module('mainApp', ['firebase', '$strap.directives'])
           $scope.items.unshift($scope.hiddenItems.pop());
           $scope.hiddenItems.unshift($scope.items.pop());
           $scope.$apply();
-        }, 3000);
+        }, 5000);
 
         $scope.accept = function(item) {
           $location.path('video/' + item.user.id);
@@ -222,12 +222,12 @@ angular.module('mainApp', ['firebase', '$strap.directives'])
                   $location.path('edit/'+ $rootScope.currentUser.id+"/");   
                 }
               }
-              $(window).trigger("currentUser");
+              $rootScope.$broadcast("currentUserInit");
               $scope.$apply();
           });
         } else {
           $rootScope.currentUser = null;
-          $(window).trigger("currentUser");
+          $rootScope.$broadcast("currentUserInit");
         }
     });
 
@@ -278,7 +278,7 @@ angular.module('mainApp', ['firebase', '$strap.directives'])
       var messageListRef = new Firebase(fullUrl);
       $scope.usersToView = [];
       
-      $(window).on("currentUser", function() {
+      $rootScope.$on("currentUserInit", function() {
         if ($rootScope.currentUser) {
           $location.path('stream');
           $scope.$apply();
