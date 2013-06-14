@@ -10,6 +10,14 @@ function listValues(listObject) {
   return res;
 }
 
+function genKey(string1, string2) {
+  if(string1 < string2){
+    return string1 + "_" + string2;
+  } else {
+    return string2 + "_" + string1;
+  }
+}
+
 
 angular.module('mainApp', ['firebase', '$strap.directives'])
   .config(function($routeProvider) {
@@ -18,7 +26,7 @@ angular.module('mainApp', ['firebase', '$strap.directives'])
       when('/detail/:userId', {controller:DetailCtrl, templateUrl:'detail.html'}).
       when('/users', {controller:UsersCtrl, templateUrl:'users.html'}).
       when('/login', {controller:LoginCtrl, templateUrl:'login.html'}).
-      when('/video/:userId', {controller:VideoCtrl, templateUrl:'video.html'}).
+      when('/video/:userId/:secondUserId', {controller:VideoCtrl, templateUrl:'video.html'}).
       when('/requests/:userId', {templateUrl:'request.html'}).
       when('/edit/:userId', {controller:EditProfileCtrl, templateUrl:'editProfile.html'}).
       when('/sessions/:userId', {controller:SessionsCtrl, templateUrl:'sessions.html'}).
@@ -76,7 +84,7 @@ angular.module('mainApp', ['firebase', '$strap.directives'])
         }, 5000);
 
         $scope.accept = function(item) {
-          $location.path('video/' + item.user.id);
+          $location.path('video/' + item.user.id + "/" + $rootScope.currentUser.id);
           $scope.$apply();
         }
 
@@ -115,7 +123,8 @@ angular.module('mainApp', ['firebase', '$strap.directives'])
   function VideoCtrl($rootScope, $routeParams, $scope, $location) {
     
     $scope.newItem = {};
-    $scope.listRef = fbRef.child("videoMessages");
+    var listKey = genKey($routeParams.userId, $routeParams.secondUserId);
+    $scope.listRef = fbRef.child("videoMessages").child(listKey);
 
     $scope.addNew = function() { 
       $scope.newItem.user = $rootScope.currentUser;
@@ -143,13 +152,6 @@ angular.module('mainApp', ['firebase', '$strap.directives'])
   function SessionsCtrl($rootScope, $routeParams, $scope, $location) {
       var userId = $routeParams.userId;
       var APPROVED = "APPROVED", REJECT= "REJECT", NEW ="NEW", DONE = "DONE";
-      // $rootScope.getFacebookUser(function(facebookUser) {
-      //   if (!facebookUser) {
-      //     window.alert("you need to sign in first");
-      //     $location.path('login/'); 
-      //   }
-      // }); 
-      
 
       if (userId) {
         fbRef.child("users").child(userId).on('value', function(user) {

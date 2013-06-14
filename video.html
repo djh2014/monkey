@@ -2,7 +2,7 @@
 <h3>3 steps to start the video session with {{userToView.name}}:</h3>
 <ol>
 	<li>
-		Copy {{userToView.name}} email: <u>{{userToView.email}}</u>. </li>
+		Copy {{userToView.name}}'s email: <u>{{userToView.email}}</u>. </li>
 	<li>
 		Start the hangout
 		<a href="https://plus.google.com/hangouts/_?gid=1033174975819" style="text-decoration:none;">
@@ -14,17 +14,16 @@
 	<li>
 		Paste the email in the Hangout Add People.	
 	</li>
+<hr/>
 
-	<form>
+	<form class="well">
 		<profile user="currentUser"/>
 		<input type="text" ng-model="newItem.text">
-		<input ng-click="addNew()" class="btn btn-success" type="submit" value="Add">
-    <form>
-    <ul>
-    	<li ng-repeat="item in items">
-    		{{item.user.name}}:
-    		<profile user="item.user"/>
-					{{item.text}}
-    	</li>
-    </ul>
+		<input ng-click="addNew()" class="btn btn-success" type="submit" value="Post">
+    </form>
+    
+	<div class="well" ng-repeat="item in items">
+		<profile user="item.user"/> <h3>{{item.text}}</h3>
+	</div>
+    
 </ol>
