@@ -9,7 +9,6 @@ mainApp = angular.module('mainApp', ['firebase', '$strap.directives'])
       when('/detail/:userId', {controller:DetailCtrl, templateUrl:'detail.html'}).
       when('/users', {controller:UsersCtrl, templateUrl:'users.html'}).
       when('/login', {controller:LoginCtrl, templateUrl:'login.html'}).
-      when('/video/:userId/:secondUserId', {controller:VideoCtrl, templateUrl:'video.html'}).
       when('/requests/:userId', {templateUrl:'request.html'}).
       when('/edit/:userId', {controller:EditProfileCtrl, templateUrl:'editProfile.html'}).
       when('/sessions/:userId', {controller:SessionsCtrl, templateUrl:'sessions.html'}).
@@ -76,35 +75,6 @@ mainApp = angular.module('mainApp', ['firebase', '$strap.directives'])
       $location.path('/');
       $scope.$apply();
     }
-  }
-
-  function VideoCtrl($rootScope, $routeParams, $scope, $location) {
-    
-    $scope.newItem = {};
-    var listKey = genKey($routeParams.userId, $routeParams.secondUserId);
-    $scope.listRef = fbRef.child("videoMessages").child(listKey);
-
-    $scope.addNew = function() { 
-      $scope.newItem.user = $rootScope.currentUser;
-      $scope.listRef.push($scope.newItem);
-      $scope.newItem = {};      
-    }
-
-    $scope.listRef.on("value", function(messages) {
-      $scope.items  = listValues(messages);
-    });
-
-
-    $scope.viewedUserRef = fbRef.child("users").child($routeParams.userId);
-    $scope.viewedUserRef.on('value', function(viewedUser) {
-      $scope.userToView = viewedUser.val();
-      $scope.userToView.id = $routeParams.userId;
-      if($scope.userToView.requests) {
-        $scope.userToView.requests = Object.keys($scope.userToView.requests);
-      }
-      $scope.$apply();
-      $scope.userToView
-    });
   }
   
   function SessionsCtrl($rootScope, $routeParams, $scope, $location) {
