@@ -29,6 +29,10 @@
 	</li>
 <hr/>
 
+<<<<<<< HEAD
+	
+
+=======
 	<form class="well">
 		<profile user="currentUser"/>
 		<input type="text" ng-model="newItem.text">
@@ -39,4 +43,5 @@
 		<profile user="item.user"/> <h3>{{item.text}}</h3>
 	</div>
     
+>>>>>>> d0ccb1176e1e0b8d74a1f489fbd0e0c127b5cf13
 </ol>

@@ -12,45 +12,51 @@ ga('send', 'pageview');
 <section id="slider">
     <div id="ei-slider" class="ei-slider">
         <ul class="ei-slider-large">
-<<<<<<< HEAD
-                <a href="detail.html"><img src="demo/slider/large/updatedhero.png" alt="image06"/></a>
-=======
-                <a href="#"><img src="demo/slider/large/hero.png" alt="image06"/></a>
->>>>>>> 8b2004de9381ce88ab9a1caccb9c2b7922d3fe67
+                <a href="/"><img src="demo/slider/large/updatedhero.png" alt="image06"/></a>
         </ul>
     </div><!-- ei-slider -->
 </section>
-<hr/>
+<!--<hr/>-->
+<<<<<<< HEAD
+<section>
+    <div class="row" id="ourmission">
+        <div class="span12 first-orange">
+            <div class="page-header">
+                <h2 class="title-center"><span class="white">Our</span> Mission</h2>
+                    <p id="mission">
+                    Do what you are great at and leave your wallet home.  Through our platform you earn Badgers, which are 15 minute units of time by helping out others.  You can then spend your Badgers on anything that would make you a more productive, happier, and overall better person.  Apply for an invite below.
+                    </p>
+                    <div class="row">
+                        <div class="span12">
+                            <form class="form-inline title-center" id="form-one">
+                                <input type="text" class="input-small" placeholder="First Name">
+                                <input type="text" class="input-small" placeholder="Last Name">
+                                <input type="text" class="input-large" placeholder="Email">
+                                <button type="button" class="btn">Submit</button>
+                            </form>
+                        </div>
+=======
 <div class="row">
-                <div class="span12">
-                    <div class="page-header">
-                        <h2 class="title-center">Our Mission</h2>
-                            <p id="mission">
-                            Our goal is to have people share valuable skills.  To create a platform that would enable anybody to share strenghts.  Do what you are great at and leave your wallet at home.  Through our platform you gain Badgers, which are 15 minute units of time by helping out others.  You can then spend your Badgers on anything that would make you a more productive, happier, and overall better person.  
-                            </p>
-                    </div>
-                </div>
-            </div>
-<div class="row">
-    <div class="span12">
+    <div class="span12 first-orange">
         <div class="page-header">
-            <h2 class="title-center"><span class="orange">Our</span> Mission</h2>
+            <h2 class="title-center"><span class="white">Our</span> Mission</h2>
                 <p id="mission">
                 Do what you are great at and leave your wallet home.  Through our platform you earn Badgers, which are 15 minute units of time by helping out others.  You can then spend your Badgers on anything that would make you a more productive, happier, and overall better person.  Apply for an invite below.
                 </p>
                 <div class="row">
                     <div class="span12">
                         <form class="form-inline title-center" id="form-one">
-                            <input type="text" class="input-small" placeholder="First Name">
-                            <input type="text" class="input-small" placeholder="Last Name">
-                            <input type="text" class="input-large" placeholder="Email">
-                            <button type="button" class="btn">Submit</button>
+                            <input type="text" ng-model="applicant.fname" class="input-small" placeholder="First Name">
+                            <input type="text" ng-model="applicant.lname" class="input-small" placeholder="Last Name">
+                            <input type="text" ng-model="applicant.email" class="input-large" placeholder="Email">
+                            <button type="button" ng-click="apply()" class="btn">Submit</button>
                         </form>
+>>>>>>> b60fa42c53aa322c6059fa1c14e1f0accee0f607
                     </div>
-                </div>
+            </div>
         </div>
     </div>
-</div>
+</section>
 <div class="row">
     <div class="span12">
         <div class="page-header">
@@ -58,6 +64,103 @@ ga('send', 'pageview');
         </div>
     </div>
 </div>
+<<<<<<< HEAD
+<section>
+        <!--<div class="span12">
+            <ul class="thumbnails">
+                <div ng-repeat="userGroup in userGroupsToView" class="row">
+                <li ng-repeat="user in userGroup" class="span{{user.spanSize}}">
+                    <div class="thumbnail">
+                        <a href="#/detail/{{user.id}}" >
+                        <span class="first-name">Eugene</span>-->
+                        <ul class="thumbnails">
+                            <li class="span4 no-left">
+                                <div class="thumbnail large">
+                                    <img data-src="holder.js/360x240" alt="">
+                                    <h3>Thumbnail label</h3>
+                                    <p>Thumbnail caption...</p>
+                                </div>
+                            </li>
+                            <li class="span4 no-left">
+                                <div class="thumbnail small">
+                                    <img data=src="holder.js/360x120" alt="">
+                                    <h3>Thumbnail label</h3>
+                                    <p>Thumbnail caption</p>
+                                </div>
+                                <div class="thumbnail small">
+                                    <img data-src="holder.js/360x120" alt="">
+                                    <h3>Thumbnail label</h3>
+                                    <p>Thumbnail caption</p>
+                                </div>
+                            </li>
+                            <li class="span4 no-left">
+                                <div class="thumbnail small">
+                                    <img-data-src="holder.js/360x120" alt="">
+                                    <h3>Thumbnail label</h3>
+                                    <p>Thumbnail caption<p>
+                                </div>
+                                <div class="thumbnail small">
+                                    <img-data-src="holder.js/360x120" alt="">
+                                    <h3>Thumbnail label</h3>
+                                    <p>Thumbnail caption<p>
+                                </div>
+                            </li>
+                        </ul>
+                        <ul class="thumbnails">
+                            <li class="span4 no-left">
+                                <div class="thumbnail large">
+                                    <img data-src="holder.js/360x240" alt="">
+                                    <h3>Thumbnail label</h3>
+                                    <p>Thumbnail caption...</p>
+                                </div>
+                            </li>
+                            <li class="span4 no-left">
+                                <div class="thumbnail large">
+                                    <img data-src="holder.js/360x240" alt="">
+                                    <h3>Thumbnail label</h3>
+                                    <p>Thumbnail caption...</p>
+                                </div>
+                            </li>
+                            <li class="span4 no-left">
+                                <div class="thumbnail large">
+                                    <img data-src="holder.js/360x240" alt="">
+                                    <h3>Thumbnail label</h3>
+                                    <p>Thumbnail caption...</p>
+                                </div>
+                            </li>
+                        </ul>
+                        <ul class="thumbnails">
+                            <li class="span4 no-left">
+                                <div class="thumbnail large">
+                                    <img data-src="holder.js/360x240" alt="">
+                                    <h3>Thumbnail label</h3>
+                                    <p>Thumbnail caption...</p>
+                                </div>
+                            </li>
+                            <li class="span4 no-left">
+                                <div class="thumbnail small">
+                                    <img data-src="holder.js/360x140" alt="">
+                                    <h3>Thumbnail label</h3>
+                                    <p>Thumbnail caption...</p>
+                                </div>
+                                <div class="thumbnail small">
+                                    <img data-src="holder.js/360x140" alt="">
+                                    <h3>Thumbnail label</h3>
+                                    <p>Thumbnail caption...</p>
+                                </div>
+                            </li>
+                            <li class="span4 no-left">
+                                <div class="thumbnail large">
+                                    <img data-src="holder.js/360x240" alt="">
+                                    <h3>Thumbnail label</h3>
+                                    <p>Thumbnail caption...</p>
+                                </div>
+                            </li>
+                        </ul>
+
+                    <!--</div>
+                </li>
+=======
 <div class="row">
     <div class="span12">
         <ul class="thumbnails">
@@ -69,15 +172,13 @@ ga('send', 'pageview');
                      src="https://i.embed.ly/1/display/resize?key=dc65793b3f1249bdb9952a491874d27e&url={{user.img}}&width={{user.imgWidth}}&height={{user.imgHeight}}&grow=true"></a>
                     <div class="caption">
                         <p><span class="name">{{user.name}}<span>:</span></span>{{user.skills}}</p>
-                        <h4>{{user.canDO}}</h4>
                         <p><span class="rating-static rating-45"></span></p>
                         <!--<p><a class="btn btn-primary" href="#/detail/{{user.id}}"><i class="icon-shopping-cart icon-white"></i> Request</a> <a class="btn pull-right" href="#/detail/{{user.id}}">more...</a></p>-->
                     </div>
+>>>>>>> b60fa42c53aa322c6059fa1c14e1f0accee0f607
                 </div>
-            </li>
-            </div>
-        </ul>
-    </div>
-</div>
+            </ul>
+        </div>-->
+</section>
  <!-- / main container -->
 

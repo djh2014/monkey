@@ -33,7 +33,7 @@ ga('send', 'pageview');
                             <button type="button" ng-click="apply()" class="btn">Submit</button>
                         </form>
                     </div>
-                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -44,25 +44,104 @@ ga('send', 'pageview');
         </div>
     </div>
 </div>
-<div class="row">
-    <div class="span12">
-        <ul class="thumbnails">
-            <div ng-repeat="userGroup in userGroupsToView" class="row">
-            <li ng-repeat="user in userGroup" class="span{{user.spanSize}}">
-                <div class="thumbnail">
-                    <a href="#/detail/{{user.id}}" >
-                    <img alt="http://placehold.it/{{user.imgWidth}}x{{user.imgHeight}}"
-                     src="https://i.embed.ly/1/display/resize?key=dc65793b3f1249bdb9952a491874d27e&url={{user.img}}&width={{user.imgWidth}}&height={{user.imgHeight}}&grow=true"></a>
-                    <div class="caption">
-                        <p><span class="name">{{user.name}}<span>:</span></span>{{user.skills}}</p>
-                        <p><span class="rating-static rating-45"></span></p>
-                        <!--<p><a class="btn btn-primary" href="#/detail/{{user.id}}"><i class="icon-shopping-cart icon-white"></i> Request</a> <a class="btn pull-right" href="#/detail/{{user.id}}">more...</a></p>-->
-                    </div>
+<section>
+        <!--<div class="span12">
+            <ul class="thumbnails">
+                <div ng-repeat="userGroup in userGroupsToView" class="row">
+                <li ng-repeat="user in userGroup" class="span{{user.spanSize}}">
+                    <div class="thumbnail">
+                        <a href="#/detail/{{user.id}}" >
+                        <span class="first-name">Eugene</span>-->
+                        <ul class="thumbnails">
+                            <li class="span4 no-left">
+                                <div class="thumbnail large">
+                                    <img data-src="holder.js/360x240" alt="">
+                                    <h3>Thumbnail label</h3>
+                                    <p>Thumbnail caption...</p>
+                                </div>
+                            </li>
+                            <li class="span4 no-left">
+                                <div class="thumbnail small">
+                                    <img data=src="holder.js/360x120" alt="">
+                                    <h3>Thumbnail label</h3>
+                                    <p>Thumbnail caption</p>
+                                </div>
+                                <div class="thumbnail small">
+                                    <img data-src="holder.js/360x120" alt="">
+                                    <h3>Thumbnail label</h3>
+                                    <p>Thumbnail caption</p>
+                                </div>
+                            </li>
+                            <li class="span4 no-left">
+                                <div class="thumbnail small">
+                                    <img-data-src="holder.js/360x120" alt="">
+                                    <h3>Thumbnail label</h3>
+                                    <p>Thumbnail caption<p>
+                                </div>
+                                <div class="thumbnail small">
+                                    <img-data-src="holder.js/360x120" alt="">
+                                    <h3>Thumbnail label</h3>
+                                    <p>Thumbnail caption<p>
+                                </div>
+                            </li>
+                        </ul>
+                        <ul class="thumbnails">
+                            <li class="span4 no-left">
+                                <div class="thumbnail large">
+                                    <img data-src="holder.js/360x240" alt="">
+                                    <h3>Thumbnail label</h3>
+                                    <p>Thumbnail caption...</p>
+                                </div>
+                            </li>
+                            <li class="span4 no-left">
+                                <div class="thumbnail large">
+                                    <img data-src="holder.js/360x240" alt="">
+                                    <h3>Thumbnail label</h3>
+                                    <p>Thumbnail caption...</p>
+                                </div>
+                            </li>
+                            <li class="span4 no-left">
+                                <div class="thumbnail large">
+                                    <img data-src="holder.js/360x240" alt="">
+                                    <h3>Thumbnail label</h3>
+                                    <p>Thumbnail caption...</p>
+                                </div>
+                            </li>
+                        </ul>
+                        <ul class="thumbnails">
+                            <li class="span4 no-left">
+                                <div class="thumbnail large">
+                                    <img data-src="holder.js/360x240" alt="">
+                                    <h3>Thumbnail label</h3>
+                                    <p>Thumbnail caption...</p>
+                                </div>
+                            </li>
+                            <li class="span4 no-left">
+                                <div class="thumbnail small">
+                                    <img data-src="holder.js/360x140" alt="">
+                                    <h3>Thumbnail label</h3>
+                                    <p>Thumbnail caption...</p>
+                                </div>
+                                <div class="thumbnail small">
+                                    <img data-src="holder.js/360x140" alt="">
+                                    <h3>Thumbnail label</h3>
+                                    <p>Thumbnail caption...</p>
+                                </div>
+                            </li>
+                            <li class="span4 no-left">
+                                <div class="thumbnail large">
+                                    <img data-src="holder.js/360x240" alt="">
+                                    <h3>Thumbnail label</h3>
+                                    <p>Thumbnail caption...</p>
+                                </div>
+                            </li>
+                        </ul>
+
+                    <!--</div>
+                </li>
                 </div>
-            </li>
-            </div>
-        </ul>
-    </div>
-</div>
+            </ul>
+        </div>-->
+</section>
  <!-- / main container -->
 
