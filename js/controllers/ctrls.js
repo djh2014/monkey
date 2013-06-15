@@ -16,7 +16,6 @@ mainApp = angular.module('mainApp', ['firebase', '$strap.directives'])
       when('/stream', {controller:StreamCtrl, templateUrl:'stream.html'}).
       otherwise({redirectTo:'/'});
   });
-  
 
   function StreamCtrl($rootScope, $routeParams, $scope, $location) {
   }
@@ -120,8 +119,7 @@ mainApp = angular.module('mainApp', ['firebase', '$strap.directives'])
   function LoginCtrl($rootScope, $scope, $location) {
         $scope.authClient = new FirebaseAuthClient(fbRef, function(error, facebookUser) { 
         if (facebookUser) {
-          var id = facebookUser.username || facebookUser.id;
-          id = id.replace(/\./g,' ').replace(/\#/g,' ').replace(/\$/g,' ').replace(/\[/g,' ').replace(/\]/g,' ');
+          var id = fbClean(facebookUser.username || facebookUser.id);
 
           var currentUserRef = fbRef.child("users").child(id);
           currentUserRef.on('value', function(FBUser) {
@@ -135,10 +133,11 @@ mainApp = angular.module('mainApp', ['firebase', '$strap.directives'])
                   email: facebookUser.email || "",
                   facebook: facebookUser || "",
                   img: "http://graph.facebook.com/"+ facebookUser.id+"/picture?type=large" || ""});
-                if ($scope.directToEditPage && !$rootScope.currentUser.skills) {
+              }
+              if (!$rootScope.currentUser.skills) {
+                  window.alert('please let us know about your skills'); 
                   $scope.directToEditPage = false;
                   $location.path('edit/'+ $rootScope.currentUser.id+"/");   
-                }
               }
               $rootScope.$broadcast("currentUserInit");
               $scope.$apply();
@@ -188,6 +187,8 @@ mainApp = angular.module('mainApp', ['firebase', '$strap.directives'])
           $location.path('/');
         }
         window.alert("Changes Saved");
+          $location.path('stream');
+          $scope.$apply();
       }
   }
 

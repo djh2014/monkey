@@ -13,3 +13,7 @@ function genKey(string1, string2) {
     return string2 + "_" + string1;
   }
 }
+
+function fbClean(string) {
+  return string.replace(/\./g,' ').replace(/\#/g,' ').replace(/\$/g,' ').replace(/\[/g,' ').replace(/\]/g,' ');
+}
