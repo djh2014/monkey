@@ -263,14 +263,14 @@ mainApp = angular.module('mainApp', ['firebase', '$strap.directives'])
   }
 
   function UsersCtrl($scope, $location, $routeParams, angularFireCollection) {
-      // TODO(This is a list that can also update, when change).
-      var url = 'https://getbadgers.firebaseio.com/users/';
-      $scope.usersToEdit = angularFireCollection(new Firebase(url), function(usersToEdit) {
-        
+      fbRef.child("users").on('value', function(users) {
+        $scope.users = users.val();
+        $scope.$apply();
       });
 
+      $scope.newUser = {'img':''};
       $scope.saveNewUser = function(newUser) {
-        $scope.usersToEdit.add(newUser);
+        $scope.users.add(newUser);
         $scope.newUser = {'img':''};
       }
 }
