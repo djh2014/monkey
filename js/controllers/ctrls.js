@@ -2,24 +2,7 @@ var fbUrl = 'https://getbadgers.firebaseio.com';
 var fbRef = new Firebase(fbUrl);
 var fbUsersRef = new Firebase(fbUrl + '/users');
 
-function listValues(listObject) {
-  var res = []
-  for(key in listObject.val()) {
-    res.unshift(listObject.val()[key]);
-  }
-  return res;
-}
-
-function genKey(string1, string2) {
-  if(string1 < string2){
-    return string1 + "_" + string2;
-  } else {
-    return string2 + "_" + string1;
-  }
-}
-
-
-angular.module('mainApp', ['firebase', '$strap.directives'])
+mainApp = angular.module('mainApp', ['firebase', '$strap.directives'])
   .config(function($routeProvider) {
     $routeProvider.
       when('/', {controller:HomeCtrl, templateUrl:'home.html'}).
@@ -32,75 +15,8 @@ angular.module('mainApp', ['firebase', '$strap.directives'])
       when('/sessions/:userId', {controller:SessionsCtrl, templateUrl:'sessions.html'}).
       when('/stream', {controller:StreamCtrl, templateUrl:'stream.html'}).
       otherwise({redirectTo:'/'});
-  })
-  .directive('profile', function() {
-    return {
-      template: '<img src="https://i.embed.ly/1/display/resize?key=dc65793b3f1249bdb9952a491874d27e&url={{user.img}}&width={{width}}&height={{height}}&grow=true" title="{{user.name}}"/>',
-      replace: true,
-      restrict: 'E',
-      scope: { user: '=', currentUser: '='}, 
-      link:  function(scope, iElement, iAttrs, controller) {
-        scope.width = iAttrs.width || 50;
-        scope.height = iAttrs.height || 50;
-      }
-    };
-  })
-  .directive('stream', function() {
-    return {
-      templateUrl: 'streamTemplate.html',
-      replace: true,
-      restrict: 'E',
-      controller: function($rootScope, $element, $attrs, $transclude, $scope, $location) {
-        var LENGTH = 5;
-        var itemsRef = fbRef.child($attrs.list)
-        $scope.items = []
-        $scope.hiddenItems = []
-
-        itemsRef.once('value', function(items) {
-           $scope.items = []
-           for(var key in items.val()) {
-              var item = items.val()[key];
-              if ($scope.items.length <= LENGTH) {
-                $scope.items.unshift(item);
-              } else {
-                $scope.hiddenItems.unshift(item);
-              }
-           };
-           $scope.$apply();
-        });
-
-        itemsRef.on('child_added', function(item) {
-           $scope.items.unshift(item.val());
-           $scope.hiddenItems.unshift($scope.items.pop());
-        });
-
-        $scope.min = 0;
-
-        var timer = setInterval(function() {
-          $scope.currentUser = $rootScope.currentUser;
-          $scope.items.unshift($scope.hiddenItems.pop());
-          $scope.hiddenItems.unshift($scope.items.pop());
-          $scope.$apply();
-        }, 5000);
-
-        $scope.accept = function(item) {
-          $location.path('video/' + item.user.id + "/" + $rootScope.currentUser.id);
-          $scope.$apply();
-        }
-
-        $scope.newItem = {}
-        $scope.addNew = function() {
-          $scope.newItem.user = $rootScope.currentUser;
-          itemsRef.push($scope.newItem);
-          $scope.newItem = {}
-        }
-      },
-      scope: { list: '@', currentUser: '@'}, 
-      link:  function(scope, iElement, iAttrs, controller) {
-        scope.list = iAttrs.list;
-      }
-    };
   });
+  
 
   function StreamCtrl($rootScope, $routeParams, $scope, $location) {
   }
