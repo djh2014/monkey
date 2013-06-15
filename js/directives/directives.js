@@ -34,6 +34,14 @@ mainApp.directive('profile', function() {
            $scope.$apply();
         });
 
+        $rootScope.$on("currentUserInit", function() {
+          if ($rootScope.currentUser) {
+            $scope.currentUser = $rootScope.currentUser;
+            $location.path('stream');
+            $scope.$apply();
+          }
+        });
+
         itemsRef.on('child_added', function(item) {
            $scope.items.unshift(item.val());
            $scope.hiddenItems.unshift($scope.items.pop());
@@ -42,7 +50,6 @@ mainApp.directive('profile', function() {
         $scope.min = 0;
 
         var timer = setInterval(function() {
-          $scope.currentUser = $rootScope.currentUser;
           $scope.items.unshift($scope.hiddenItems.pop());
           $scope.hiddenItems.unshift($scope.items.pop());
           $scope.$apply();
