@@ -14,8 +14,51 @@ mainApp = angular.module('mainApp', ['firebase', '$strap.directives'])
       when('/edit/:userId', {controller:EditProfileCtrl, templateUrl:'editProfile.html'}).
       when('/sessions/:userId', {controller:SessionsCtrl, templateUrl:'sessions.html'}).
       when('/stream', {controller:StreamCtrl, templateUrl:'stream.html'}).
+      when('/meeting/:userId1/:userId2', {controller:MeetingCtrl, templateUrl:'meeting.html'}).
+      when('/meetings/:userId', {controller:MeetingsCtrl, templateUrl:'meetings.html'}).
       otherwise({redirectTo:'/'});
   });
+
+  function MeetingCtrl ($rootScope, $routeParams, $scope, $location) {
+    // Messages: TODO(guti): make a directive:
+    var listKey = genKey($routeParams.userId, $routeParams.secondUserId);
+    $scope.listRef = fbRef.child("meeting_messages").child(listKey);
+
+    $scope.listRef.on("value", function(messages) {
+      $scope.items  = listValues(messages);
+    });
+
+    $scope.newItem = {};
+    $scope.addNew = function() { 
+      if ($rootScope.currentUser.id ==  $scope.user1.id || 
+          $rootScope.currentUser.id ==  $scope.user2.id) {
+        $scope.newItem.user = $rootScope.currentUser;
+        $scope.listRef.push($scope.newItem);
+        $scope.newItem = {};      
+      } else {
+        window.alert('sorry you are not a user');
+      }
+    }
+
+
+
+    // Get Users, TODO(guti):make a service
+    $scope.user1Ref = fbRef.child("users").child($routeParams.userId1);
+    $scope.user1Ref.on('value', function(user1) {
+      $scope.user1 = user1.val();
+      $scope.$apply();
+    });
+    $scope.user1Ref = fbRef.child("users").child($routeParams.userId2);
+    $scope.user1Ref.on('value', function(user2) {
+      $scope.user2 = user2.val();
+      $scope.$apply();
+    });
+
+  }
+
+  function MeetingsCtrl ($rootScope, $routeParams, $scope, $location) {
+    
+  }
 
   function StreamCtrl($rootScope, $routeParams, $scope, $location) {
   }
