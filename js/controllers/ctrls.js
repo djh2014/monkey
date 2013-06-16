@@ -184,12 +184,13 @@ mainApp = angular.module('mainApp', ['firebase', '$strap.directives'])
       var messageListRef = new Firebase(fullUrl);
       $scope.usersToView = [];
       
-      $rootScope.$on("currentUserInit", function() {
-        if ($rootScope.currentUser) {
-          $location.path('stream');
-          $scope.$apply();
-        }
-      });
+      // navigate to stream if login.
+      // $rootScope.$on("currentUserInit", function() {
+      //   if ($rootScope.currentUser) {
+      //     $location.path('stream');
+      //     $scope.$apply();
+      //   }
+      // });
 
       $scope.applicant = {}
       $scope.apply = function() {

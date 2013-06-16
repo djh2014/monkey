@@ -22,28 +22,40 @@ ga('send', 'pageview');
         <div class="page-header">
             <h2 class="title-center"><span class="white">Our</span> Mission</h2>
                 <p id="mission">
-                Do what you are great at and leave your wallet home.  Through our platform you earn Badgers, which are 15 minute units of time by helping out others.  You can then spend your Badgers on anything that would make you a more productive, happier, and overall better person.  Apply for an invite below.
+                Do what you are great at and leave your wallet home.  Through our platform you earn Badgers, which are 15 minute units of time by helping out others.  You can then spend your Badgers on anything that would make you a more productive, happier, and overall better person.
                 </p>
                 <div class="row">
                     <div class="span12">
                         <form class="form-inline title-center" id="form-one">
-                            <input type="text" ng-model="applicant.fname" class="input-small" placeholder="First Name">
-                            <input type="text" ng-model="applicant.lname" class="input-small" placeholder="Last Name">
-                            <input type="text" ng-model="applicant.email" class="input-large" placeholder="Email">
-                            <button type="button" ng-click="apply()" class="btn">Submit</button>
+                            
+                            <div ng-switch on="currentUser != null" >
+                                        <span ng-switch-when="true">
+                                            <h1><a href="/#/users">Find out what others can do for you</a></h1><br/>
+                                        </span>
+                                        <span ng-switch-default>
+                                            <button class="btn btn-danger home-button"><a ng-click="facebookLogin()">Register</a>
+                                            </button>
+                                            <button class="btn btn-success home-button"><a ng-click="facebookLogin()">Login</a>
+                                            </button>
+                                        </span>
+                                    </div>
+
+
+
                         </form>
                     </div>
             </div>
         </div>
     </div>
 </div>
+<!-- 
 <div class="row">
     <div class="span12">
         <div class="page-header">
             <h2 class="title-center"><span class="orange">Featured</span> People</h2>
         </div>
     </div>
-</div>
+</div> -->
 <section>
         <!--<div class="span12">
             <ul class="thumbnails">
@@ -52,7 +64,9 @@ ga('send', 'pageview');
                     <div class="thumbnail">
                         <a href="#/detail/{{user.id}}" >
                         <span class="first-name">Eugene</span>-->
-                        <ul class="thumbnails">
+                        
+
+<!--                         <ul class="thumbnails">
                             <li class="span4 no-left">
                                 <div class="thumbnail large">
                                     <img data-src="holder.js/360x240" alt="">
@@ -136,7 +150,7 @@ ga('send', 'pageview');
                                 </div>
                             </li>
                         </ul>
-
+ -->
                     <!--</div>
                 </li>
                 </div>
