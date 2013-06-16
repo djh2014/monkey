@@ -60,8 +60,8 @@ mainApp = angular.module('mainApp', ['firebase', '$strap.directives'])
         meeting[key] = {'teacher':$scope.user, 'student':$rootScope.currentUser, 'status':"NEW", 'id': key};
         fbRef.child('meetings').update(meeting);
         var meetingPath = 'meeting/' + $rootScope.currentUser.id + '/' + $scope.user.id 
+        
         // Send event
-        debugger;
         fbRef.child('events').child($scope.user.id).push(
           {text: $rootScope.currentUser.name + ' want to start the video session with you',
            path:meetingPath,
@@ -86,7 +86,7 @@ mainApp = angular.module('mainApp', ['firebase', '$strap.directives'])
       db.get($scope, 'users/' + $routeParams.userId1, 'user1');
       db.get($scope, 'users/' + $routeParams.userId2, 'user2', function() {
          if ($scope.items.length == 0) {
-            var item = {user:$scope.user2, text:'Hi when can we start.'};  
+            var item = {user:$scope.user2, text:'Hi, when can we start.'};  
             $scope.listRef.push(item);
          }
       });  
@@ -104,8 +104,6 @@ mainApp = angular.module('mainApp', ['firebase', '$strap.directives'])
         window.alert('sorry you are not a user');
       }
     }
-
-    
   }
 
   function StreamCtrl($rootScope, $routeParams, $scope, $location) {
@@ -131,16 +129,6 @@ mainApp = angular.module('mainApp', ['firebase', '$strap.directives'])
     $rootScope.$on("currentUserInit", function() {
       if ($rootScope.currentUser) {
         $rootScope.myEventsRef = fbRef.child('events').child($rootScope.currentUser.id);
-        
-        $rootScope.myEventsRef.once('value', function(eventsDic) {
-          var events = utils.listValues(eventsDic.val());
-          for (var i = 0; i < events.length; i++) {
-            if(events[i].alert == true) {
-              $rootScope.processEvent(events[i]);
-              break;
-            }
-          }            
-        });
 
         $rootScope.myEventsRef.on('child_added', function(eventObject) {
           var newEvent = eventObject.val();
@@ -148,7 +136,6 @@ mainApp = angular.module('mainApp', ['firebase', '$strap.directives'])
           if(newEvent.alert == true) {
             $rootScope.processEvent(newEvent);
           }
-          
         });
         $scope.$apply();
       }
@@ -161,7 +148,6 @@ mainApp = angular.module('mainApp', ['firebase', '$strap.directives'])
       $scope.$apply();
     }
     ////
-
 
       $rootScope.checkRequireFields = function() {
         if (!$rootScope.currentUser.skills || !$rootScope.currentUser.email) {
