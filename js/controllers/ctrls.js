@@ -53,9 +53,7 @@ mainApp = angular.module('mainApp', ['firebase', '$strap.directives'])
       $scope.$apply();
     });
 
-    // TODO(guti): move this away.
-    $scope.setRequest = function() {
-      
+    $scope.setRequest = function() {      
       if($rootScope.currentUser) {
         var key = utils.genKey($scope.user.id, $rootScope.currentUser.id);
         var meeting = {};
@@ -76,6 +74,14 @@ mainApp = angular.module('mainApp', ['firebase', '$strap.directives'])
 
     $scope.listRef.on("value", function(messages) {
       $scope.items  = utils.listValues(messages.val());
+      // TODO(guti): I put it here just to sync, wonder how you sync correctly.
+      db.get($scope, 'users/' + $routeParams.userId1, 'user1');
+      db.get($scope, 'users/' + $routeParams.userId2, 'user2', function() {
+         if ($scope.items.length == 0) {
+            var item = {user:$scope.user2, text:'Hi let me check if I can make it, will get back to you shortly.'};  
+            $scope.listRef.push(item);
+         }
+      });  
     });
 
     $scope.newItem = {};
@@ -91,8 +97,7 @@ mainApp = angular.module('mainApp', ['firebase', '$strap.directives'])
       }
     }
 
-    db.get($scope, 'users/' + $routeParams.userId1, 'user1');
-    db.get($scope, 'users/' + $routeParams.userId2, 'user2');
+    
   }
 
   function StreamCtrl($rootScope, $routeParams, $scope, $location) {
