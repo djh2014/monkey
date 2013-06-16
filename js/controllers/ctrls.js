@@ -114,6 +114,14 @@ mainApp = angular.module('mainApp', ['firebase', '$strap.directives'])
   }
 
   function LoginCtrl($rootScope, $scope, $location, utils) {
+      $rootScope.checkRequireFields = function() {
+        if (!$rootScope.currentUser.skills || !$rootScope.currentUser.email) {
+          window.alert('please let us know about your skills and gmail.'); 
+          $scope.directToEditPage = false;
+          $location.path('edit/'+ $rootScope.currentUser.id+"/");   
+        }
+      }
+
       $scope.authClient = new FirebaseAuthClient(fbRef, function(error, facebookUser) { 
         if (facebookUser) {
           var id = utils.fbClean(facebookUser.username || facebookUser.id);
@@ -131,10 +139,8 @@ mainApp = angular.module('mainApp', ['firebase', '$strap.directives'])
                   facebook: facebookUser || "",
                   img: "http://graph.facebook.com/"+ facebookUser.id+"/picture?type=large" || ""});
               }
-              if (!$rootScope.currentUser.skills) {
-                  window.alert('please let us know about your skills'); 
-                  $scope.directToEditPage = false;
-                  $location.path('edit/'+ $rootScope.currentUser.id+"/");   
+              if ($location.path().indexOf('edit') == -1) {
+                $rootScope.checkRequireFields();
               }
               $rootScope.$broadcast("currentUserInit");
               $scope.$apply();
@@ -160,7 +166,7 @@ mainApp = angular.module('mainApp', ['firebase', '$strap.directives'])
     }
   }
 
-  function EditProfileCtrl($scope, $routeParams, $location){
+  function EditProfileCtrl($rootScope, $scope, $routeParams, $location){
       //TODO(guti): make it a service:
       var userId = $routeParams.userId;
       if (userId) {
@@ -183,9 +189,10 @@ mainApp = angular.module('mainApp', ['firebase', '$strap.directives'])
           var res = listFBRef.push($scope.user);
           $location.path('/');
         }
-        //window.alert("Changes Saved");
-          $location.path('detail/'+$scope.user.id);
-          $scope.$apply();
+        debugger;
+        $rootScope.checkRequireFields();
+        $location.path('detail/'+$scope.user.id);
+        $scope.$apply();
       }
   }
 
