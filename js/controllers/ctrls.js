@@ -18,13 +18,17 @@ mainApp = angular.module('mainApp', ['firebase', '$strap.directives'])
       otherwise({redirectTo:'/'});
   });
 
-  function MeetingCtrl ($rootScope, $routeParams, $scope, $location) {
+  function MeetingsCtrl ($rootScope, $routeParams, $scope, $location) {
+    
+  }
+
+  function MeetingCtrl ($rootScope, $routeParams, $scope, $location, utils, db) {
     // Messages: TODO(guti): make a directive:
-    var listKey = genKey($routeParams.userId, $routeParams.secondUserId);
+    var listKey = utils.genKey($routeParams.userId, $routeParams.secondUserId);
     $scope.listRef = fbRef.child("meeting_messages").child(listKey);
 
     $scope.listRef.on("value", function(messages) {
-      $scope.items  = listValues(messages);
+      $scope.items  = utils.listValues(messages);
     });
 
     $scope.newItem = {};
@@ -39,24 +43,8 @@ mainApp = angular.module('mainApp', ['firebase', '$strap.directives'])
       }
     }
 
-
-
-    // Get Users, TODO(guti):make a service
-    $scope.user1Ref = fbRef.child("users").child($routeParams.userId1);
-    $scope.user1Ref.on('value', function(user1) {
-      $scope.user1 = user1.val();
-      $scope.$apply();
-    });
-    $scope.user1Ref = fbRef.child("users").child($routeParams.userId2);
-    $scope.user1Ref.on('value', function(user2) {
-      $scope.user2 = user2.val();
-      $scope.$apply();
-    });
-
-  }
-
-  function MeetingsCtrl ($rootScope, $routeParams, $scope, $location) {
-    
+    db.get($scope, 'users/' + $routeParams.userId1, 'user1');
+    db.get($scope, 'users/' + $routeParams.userId2, 'user2');
   }
 
   function StreamCtrl($rootScope, $routeParams, $scope, $location) {
@@ -77,6 +65,7 @@ mainApp = angular.module('mainApp', ['firebase', '$strap.directives'])
     }
   }
   
+  // TODO(guti): delete:
   function SessionsCtrl($rootScope, $routeParams, $scope, $location) {
       var userId = $routeParams.userId;
       var APPROVED = "APPROVED", REJECT= "REJECT", NEW ="NEW", DONE = "DONE";
@@ -129,10 +118,10 @@ mainApp = angular.module('mainApp', ['firebase', '$strap.directives'])
       }
   }
 
-  function LoginCtrl($rootScope, $scope, $location) {
+  function LoginCtrl($rootScope, $scope, $location, utils) {
         $scope.authClient = new FirebaseAuthClient(fbRef, function(error, facebookUser) { 
         if (facebookUser) {
-          var id = fbClean(facebookUser.username || facebookUser.id);
+          var id = utils.fbClean(facebookUser.username || facebookUser.id);
 
           var currentUserRef = fbRef.child("users").child(id);
           currentUserRef.on('value', function(FBUser) {

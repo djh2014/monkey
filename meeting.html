@@ -1,5 +1,5 @@
 <div class="span5">
-	<h3>Meeting Page</h3>
+	<u><h3>Meeting Page</h3></u>
 	<profile user="user1"/> <b>+</b>
 	<profile user="user2"/>
 
@@ -29,6 +29,7 @@
 	</form>
 
 	<div class="well" ng-repeat="item in items">
-		<profile user="item.user"/> <h3>{{item.text}}</h3>
+		<div class="span1"><profile user="item.user"/></div>
+		 <h3>{{item.text}}</h3>
 	</div>
 </div>
