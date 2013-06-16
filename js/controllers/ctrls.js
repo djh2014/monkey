@@ -62,7 +62,7 @@ mainApp = angular.module('mainApp', ['firebase', '$strap.directives'])
         meeting[key] = {'teacher':$scope.user, 'student':$rootScope.currentUser, 'status':"NEW", 'id': key};
         fbRef.child('meetings').update(meeting);
         window.alert('meeting is pending for ' + $scope.user.name + 'approval');
-        $location.path('meetings/' + $rootScope.currentUser.id);
+        $location.path('meeting/' + $rootScope.currentUser.id + '/' + $scope.user.id);
       } else {
         window.alert("you need to sign in first");
       }
@@ -239,16 +239,16 @@ mainApp = angular.module('mainApp', ['firebase', '$strap.directives'])
   }
 
   function UsersCtrl($scope, $location, $routeParams, angularFireCollection, utils) {
-      fbRef.child("users").on('value', function(users) {
-        $scope.users = utils.listValues(users.val());
-        $scope.$apply();
-      });
+    fbRef.child("users").on('value', function(users) {
+      $scope.users = utils.listValues(users.val());
+      $scope.$apply();
+    });
 
+    $scope.newUser = {'img':''};
+    $scope.saveNewUser = function(newUser) {
+      $scope.users.add(newUser);
       $scope.newUser = {'img':''};
-      $scope.saveNewUser = function(newUser) {
-        $scope.users.add(newUser);
-        $scope.newUser = {'img':''};
-      }
+    }
   }
 
 
