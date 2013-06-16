@@ -13,7 +13,11 @@ mainApp = angular.module('mainApp', ['firebase', '$strap.directives'])
       when('/detail/:userId', {controller:DetailCtrl, templateUrl:'detail.html'}).
       when('/edit/:userId', {controller:EditProfileCtrl, templateUrl:'editProfile.html'}).
       otherwise({redirectTo:'/'});
-  });
+  }).run(["$rootScope", "$location",
+         function ($rootScope, $location) {
+           $rootScope.global = {};
+         }
+  ]);
 
   function MeetingsCtrl ($rootScope, $routeParams, $scope, $location, utils, db) {
     db.get($scope, 'meetings', 'meetings', function() {
