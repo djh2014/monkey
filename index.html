@@ -133,10 +133,8 @@ ga('send', 'pageview');
                                             <a href="#/detail/{{currentUser.id}}" title="{{currentUser.name}}"></a>(<a ng-click="logOut()">logout</a>)
                                         </span>
                                         <span ng-switch-default>
-                                            <button class="btn btn-danger home-button"><a ng-click="facebookLogin()">Register</a>
-                                            </button>
-                                            <button class="btn btn-success home-button"><a ng-click="facebookLogin()">Login</a>
-                                            </button>
+                                            <a class="btn btn-danger home-button" ng-click="facebookLogin()">Register</a>
+                                            <a class="btn btn-success home-button" ng-click="facebookLogin()">Login</a>
                                         </span>
                                     </div>
                                 </li>
