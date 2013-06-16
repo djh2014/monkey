@@ -19,8 +19,8 @@ mainApp
   return {
 	listValues : function(listObject) {
 	  var res = []
-	  for(key in listObject.val()) {
-	    res.unshift(listObject.val()[key]);
+	  for(key in listObject) {
+	    res.unshift(listObject[key]);
 	  }
 	  return res;
 	},
