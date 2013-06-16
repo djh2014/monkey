@@ -138,6 +138,9 @@ mainApp = angular.module('mainApp', ['firebase', '$strap.directives'])
         } else {
           $rootScope.currentUser = null;
           $rootScope.$broadcast("currentUserInit");
+          // not login user should go home.
+          $location.path('/');
+          $scope.$apply();
         }
      });
 
@@ -148,6 +151,8 @@ mainApp = angular.module('mainApp', ['firebase', '$strap.directives'])
 
     $scope.logOut = function() {
       $scope.authClient.logout();
+      $location.path('/');
+      $scope.$apply();
     }
   }
 
@@ -173,52 +178,52 @@ mainApp = angular.module('mainApp', ['firebase', '$strap.directives'])
           var res = listFBRef.push($scope.user);
           $location.path('/');
         }
-        window.alert("Changes Saved");
-          $location.path('stream');
+        //window.alert("Changes Saved");
+          $location.path('detail/'+$scope.user.id);
           $scope.$apply();
       }
   }
 
   function HomeCtrl($scope, $location, angularFireCollection, $rootScope) {
-      var fullUrl = 'https://getbadgers.firebaseio.com/users/';
-      var messageListRef = new Firebase(fullUrl);
-      $scope.usersToView = [];
-      
-      // navigate to stream if login.
-      // $rootScope.$on("currentUserInit", function() {
-      //   if ($rootScope.currentUser) {
-      //     $location.path('stream');
-      //     $scope.$apply();
-      //   }
-      // });
+    var fullUrl = 'https://getbadgers.firebaseio.com/users/';
+    var messageListRef = new Firebase(fullUrl);
+    $scope.usersToView = [];
+    
+    // navigate to stream if login.
+    // $rootScope.$on("currentUserInit", function() {
+    //   if ($rootScope.currentUser) {
+    //     $location.path('stream');
+    //     $scope.$apply();
+    //   }
+    // });
 
-      // TODO(guti): probably remove this.
-      messageListRef.on('value', function(snapshot) {
-            // For index.html page:
-            var BIG_IMG = [600, 450, 6], MEDIUM_IMG = [260, 200, 3], SMALL_IMG = [225, 200, 3];
-            var IMG_SIZES = [[BIG_IMG, MEDIUM_IMG, MEDIUM_IMG], [MEDIUM_IMG, MEDIUM_IMG, BIG_IMG], [SMALL_IMG, SMALL_IMG, SMALL_IMG, SMALL_IMG]];
-            var usersObject = snapshot.val();
-            var ids = Object.keys(usersObject);
-            var userGroups = []
-            for (var i = 0; i < IMG_SIZES.length; i++) {
-              var userGroup = []
-              for (var j = 0; j < IMG_SIZES[i].length; j++) {
-                if(ids.length <= 0){
-                  break;
-                }
-                var id = ids.pop();
-                var user = usersObject[id];
-                user.imgWidth = IMG_SIZES[i][j][0];
-                user.imgHeight = IMG_SIZES[i][j][1];
-                user.spanSize = IMG_SIZES[i][j][2];
-                user.id = id;
-                userGroup.push(user);
-              };
-              userGroups.push(userGroup);
-            };
-            $scope.userGroupsToView = userGroups;
-            $scope.$apply();
-      });
+    // TODO(guti): probably remove this.
+    messageListRef.on('value', function(snapshot) {
+      // For index.html page:
+      var BIG_IMG = [600, 450, 6], MEDIUM_IMG = [260, 200, 3], SMALL_IMG = [225, 200, 3];
+      var IMG_SIZES = [[BIG_IMG, MEDIUM_IMG, MEDIUM_IMG], [MEDIUM_IMG, MEDIUM_IMG, BIG_IMG], [SMALL_IMG, SMALL_IMG, SMALL_IMG, SMALL_IMG]];
+      var usersObject = snapshot.val();
+      var ids = Object.keys(usersObject);
+      var userGroups = []
+      for (var i = 0; i < IMG_SIZES.length; i++) {
+        var userGroup = []
+        for (var j = 0; j < IMG_SIZES[i].length; j++) {
+          if(ids.length <= 0){
+            break;
+          }
+          var id = ids.pop();
+          var user = usersObject[id];
+          user.imgWidth = IMG_SIZES[i][j][0];
+          user.imgHeight = IMG_SIZES[i][j][1];
+          user.spanSize = IMG_SIZES[i][j][2];
+          user.id = id;
+          userGroup.push(user);
+        };
+        userGroups.push(userGroup);
+      };
+      $scope.userGroupsToView = userGroups;
+      $scope.$apply();
+    });
   }
 
   function UsersCtrl($scope, $location, $routeParams, angularFireCollection) {
