@@ -59,8 +59,16 @@ mainApp = angular.module('mainApp', ['firebase', '$strap.directives'])
         var meeting = {};
         meeting[key] = {'teacher':$scope.user, 'student':$rootScope.currentUser, 'status':"NEW", 'id': key};
         fbRef.child('meetings').update(meeting);
-        window.alert('meeting is pending for ' + $scope.user.name + 'approval');
-        $location.path('meeting/' + $rootScope.currentUser.id + '/' + $scope.user.id);
+        var meetingPath = 'meeting/' + $rootScope.currentUser.id + '/' + $scope.user.id 
+        // Send event
+        debugger;
+        fbRef.child('events').child($scope.user.id).push(
+          {text: $rootScope.currentUser.name + ' want to start the video session with you',
+           path:meetingPath,
+           alert:true});
+
+        window.alert('we notify ' + $scope.user.name + '. copy his email and click the red button');
+        $location.path(meetingPath);
       } else {
         window.alert("you need to sign in first");
       }
@@ -78,7 +86,7 @@ mainApp = angular.module('mainApp', ['firebase', '$strap.directives'])
       db.get($scope, 'users/' + $routeParams.userId1, 'user1');
       db.get($scope, 'users/' + $routeParams.userId2, 'user2', function() {
          if ($scope.items.length == 0) {
-            var item = {user:$scope.user2, text:'Hi let me check if I can make it, will get back to you shortly.'};  
+            var item = {user:$scope.user2, text:'Hi when can we start.'};  
             $scope.listRef.push(item);
          }
       });  
@@ -119,6 +127,42 @@ mainApp = angular.module('mainApp', ['firebase', '$strap.directives'])
   }
 
   function LoginCtrl($rootScope, $scope, $location, utils) {
+    // Events: 
+    $rootScope.$on("currentUserInit", function() {
+      if ($rootScope.currentUser) {
+        $rootScope.myEventsRef = fbRef.child('events').child($rootScope.currentUser.id);
+        
+        $rootScope.myEventsRef.once('value', function(eventsDic) {
+          var events = utils.listValues(eventsDic.val());
+          for (var i = 0; i < events.length; i++) {
+            if(events[i].alert == true) {
+              $rootScope.processEvent(events[i]);
+              break;
+            }
+          }            
+        });
+
+        $rootScope.myEventsRef.on('child_added', function(eventObject) {
+          var newEvent = eventObject.val();
+          newEvent.id = eventObject.name();
+          if(newEvent.alert == true) {
+            $rootScope.processEvent(newEvent);
+          }
+          
+        });
+        $scope.$apply();
+      }
+    });
+
+    $rootScope.processEvent = function(newEvent) {
+      $rootScope.myEventsRef.child(newEvent.id).update({alert:false});
+      window.alert(newEvent.text);
+      $location.path(newEvent.path);
+      $scope.$apply();
+    }
+    ////
+
+
       $rootScope.checkRequireFields = function() {
         if (!$rootScope.currentUser.skills || !$rootScope.currentUser.email) {
           window.alert('please let us know about your skills and gmail.'); 

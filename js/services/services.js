@@ -20,7 +20,9 @@ mainApp
 	listValues : function(listObject) {
 	  var res = []
 	  for(key in listObject) {
-	    res.unshift(listObject[key]);
+	  	var object = listObject[key];
+	  	object.id = key; 
+	    res.unshift(object);
 	  }
 	  return res;
 	},
