@@ -5,13 +5,13 @@ mainApp
 .factory('db', function() {
   return {
 	get : function (scope, dbAddress, scopeName, cb) {
-	    	fbRef.child(dbAddress).on('value', function(item) {
-		    	scope[scopeName] = item.val();
-		        if(cb) {
-		        	cb();
-		        }
-		        scope.$apply();
-    	  	});
+    	fbRef.child(dbAddress).on('value', function(item) {
+	    	scope[scopeName] = item.val();
+	        if(cb) {
+	        	cb();
+	        }
+	        scope.$apply();
+	  	});
 	}
   }
 })

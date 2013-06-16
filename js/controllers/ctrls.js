@@ -14,17 +14,23 @@ mainApp = angular.module('mainApp', ['firebase', '$strap.directives'])
       when('/sessions/:userId', {controller:SessionsCtrl, templateUrl:'sessions.html'}).
       when('/stream', {controller:StreamCtrl, templateUrl:'stream.html'}).
       when('/meeting/:userId1/:userId2', {controller:MeetingCtrl, templateUrl:'meeting.html'}).
-      when('/meetings/:userId', {controller:MeetingsCtrl, templateUrl:'meetings.html'}).
+      when('/meetings/:userId1', {controller:MeetingsCtrl, templateUrl:'meetings.html'}).
       otherwise({redirectTo:'/'});
   });
 
-  function MeetingsCtrl ($rootScope, $routeParams, $scope, $location) {
-    
+  function MeetingsCtrl ($rootScope, $routeParams, $scope, $location, utils, db) {
+    //temp
+    $rootScope.$on("currentUserInit", function() {
+      fbRef.child('meetings').update({'guti6_guti6':{'user1':$rootScope.currentUser, 'user2':$rootScope.currentUser}});
+    });
+    var key = utils.genKey($routeParams.userId1, $routeParams.userId2);
+    debugger;
+    db.get($scope, 'meetings', 'meetings');
   }
 
   function MeetingCtrl ($rootScope, $routeParams, $scope, $location, utils, db) {
     // Messages: TODO(guti): make a directive:
-    var listKey = utils.genKey($routeParams.userId, $routeParams.secondUserId);
+    var listKey = utils.genKey($routeParams.userId1, $routeParams.userId2);
     $scope.listRef = fbRef.child("meeting_messages").child(listKey);
 
     $scope.listRef.on("value", function(messages) {
@@ -35,6 +41,7 @@ mainApp = angular.module('mainApp', ['firebase', '$strap.directives'])
     $scope.addNew = function() { 
       if ($rootScope.currentUser.id ==  $scope.user1.id || 
           $rootScope.currentUser.id ==  $scope.user2.id) {
+        
         $scope.newItem.user = $rootScope.currentUser;
         $scope.listRef.push($scope.newItem);
         $scope.newItem = {};      
