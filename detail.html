@@ -34,19 +34,14 @@ ga('send', 'pageview');
                         <span class="rating-static rating-45" style="float: right;"></span>
                     </td>
                 </tr>
-                <tr>
-                    <td>Time Available:</td>
-                    <td><span class="priceLarge">&nbsp;{{userToView.time}}</span></td>
-                </tr>
                 </tr>
                 <tr>
                     <td colspan="1" style="text-align:left">
                         <div class="btn-toolbar">
                             <div class="btn-group pull-left profile-request">
-                                <a role="button" ng-click="setRequest()" data-toggle="modal" class="btn btn-info"> Request Now</a>
+                                <a role="button" ng-click="setRequest()" data-toggle="modal" class="btn btn-info"> Send {{userToView.name}} A Meeting Request Now</a>
                             </div>
                         </div>
-                        Got Requests from:
                         <ol>
                             <li ng-repeat="request in userToView.requests">
                                 {{request}}
