@@ -19,18 +19,43 @@ mainApp = angular.module('mainApp', ['firebase', '$strap.directives'])
   });
 
   function MeetingsCtrl ($rootScope, $routeParams, $scope, $location, utils, db) {
-    $rootScope.$on("currentUserInit", function() {
-      fbRef.child('meetings').update({'guti6_guti6':{'user1':$rootScope.currentUser, 'user2':$rootScope.currentUser}});
-    });
-    var key = utils.genKey($routeParams.userId1, $routeParams.userId2);
     db.get($scope, 'meetings', 'meetings', function() {
-      debugger;
       $scope.meetings = utils.listValues($scope.meetings);
       $scope.meetings = $scope.meetings.filter(function(e, i) {
-        return e.user1.id == $routeParams.userId || e.user2.id == $routeParams.userId;
+        return e.teacher.id == $routeParams.userId || e.student.id == $routeParams.userId;
       });
       $scope.$apply();
     });
+  }
+
+  function DetailCtrl($scope, $rootScope, $location, $routeParams,db, utils) {      
+    $scope.viewedUserRef = fbRef.child("users").child($routeParams.userId);
+
+    $scope.viewedUserRef.on('value', function(viewedUser) { 
+      $scope.userToView = viewedUser.val();
+      $scope.userToView.id = $routeParams.userId;
+      if($scope.userToView.requests) {
+        $scope.userToView.requests = Object.keys($scope.userToView.requests);
+      }
+      $scope.$apply();
+    });
+
+    $scope.setRequest = function() {
+      // Update meetings.
+      // and direct to meetings page.
+      if($rootScope.currentUser) {
+
+        var key = utils.genKey($scope.userToView.id, $rootScope.currentUser.id);
+        var meeting = {}
+        meeting[key] = {'teacher':$scope.userToView, 'student':$rootScope.currentUser};
+        fbRef.child('meetings').update(meeting);
+        window.alert('meeting is pending for ' + $scope.userToView.name + 'approval');
+        $location.path('meetings/' + $rootScope.currentUser.id);
+      } else {
+        window.alert("you need to sign in first");
+        $location.path('login/');
+      }
+    }
   }
 
   function MeetingCtrl ($rootScope, $routeParams, $scope, $location, utils, db) {
@@ -252,29 +277,6 @@ mainApp = angular.module('mainApp', ['firebase', '$strap.directives'])
             $scope.userGroupsToView = userGroups;
             $scope.$apply();
       });
-  }
-  function DetailCtrl($scope, $rootScope, $location, $routeParams, angularFireCollection) {      
-      $scope.viewedUserRef = fbRef.child("users").child($routeParams.userId);
-
-      $scope.viewedUserRef.on('value', function(viewedUser) { 
-            $scope.userToView = viewedUser.val();
-            $scope.userToView.id = $routeParams.userId;
-            if($scope.userToView.requests) {
-              $scope.userToView.requests = Object.keys($scope.userToView.requests);
-            }
-            $scope.$apply();
-      });
-
-      $scope.setRequest = function() {
-        if($rootScope.currentUser) {
-          $scope.viewedUserRef.child("requests").child($rootScope.currentUser.name).set("request");
-          $location.path('sessions/' + $routeParams.userId);
-          //window.alert("request was added, will come back to you soon.");
-        } else {
-          window.alert("you need to sign in first");
-          $location.path('login/');
-        }
-      }
   }
 
   function UsersCtrl($scope, $location, $routeParams, angularFireCollection) {
