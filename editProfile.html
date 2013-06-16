@@ -4,9 +4,12 @@
                     <img src="http://i.embed.ly/1/image/crop?url={{user.img}}&amp;key=92b31102528511e1a2ec4040d3dc5c07&amp;width=200&amp;height=200" alt="?" class="pull-left span2 clearfix" style='margin-right:10px'>
         </div>
         <div class="span3">
-            <!-- <label>Name</label>
-            <input ng-model="user.name" type="text" value="" class="input-xlarge" placeholder="First and Last Name">
- -->
+            
+            <div ng-show="currentEmail == null || currentEmail == ''">
+            <label>Gmail</label>
+            <input ng-model="user.email" type="text" value="" class="input-xlarge" placeholder="Gmail address">
+            </div>
+
             <label>Skills:</label>
             <textarea ng-model="user.skills" value="" rows="6" class="input-xlarge" placeholder="What skills do you have that you can teach, e.g programming, design, business, law, finance"></textarea>
             

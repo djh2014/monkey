@@ -169,6 +169,7 @@ mainApp = angular.module('mainApp', ['firebase', '$strap.directives'])
 
         userFBRef.on('value', function(FBUser) {
               $scope.user = FBUser.val();
+              $scope.currentEmail = $scope.user.email;
               $scope.$apply();
         });
       }
