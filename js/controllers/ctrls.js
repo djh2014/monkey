@@ -26,6 +26,18 @@ mainApp = angular.module('mainApp', ['firebase', '$strap.directives'])
       });
       $scope.$apply();
     });
+
+    $scope.approve = function(meeting_id) {
+      debugger;
+      fbRef.child("meetings").child(meeting_id).update({status:"APPROVED"});
+      $scope.$apply();
+    }
+
+    $scope.reject = function(meeting_id) {
+      debugger;
+      fbRef.child("meetings").child(meeting_id).update({status:"REJECT"});
+      $scope.$apply();
+    }
   }
 
   function DetailCtrl($scope, $rootScope, $location, $routeParams,db, utils) {      
@@ -40,14 +52,13 @@ mainApp = angular.module('mainApp', ['firebase', '$strap.directives'])
       $scope.$apply();
     });
 
+    // TODO(guti): move this away.
     $scope.setRequest = function() {
-      // Update meetings.
-      // and direct to meetings page.
+      
       if($rootScope.currentUser) {
-
         var key = utils.genKey($scope.userToView.id, $rootScope.currentUser.id);
-        var meeting = {}
-        meeting[key] = {'teacher':$scope.userToView, 'student':$rootScope.currentUser};
+        var meeting = {};
+        meeting[key] = {'teacher':$scope.userToView, 'student':$rootScope.currentUser, 'status':"NEW", 'id': key};
         fbRef.child('meetings').update(meeting);
         window.alert('meeting is pending for ' + $scope.userToView.name + 'approval');
         $location.path('meetings/' + $rootScope.currentUser.id);

@@ -1,9 +1,30 @@
 <h3>My Meetings</h3>
-<div class="well" ng-repeat="meeting in meetings">
+<div class="row well" ng-repeat="meeting in meetings">
+	<div class="span2">
 	<profile user="meeting.teacher"/>
 	->
 	<profile user="meeting.student"/>
-	
+	</div>
+	<div class="span2">
 	<a href="/#/meeting/{{meeting.teacher.id}}/{{meeting.student.id}}">See meeting page</a>
-	
+	<br/>	
+	<!-- Status TODO(guti): make a directive out of it -->
+	status:
+	<span ng-switch on="meeting.status" >
+    <span ng-switch-when="APPROVED">Approve!</span>
+        <span ng-switch-when="REJECT">Rejected</span>
+        <span ng-switch-when="DONE">Meeting is finish :)</span>
+        <!-- Not Approved yet: -->
+        <span ng-switch-default>
+        	<span ng-switch on="meeting.teacher.id == currentUser.id" >
+        	  <span ng-switch-when="true">
+        	  	<br/>
+        	   <button ng-click="approve(meeting.id)" >Click To Approve</button>
+				<button ng-click="reject(meeting.id)" >Click To REJECT</button>
+        	  </span>
+        	  <span ng-switch-default> Not Apporved yet.</span>
+        	</span>
+        </span>
+    </span>
+	</div>
 </div>
