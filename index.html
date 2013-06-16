@@ -123,9 +123,12 @@ ga('send', 'pageview');
                                 <li class="dropdown main-menu-element">
                                      <div ng-switch on="currentUser != null" >
                                         <span ng-switch-when="true">
-                                            <a href="/#/stream">Stream</a>
-                                            <a href="/#/users">Users</a>
-                                            <a href="/#/meetings/{{currentUser.id}}">My_Meetings</a>
+
+
+  <!-- <a href="/#/stream" class="btn btn-large btn-info" >Stream</a> -->
+  <a href="/#/users" class="btn btn-large btn-info">Find People</a>
+  <a href="/#/meetings/{{currentUser.id}}" class="btn btn-large btn-info">My Meetings</a>
+
                                             <profile user="currentUser"/></profile>
                                             <a href="#/detail/{{currentUser.id}}" title="{{currentUser.name}}"></a>(<a ng-click="logOut()">logout</a>)
                                         </span>
