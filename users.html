@@ -1,8 +1,12 @@
 <div class="row"> 
-<u><h1 class="offset3" >Find people that can help you</h1></u>
+  <div class="offset3">
+  <u><h1  >Find people that can help you</h1></u>
+  Search: <input  ng-model="search" type="text">
+  </div>
 </div>
+  
 <ul class="thumbnails">
-<li class="span6 clearfix" ng-repeat="user in users">
+<li class="span6 clearfix" ng-repeat="user in users | filter:search">
   <div class="thumbnail clearfix">
     <a href="/#/detail/{{user.id}}">
     <img src="http://i.embed.ly/1/image/crop?url={{user.img}}&amp;key=92b31102528511e1a2ec4040d3dc5c07&amp;width=200&amp;height=200" alt="?" class="pull-left span2 clearfix" style='margin-right:10px'></a>

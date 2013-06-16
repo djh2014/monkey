@@ -226,9 +226,9 @@ mainApp = angular.module('mainApp', ['firebase', '$strap.directives'])
     });
   }
 
-  function UsersCtrl($scope, $location, $routeParams, angularFireCollection) {
+  function UsersCtrl($scope, $location, $routeParams, angularFireCollection, utils) {
       fbRef.child("users").on('value', function(users) {
-        $scope.users = users.val();
+        $scope.users = utils.listValues(users.val());
         $scope.$apply();
       });
 
