@@ -41,10 +41,10 @@ mainApp = angular.module('mainApp', ['firebase', '$strap.directives'])
     $scope.viewedUserRef = fbRef.child("users").child($routeParams.userId);
 
     $scope.viewedUserRef.on('value', function(viewedUser) { 
-      $scope.userToView = viewedUser.val();
-      $scope.userToView.id = $routeParams.userId;
-      if($scope.userToView.requests) {
-        $scope.userToView.requests = Object.keys($scope.userToView.requests);
+      $scope.user = viewedUser.val();
+      $scope.user.id = $routeParams.userId;
+      if($scope.user.requests) {
+        $scope.user.requests = Object.keys($scope.user.requests);
       }
       $scope.$apply();
     });
@@ -53,11 +53,11 @@ mainApp = angular.module('mainApp', ['firebase', '$strap.directives'])
     $scope.setRequest = function() {
       
       if($rootScope.currentUser) {
-        var key = utils.genKey($scope.userToView.id, $rootScope.currentUser.id);
+        var key = utils.genKey($scope.user.id, $rootScope.currentUser.id);
         var meeting = {};
-        meeting[key] = {'teacher':$scope.userToView, 'student':$rootScope.currentUser, 'status':"NEW", 'id': key};
+        meeting[key] = {'teacher':$scope.user, 'student':$rootScope.currentUser, 'status':"NEW", 'id': key};
         fbRef.child('meetings').update(meeting);
-        window.alert('meeting is pending for ' + $scope.userToView.name + 'approval');
+        window.alert('meeting is pending for ' + $scope.user.name + 'approval');
         $location.path('meetings/' + $rootScope.currentUser.id);
       } else {
         window.alert("you need to sign in first");
@@ -191,14 +191,6 @@ mainApp = angular.module('mainApp', ['firebase', '$strap.directives'])
       //     $scope.$apply();
       //   }
       // });
-
-      $scope.applicant = {}
-      $scope.apply = function() {
-        fbRef.child("applicants").push($scope.applicant);
-        $scope.applicant = {}
-        window.alert("Thanks we will get back to you shortly.");
-        $scope.$apply()
-      }
 
       // TODO(guti): probably remove this.
       messageListRef.on('value', function(snapshot) {

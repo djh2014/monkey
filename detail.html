@@ -1,83 +1,33 @@
-<script>
-(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
-ga('create', 'UA-41565562-1', 'getbadgers.com');
-ga('send', 'pageview');
-
-</script>
-<!-- Detail products -->
-
-<!-- breadcrumb -->
 <div class="row">
-    <section id="slider">
-        <div class="span5">
-            <div class="page-header">
-                <h3>
-                    {{userToView.name}} 
-                    <span ng-switch on="userToView.id == currentUser.id">
-                        <span ng-switch-when="true"><a href="#/edit/{{userToView.id}}"class="btn" >Edit</a></span>
-                        <span ng-switch-default></span>
-                    </span>
-                </h3>
-            </div>
-
-            <table class="product">
-                 <tr>
-                    <td>My Skills:</td>
-                    <td><span class="priceLarge">&nbsp;{{userToView.skills}}</span></td>
-                </tr>
-                <tr>
-                    <td>
-                        <span class="rating-static rating-45" style="float: right;"></span>
-                    </td>
-                </tr>
-                </tr>
-                <tr>
-                    <td colspan="1" style="text-align:left">
-                        <div class="btn-toolbar">
-                            <div class="btn-group pull-left profile-request">
-                                <a role="button" ng-click="setRequest()" data-toggle="modal" class="btn btn-info"> Send {{userToView.name}} A Meeting Request Now</a>
-                            </div>
-                        </div>
-                        <ol>
-                            <li ng-repeat="request in userToView.requests">
-                                {{request}}
-                            </li>
-                        </ol>
-                    </td>
-                </tr>
-            </table>
-
-            <hr>
+    <div class="span5">
+     <div class="thumbnail clearfix">
+        <a href="/#/detail/{{user.id}}">
+        <img src="http://i.embed.ly/1/image/crop?url={{user.img}}&amp;key=92b31102528511e1a2ec4040d3dc5c07&amp;width=200&amp;height=200" alt="?" class="pull-left span2 clearfix" style='margin-right:10px'></a>
+        <div class="caption" class="pull-left">
+          <h4>      
+          <h3 href="/#/detail/{{user.id}}" >{{user.name}}</h3>
+          </h4>
+          <p>{{user.skills}}</p>
         </div>
-        <div class="span7">
-            <div class="carousel slide" id="myCarousel">
-                <div class="carousel-inner">
-                    <div class="active item">
-<!-- TODO: why not working.
-                        <profile user="{{userToView}}" width="800" height="500" ></profile>
-                         -->
-                        <img alt="" src="https://i.embed.ly/1/display/resize?key=dc65793b3f1249bdb9952a491874d27e&url={{userToView.img}}&width=800&height=500&grow=true">
-                    </div>
-                    <div class="item">
-                        <img alt="" src="https://i.embed.ly/1/display/resize?key=dc65793b3f1249bdb9952a491874d27e&url={{userToView.companyImg}}&width=800&height=500&grow=true">
-                    </div>
-                </div>
-                <a class="carousel-control left" href="#myCarousel" data-slide="prev">&lsaquo;</a>
-                <a class="carousel-control right" href="#myCarousel" data-slide="next">&rsaquo;</a>
-            </div>
-        </div>
-    </section>
+      </div>
+    </div>
+    <div class="span5">
+        <span ng-switch on="user.id == currentUser.id">
+            <span ng-switch-when="true"><a href="#/edit/{{user.id}}"class="btn" >Edit</a></span>
+            <span ng-switch-default>
+                <a role="button" ng-click="setRequest()" data-toggle="modal" class="btn btn-info"> Send {{user.name}} A Meeting Request Now</a>
+            </span>
+        </span>
+    </div>
 </div>
+    <!-- 
 <div class="row">
     <div class="span6" id="number_badgers">
         <h4>Number of Badgers</h4>
         <img src="./img/numberbadgers.png">
     </div>
-</div>
+</div> -->
 
 <!-- / main container -->
 
