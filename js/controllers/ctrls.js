@@ -6,15 +6,12 @@ mainApp = angular.module('mainApp', ['firebase', '$strap.directives'])
   .config(function($routeProvider) {
     $routeProvider.
       when('/', {controller:HomeCtrl, templateUrl:'home.html'}).
-      when('/detail/:userId', {controller:DetailCtrl, templateUrl:'detail.html'}).
-      when('/users', {controller:UsersCtrl, templateUrl:'users.html'}).
-      when('/login', {controller:LoginCtrl, templateUrl:'login.html'}).
-      when('/requests/:userId', {templateUrl:'request.html'}).
-      when('/edit/:userId', {controller:EditProfileCtrl, templateUrl:'editProfile.html'}).
-      when('/sessions/:userId', {controller:SessionsCtrl, templateUrl:'sessions.html'}).
       when('/stream', {controller:StreamCtrl, templateUrl:'stream.html'}).
-      when('/meeting/:userId1/:userId2', {controller:MeetingCtrl, templateUrl:'meeting.html'}).
+      when('/users', {controller:UsersCtrl, templateUrl:'users.html'}).
       when('/meetings/:userId', {controller:MeetingsCtrl, templateUrl:'meetings.html'}).
+      when('/meeting/:userId1/:userId2', {controller:MeetingCtrl, templateUrl:'meeting.html'}).
+      when('/detail/:userId', {controller:DetailCtrl, templateUrl:'detail.html'}).
+      when('/edit/:userId', {controller:EditProfileCtrl, templateUrl:'editProfile.html'}).
       otherwise({redirectTo:'/'});
   });
 
@@ -64,7 +61,6 @@ mainApp = angular.module('mainApp', ['firebase', '$strap.directives'])
         $location.path('meetings/' + $rootScope.currentUser.id);
       } else {
         window.alert("you need to sign in first");
-        $location.path('login/');
       }
     }
   }
@@ -112,62 +108,9 @@ mainApp = angular.module('mainApp', ['firebase', '$strap.directives'])
       $scope.$apply();
     }
   }
-  
-  // TODO(guti): delete:
-  function SessionsCtrl($rootScope, $routeParams, $scope, $location) {
-      var userId = $routeParams.userId;
-      var APPROVED = "APPROVED", REJECT= "REJECT", NEW ="NEW", DONE = "DONE";
-
-      if (userId) {
-        fbRef.child("users").child(userId).on('value', function(user) {
-              $scope.viewedUser = user.val();
-              $scope.newSession = {}
-
-              fbRef.child("sessions").on("value", function(sessions) {
-                var allSessions = sessions.val();
-                // TODO: replace with nice angular filter:
-                filterSessions = []; 
-                for(var key in allSessions) {
-                  var session = allSessions[key];
-                  if (session.teacher.id != null && session.teacher.id == $scope.viewedUser.id) {
-                    filterSessions.push(session);
-                  }
-                }
-                $scope.sessions = filterSessions;
-                $scope.$apply();
-              });
-              $scope.$apply();
-        });
-      }
-
-      $scope.approve = function(session) {
-        fbRef.child("sessions").child(session.id).update({status:APPROVED});
-        $scope.$apply();
-      }
-
-      $scope.reject = function(session) {
-        fbRef.child("sessions").child(session.id).update({status:REJECT});
-        $scope.$apply();
-      }
-
-      $scope.addNewSession = function() {
-        if ($rootScope.currentUser) {
-          var sessionRef = fbRef.child("sessions").push()
-          $scope.newSession.student = $rootScope.currentUser;
-          $scope.newSession.teacher = $scope.viewedUser;
-          $scope.newSession.status = NEW;
-          $scope.newSession.id = sessionRef.name();
-          sessionRef.update($scope.newSession);
-          $scope.newSession = {}
-        } else {
-          window.alert("You need to login first, in order to send a request.");
-        }
-
-      }
-  }
 
   function LoginCtrl($rootScope, $scope, $location, utils) {
-        $scope.authClient = new FirebaseAuthClient(fbRef, function(error, facebookUser) { 
+      $scope.authClient = new FirebaseAuthClient(fbRef, function(error, facebookUser) { 
         if (facebookUser) {
           var id = utils.fbClean(facebookUser.username || facebookUser.id);
 
@@ -196,13 +139,7 @@ mainApp = angular.module('mainApp', ['firebase', '$strap.directives'])
           $rootScope.currentUser = null;
           $rootScope.$broadcast("currentUserInit");
         }
-    });
-
-    $rootScope.getFacebookUser = function(cb) {
-      new FirebaseAuthClient(fbRef, function(error, facebookUser) { 
-        cb(facebookUser);
-      });
-    }
+     });
 
     $scope.facebookLogin = function() {
       $scope.directToEditPage = true;
@@ -262,6 +199,7 @@ mainApp = angular.module('mainApp', ['firebase', '$strap.directives'])
         $scope.$apply()
       }
 
+      // TODO(guti): probably remove this.
       messageListRef.on('value', function(snapshot) {
             // For index.html page:
             var BIG_IMG = [600, 450, 6], MEDIUM_IMG = [260, 200, 3], SMALL_IMG = [225, 200, 3];
@@ -301,6 +239,6 @@ mainApp = angular.module('mainApp', ['firebase', '$strap.directives'])
         $scope.users.add(newUser);
         $scope.newUser = {'img':''};
       }
-}
+  }
 
 
