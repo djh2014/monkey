@@ -121,6 +121,7 @@ mainApp = angular.module('mainApp', ['firebase', '$strap.directives', 'ui.calend
     $scope.viewedUserRef.on('value', function(viewedUser) { 
       $scope.user = viewedUser.val();
       $scope.user.id = $routeParams.userId;
+      $scope.user.badgersArray = utils.range($scope.user.badgers);
       if($scope.user.requests) {
         $scope.user.requests = Object.keys($scope.user.requests);
       }
