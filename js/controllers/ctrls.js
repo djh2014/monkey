@@ -2,7 +2,7 @@ var fbUrl = 'https://getbadgers.firebaseio.com';
 var fbRef = new Firebase(fbUrl);
 var fbUsersRef = new Firebase(fbUrl + '/users');
 
-mainApp = angular.module('mainApp', ['firebase', '$strap.directives'])
+mainApp = angular.module('mainApp', ['firebase', '$strap.directives', 'ui.calendar'])
   .config(function($routeProvider) {
     $routeProvider.
       when('/', {controller:HomeCtrl, templateUrl:'home.html'}).
@@ -27,6 +27,17 @@ mainApp = angular.module('mainApp', ['firebase', '$strap.directives'])
   ]);
 
   function TestCtrl ($rootScope, $routeParams, $scope, $location, utils, db, $modal, $q) {
+    $scope.calendarConfig = {
+        height: 450,
+        editiable: true,
+        dayClick: function(){
+            debugger;
+            $scope.$apply($scope.alertEventOnClick);
+        }
+    };
+    $scope.eventSources = [];
+
+
     $scope.click = function() {
       $rootScope.showMessage("test?");
     };  

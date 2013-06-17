@@ -1,7 +1,23 @@
 <!-- Button to trigger modal -->
 
 <a type="button" class="btn" bs-modal="'template2.html'">...</a>
- <a type="button" class="btn" ng-click="click()">Click</a>
+<a type="button" class="btn" ng-click="click()">Click</a>
+
+<!-- <div ui-calendar> -->
+
+<div ui-calendar="calendarConfig" ng-model="eventSources">
+
+<div class="control-group input-append">
+  <input type="text" ng-model="datepicker.date" data-date-format="dd/mm/yyyy" bs-datepicker>
+  <button type="button" class="btn" data-toggle="datepicker"><i class="icon-calendar"></i></button>
+</div>
+
+<div class="control-group input-append">
+  <input type="text" ng-model="timepicker.time" bs-timepicker>
+  <button type="button" class="btn" data-toggle="timepicker"><i class="icon-time"></i></buttoni>
+</div>
+
+
 
 
 <script type="text/ng-template" id="template2.html">		
