@@ -13,14 +13,17 @@
       </div>
     </div>
     <div class="span5">
-        <span ng-switch on="user.id == currentUser.id">
-            <span ng-switch-when="true"><a href="#/edit/{{user.id}}"class="btn" >Edit Your Skills</a></span>
-            <span ng-switch-default>
-                <a role="button" ng-click="setRequest()" data-toggle="modal" class="btn btn-info"> Send {{user.name}} A Meeting Request Now</a>
-            </span>
+      <span ng-switch on="user.id == currentUser.id">
+        <span ng-switch-when="true"><a href="#/edit/{{user.id}}"class="btn" >Edit Your Skills</a></span>
+        <span ng-switch-default>
+            <a role="button" ng-click="setRequest()" data-toggle="modal" class="btn btn-info"> Send {{user.name}} A Meeting Request Now</a>
         </span>
+      </span>
     </div>
 </div>
+<div class="row">
+  
+</div>  
     <!-- 
 <div class="row">
     <div class="span6" id="number_badgers">
