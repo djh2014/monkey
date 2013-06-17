@@ -35,7 +35,18 @@ mainApp = angular.module('mainApp', ['firebase', '$strap.directives', 'ui.calend
             $scope.$apply($scope.alertEventOnClick);
         }
     };
-    $scope.eventSources = [];
+    $scope.eventSources = [
+      {
+      events: function(start, end, callback) {
+        callback(
+
+
+          );
+      },
+      color: 'yellow',   // an option!
+      textColor: 'black' // an option!
+    }
+    ];
 
 
     $scope.click = function() {
