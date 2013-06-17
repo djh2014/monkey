@@ -1,3 +1,4 @@
+
 <h3>What is your free time for helping others:</h3>
 On  <select ng-model="day" name="" id="">
 	<option>Mondays</option>
@@ -21,3 +22,9 @@ On  <select ng-model="day" name="" id="">
   <input type="text" ng-model="dayTimes.end" bs-timepicker>
   <button type="button" class="btn" data-toggle="timepicker"><i class="icon-time"></i></button>
 </div>
+
+<table>
+	<tr ng-repeat="(dayName,times) in freeTime">
+		?{{dayName}}
+	</tr>
+</table>

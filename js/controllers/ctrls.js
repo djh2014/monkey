@@ -29,10 +29,11 @@ mainApp = angular.module('mainApp', ['firebase', '$strap.directives', 'ui.calend
 
   function CalendarCtrl ($rootScope, $routeParams, $scope, $location, utils, db, $modal, $q) {
     $scope.day = "Mondays";
+    $scope.defaultFreeTime = {"Mondays": {}, "Sundays": {}, "Tuesdays": {}, "Wednesdays": {}, "Thursdays": {}, "Fridays": {}, "Sturdays": {}, "Sundays": {}};
 
     $scope.calendarRef = fbRef.child('freeTimes').child($routeParams.userId);
       $scope.calendarRef.on('value', function(freeTime) {
-        $scope.freeTime = freeTime.val() || {};
+        $scope.freeTime = freeTime.val() || $scope.defaultFreeTime;
         $scope.setTimes();
     });
 
@@ -53,11 +54,6 @@ mainApp = angular.module('mainApp', ['firebase', '$strap.directives', 'ui.calend
         $scope.calendarRef.update($scope.freeTime);
       }
     });
-
-
-
-
-
   }
 
   function TestCtrl ($rootScope, $routeParams, $scope, $location, utils, db, $modal, $q) {
