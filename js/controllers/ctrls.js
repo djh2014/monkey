@@ -12,6 +12,7 @@ mainApp = angular.module('mainApp', ['firebase', '$strap.directives', 'ui.calend
       when('/meeting/:userId1/:userId2', {controller:MeetingCtrl, templateUrl:'meeting.html'}).
       when('/detail/:userId', {controller:DetailCtrl, templateUrl:'detail.html'}).
       when('/edit/:userId', {controller:EditProfileCtrl, templateUrl:'editProfile.html'}).
+      when('/calendar/:userId', {controller:CalendarCtrl, templateUrl:'calendar.html'}).
       when('/test', {controller:TestCtrl, templateUrl:'test.html'}).
       otherwise({redirectTo:'/'});
   }).run(["$rootScope", "$location", "$modal", "$q",
@@ -26,6 +27,39 @@ mainApp = angular.module('mainApp', ['firebase', '$strap.directives', 'ui.calend
      }
   ]);
 
+  function CalendarCtrl ($rootScope, $routeParams, $scope, $location, utils, db, $modal, $q) {
+    $scope.day = "Mondays";
+
+    $scope.calendarRef = fbRef.child('freeTimes').child($routeParams.userId);
+      $scope.calendarRef.on('value', function(freeTime) {
+        $scope.freeTime = freeTime.val() || {};
+        $scope.setTimes();
+    });
+
+    $scope.setTimes = function() {
+      if($scope.freeTime) {
+        if(!$scope.freeTime[$scope.day]) {
+          $scope.freeTime[$scope.day] = {}
+        }
+        $scope.dayTimes = $scope.freeTime[$scope.day];
+      }
+    }
+    $scope.$watch('day', function() {
+      $scope.setTimes();
+    });
+
+    $scope.$watch('dayTimes', function() {
+      if ($scope.freeTime) {
+        $scope.calendarRef.update($scope.freeTime);
+      }
+    });
+
+
+
+
+
+  }
+
   function TestCtrl ($rootScope, $routeParams, $scope, $location, utils, db, $modal, $q) {
     $scope.calendarConfig = {
         height: 450,
@@ -35,19 +69,28 @@ mainApp = angular.module('mainApp', ['firebase', '$strap.directives', 'ui.calend
             $scope.$apply($scope.alertEventOnClick);
         }
     };
-    $scope.eventSources = [
-      {
-      events: function(start, end, callback) {
-        callback(
 
+    ///
+    $scope.calendarConfig = {
+        height: 450,
+        editiable: true,
+        dayClick: function(){
+            debugger;
+            $scope.$apply($scope.alertEventOnClick);
+        }
+    };
 
-          );
+    $scope.eventSources = [{
+      events: function(start, end, cb) {
+        $scope.calendarRef = fbRef.child("calendars").child($routeParams.userId);
+        $scope.calendarRef.on('value', function(calendar) {
+            cb( );
+        })
       },
-      color: 'yellow',   // an option!
-      textColor: 'black' // an option!
-    }
-    ];
-
+      //color: 'yellow',   // an option!
+      //textColor: 'black' // an option!
+    }];
+    ///
 
     $scope.click = function() {
       $rootScope.showMessage("test?");

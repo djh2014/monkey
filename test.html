@@ -5,7 +5,6 @@
 
 <!-- <div ui-calendar> -->
 
-<div ui-calendar="calendarConfig" ng-model="eventSources">
 
 <div class="control-group input-append">
   <input type="text" ng-model="datepicker.date" data-date-format="dd/mm/yyyy" bs-datepicker>
@@ -16,6 +15,9 @@
   <input type="text" ng-model="timepicker.time" bs-timepicker>
   <button type="button" class="btn" data-toggle="timepicker"><i class="icon-time"></i></buttoni>
 </div>
+
+<div ui-calendar="calendarConfig" ng-model="eventSources">
+
 
 
 
