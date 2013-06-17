@@ -12,12 +12,25 @@ mainApp = angular.module('mainApp', ['firebase', '$strap.directives'])
       when('/meeting/:userId1/:userId2', {controller:MeetingCtrl, templateUrl:'meeting.html'}).
       when('/detail/:userId', {controller:DetailCtrl, templateUrl:'detail.html'}).
       when('/edit/:userId', {controller:EditProfileCtrl, templateUrl:'editProfile.html'}).
+      when('/test', {controller:TestCtrl, templateUrl:'test.html'}).
       otherwise({redirectTo:'/'});
-  }).run(["$rootScope", "$location",
-         function ($rootScope, $location) {
-           $rootScope.global = {};
-         }
+  }).run(["$rootScope", "$location", "$modal", "$q",
+     function ($rootScope, $location, $modal, $q) {
+       $rootScope.global = {};
+       var modalPromise = $modal({template: 'message.html', show: false, scope: $rootScope});
+       $rootScope.showMessage = function(text) {
+         debugger;
+         $rootScope.mainModalMessage = text;
+         $q.when(modalPromise).then(function(modalEl) {modalEl.modal('show');});
+       }
+     }
   ]);
+
+  function TestCtrl ($rootScope, $routeParams, $scope, $location, utils, db, $modal, $q) {
+    $scope.click = function() {
+      $rootScope.showMessage("test?");
+    };  
+  }  
 
   function MeetingsCtrl ($rootScope, $routeParams, $scope, $location, utils, db) {
     db.get($scope, 'meetings', 'meetings', function() {
@@ -67,10 +80,10 @@ mainApp = angular.module('mainApp', ['firebase', '$strap.directives'])
            path:meetingPath,
            alert:true});
 
-        window.alert('we notify ' + $scope.user.name + '. copy his email and click the red button');
+        $rootScope.showMessage('we notify ' + $scope.user.name + '. copy his email and click the red button');
         $location.path(meetingPath);
       } else {
-        window.alert("you need to sign in first");
+        $rootScope.showMessage("you need to sign in first");
       }
     }
   }
@@ -101,7 +114,7 @@ mainApp = angular.module('mainApp', ['firebase', '$strap.directives'])
         $scope.listRef.push($scope.newItem);
         $scope.newItem = {};      
       } else {
-        window.alert('sorry you are not a user');
+        $rootScope.showMessage('sorry you are not a user');
       }
     }
   }
@@ -143,15 +156,17 @@ mainApp = angular.module('mainApp', ['firebase', '$strap.directives'])
 
     $rootScope.processEvent = function(newEvent) {
       $rootScope.myEventsRef.child(newEvent.id).update({alert:false});
-      window.alert(newEvent.text);
-      $location.path(newEvent.path);
+      $rootScope.showMessage(newEvent.text);
+      // TODO(guti).
+      //$location.path('meetings');
+       $location.path(newEvent.path);
       $scope.$apply();
     }
     ////
 
       $rootScope.checkRequireFields = function() {
         if (!$rootScope.currentUser.skills || !$rootScope.currentUser.email) {
-          window.alert('please let us know about your skills and gmail.'); 
+          $rootScope.showMessage('please let us know about your skills.'); 
           $scope.directToEditPage = false;
           $location.path('edit/'+ $rootScope.currentUser.id+"/");   
         }
