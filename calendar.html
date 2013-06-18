@@ -1,31 +1,9 @@
-
-<h3>What is your free time for helping others:</h3>
-On  <select ng-model="day" name="" id="">
-	<option>Mondays</option>
-	<option>Sundays</option>
-	<option>Tuesdays</option>
-	<option>Wednesdays</option>
-	<option>Thursdays</option>
-	<option>Fridays</option>
-	<option>Sturdays</option>
-	<option>Sundays</option>	
-</select>
-
-<h3>My free time starts at</h3>
-<div class="control-group input-append">
-  <input type="text" ng-model="dayTimes.start" bs-timepicker>
-  <button type="button" class="btn" data-toggle="timepicker"><i class="icon-time"></i></button>
-</div>
-
-<h3>And ends at</h3>
-<div class="control-group input-append">
-  <input type="text" ng-model="dayTimes.end" bs-timepicker>
-  <button type="button" class="btn" data-toggle="timepicker"><i class="icon-time"></i></button>
-</div>
-<!-- 
-<table>
-	<tr ng-repeat="(dayName,times) in freeTime">
-		{{dayName}}
-	</tr>
+<table class="table">
+	<tr ng-repeat="day in days">
+	    <td>{{day.day}}</td>
+		<td>Available: <input ng-model="day.isAvailable" type="checkbox"></td>
+		<td>start: <input ng-model="day.start" type="text"></td>
+		<td>end: <input ng-model="day.end" type="text"></td>
+    </tr>
 </table>
- -->
+

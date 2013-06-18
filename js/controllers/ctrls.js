@@ -28,36 +28,25 @@ mainApp = angular.module('mainApp', ['firebase', '$strap.directives', 'ui.calend
   ]);
 
   function CalendarCtrl ($rootScope, $routeParams, $scope, $location, utils, db, $modal, $q) {
-    $scope.day = "Mondays";
-    $scope.defaultFreeTime = {Mondays: {start:"8:00 PM", end:"9:00 PM"} , Sundays: {start:"8:00 PM", end:"9:00 PM"}, Tuesdays: {start:"8:00 PM", end:"9:00 PM"}, Wednesdays: {start:"8:00 PM", end:"9:00 PM"}, Thursdays: {start:"8:00 PM", end:"9:00 PM"}, Fridays: {start:"8:00 PM", end:"9:00 PM"}, Sturdays: {start:"8:00 PM", end:"9:00 PM"}, Sundays: {start:"8:00 PM", end:"9:00 PM"}};
-    
+    $scope.defaultFreeTime = [{day:'Mon',start:'8:00 PM',end:'10:00 PM', isAvailable:true}, {day:'Sun',start:'8:00 PM',end:'10:00 PM', isAvailable:true}];
+
     $scope.calendarRef = fbRef.child('freeTimes').child($routeParams.userId);
-    debugger;
-    $scope.calendarRef.update($scope.defaultFreeTime);
-
     $scope.calendarRef.on('value', function(freeTime) {
-      $scope.freeTime = freeTime.val() || $scope.defaultFreeTime;
-      $scope.setTimes();
+      $scope.days = freeTime.val() || $scope.defaultFreeTime;
     });
 
-    $scope.setTimes = function() {
-      if($scope.freeTime) {
-        if(!$scope.freeTime[$scope.day]) {
-          $scope.freeTime[$scope.day] = {}
-        }
-        $scope.dayTimes = $scope.freeTime[$scope.day];
-      }
-    }
-    $scope.$watch('day', function() {
-      $scope.setTimes();
-    });
-
-    $scope.$watch('dayTimes', function() {
-      if ($scope.freeTime) {
-        debugger;
-        $scope.calendarRef.update($scope.freeTime);
-      }
-    });
+    // $scope = {};
+    // $scope.updateTime = function() {
+    //   if ($scope.freeTime) {
+    //     //$scope.calendarRef.update(utils.removeHashKey($scope.days));
+    //   }
+    // }
+    // $scope.$watch('day.start', function() {
+    //  // $scope.updateTime();
+    // });
+    // $scope.$watch('day.end', function() {
+    //   //$scope.updateTime();
+    // });
   }
 
   function TestCtrl ($rootScope, $routeParams, $scope, $location, utils, db, $modal, $q) {

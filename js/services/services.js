@@ -1,6 +1,7 @@
 var fbUrl = 'https://getbadgers.firebaseio.com';
 var fbRef = new Firebase(fbUrl);
 
+
 mainApp
 .factory('db', function() {
   return {
@@ -17,6 +18,15 @@ mainApp
 })
 .factory('utils', function() {
   return {
+  	removeHashKey : function(dic) {
+  		var newDic = {}
+  		for( key  in dic) {
+  			newDic[key] =  dic[key];
+  			delete newDic[key].$$hashKey;  
+  		}
+  		return newDic
+  	},
+
 	listValues : function(listObject) {
 	  var res = []
 	  for(key in listObject) {
