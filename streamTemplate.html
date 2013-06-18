@@ -1,10 +1,9 @@
 <div>
-	<h2>Find out how can people help you and how you might help them</h2>
 	<form class="well">
 		<!-- TODO: I wonder why it is not working: -->
 		<profile user="currentUser"/>
-
-		<input size="350" type="text" ng-model="newItem.text" style="width: 800px;"><br/><br/>
+		<h4 class="status">Requests</h4>
+		<input size="350" type="text" ng-model="newItem.text" placeholder="Request What you would love to learn or need help in" style="width: 800px;"><br/><br/>
 		<input ng-click="addNew()" class="btn btn-primary" type="submit" value="Add">
 	</form>
 	<!-- <ul ng-animate="'slide'"> -->
@@ -14,7 +13,7 @@
 				<profile user="item.user"/><h3>{{item.text}}</h3>
 				</span>
 				<span class="row">
-					<input class="btn-min btn btn-success" ng-click="accept(item)" type="text" value="Lets Talk"/>
+					<input class="btn-min btn btn-success" ng-click="accept(item)" type="text" value="Request"/>
 				</span>
 			</div>
 		</div>
