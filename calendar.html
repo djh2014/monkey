@@ -1,9 +1,21 @@
 <table class="table">
 	<tr ng-repeat="day in days">
-	    <td>{{day.day}}</td>
-		<td>Available: <input ng-model="day.isAvailable" type="checkbox"></td>
-		<td>start: <input ng-model="day.start" type="text"></td>
-		<td>end: <input ng-model="day.end" type="text"></td>
+	    <h3>
+	    <td><h3>{{day.day}}</h3></td>
+		<td><h4>Available: <input ng-model="day.isAvailable" type="checkbox"></h4></td>
+		<td><h4 ng-hide="!day.isAvailable">
+			starts: 		
+		  <input type="text" ng-model="day.start" bs-timepicker>
+		  <button type="button" class="btn" data-toggle="timepicker"><i class="icon-time"></i></buttoni>
+		 </h4> 	
+		</td>
+		<td><h4 ng-hide="!day.isAvailable">
+			ends: 
+			<input type="text" ng-model="day.start" bs-timepicker>
+		  <button type="button" class="btn" data-toggle="timepicker"><i class="icon-time"></i></buttoni>
+		  	</h4>
+		</td>
+		</h3>
     </tr>
 </table>
 
