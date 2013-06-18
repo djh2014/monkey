@@ -28,25 +28,20 @@ mainApp = angular.module('mainApp', ['firebase', '$strap.directives', 'ui.calend
   ]);
 
   function CalendarCtrl ($rootScope, $routeParams, $scope, $location, utils, db, $modal, $q) {
-    $scope.defaultFreeTime = [{day:'Mon',start:'8:00 PM',end:'10:00 PM', isAvailable:true}, {day:'Sun',start:'8:00 PM',end:'10:00 PM', isAvailable:true}];
+    var DEFAULT_FREE_TIMES = ['Mondays', 'Tuesdays', 'wednesdays', 'thursdays', 'Fridays', 'Saturdays', 'Sundays']
+    .map(function(day, index) {
+      return {day:day, isAvailable:true ,start:'6:00 PM', end:'10:00 PM'};
+    })
 
     $scope.calendarRef = fbRef.child('freeTimes').child($routeParams.userId);
-    $scope.calendarRef.on('value', function(freeTime) {
-      $scope.days = freeTime.val() || $scope.defaultFreeTime;
+    $scope.calendarRef.on('value', function(freeTimes) {
+      $scope.freeTimes = freeTimes.val() || DEFAULT_FREE_TIMES;
     });
 
-    // $scope = {};
-    // $scope.updateTime = function() {
-    //   if ($scope.freeTime) {
-    //     //$scope.calendarRef.update(utils.removeHashKey($scope.days));
-    //   }
-    // }
-    // $scope.$watch('day.start', function() {
-    //  // $scope.updateTime();
-    // });
-    // $scope.$watch('day.end', function() {
-    //   //$scope.updateTime();
-    // });
+    $scope.saveFreeTime = function() {
+      debugger;
+      $scope.calendarRef.update(utils.removeHashKey($scope.freeTimes));
+    }
   }
 
   function TestCtrl ($rootScope, $routeParams, $scope, $location, utils, db, $modal, $q) {
