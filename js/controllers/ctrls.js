@@ -30,7 +30,7 @@ mainApp = angular.module('mainApp', ['firebase', '$strap.directives', 'ui.calend
   function CalendarCtrl ($rootScope, $routeParams, $scope, $location, utils, db, $modal, $q) {
     var DEFAULT_FREE_TIMES = ['Mondays', 'Tuesdays', 'wednesdays', 'thursdays', 'Fridays', 'Saturdays', 'Sundays']
     .map(function(day, index) {
-      return {day:day, isAvailable:false ,start:'6:00 PM', end:'10:00 PM'};
+      return {day:day, isAvailable:true ,start:'6:00 PM', end:'10:00 PM'};
     });
     $scope.calendarRef = fbRef.child('freeTimes').child($routeParams.userId);
     $scope.calendarRef.on('value', function(freeTimes) {
@@ -155,10 +155,11 @@ mainApp = angular.module('mainApp', ['firebase', '$strap.directives', 'ui.calend
       // TODO(guti): I put it here just to sync, wonder how you sync correctly.
       db.get($scope, 'users/' + $routeParams.userId1, 'user1');
       db.get($scope, 'users/' + $routeParams.userId2, 'user2', function() {
-         if ($scope.items.length == 0) {
-            var item = {user:$scope.user2, text:'Hi, when can we start.'};  
-            $scope.listRef.push(item);
-         }
+         // TODO: remove this, it's not nice to send message for others.
+         // if ($scope.items.length == 0) {
+         //    var item = {user:$scope.user2, text:'Hi, when can we start.'};  
+         //    $scope.listRef.push(item);
+         // }
       });  
     });
 
