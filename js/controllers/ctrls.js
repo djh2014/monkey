@@ -29,12 +29,15 @@ mainApp = angular.module('mainApp', ['firebase', '$strap.directives', 'ui.calend
 
   function CalendarCtrl ($rootScope, $routeParams, $scope, $location, utils, db, $modal, $q) {
     $scope.day = "Mondays";
-    $scope.defaultFreeTime = {"Mondays": {}, "Sundays": {}, "Tuesdays": {}, "Wednesdays": {}, "Thursdays": {}, "Fridays": {}, "Sturdays": {}, "Sundays": {}};
-
+    $scope.defaultFreeTime = {Mondays: {start:"8:00 PM", end:"9:00 PM"} , Sundays: {start:"8:00 PM", end:"9:00 PM"}, Tuesdays: {start:"8:00 PM", end:"9:00 PM"}, Wednesdays: {start:"8:00 PM", end:"9:00 PM"}, Thursdays: {start:"8:00 PM", end:"9:00 PM"}, Fridays: {start:"8:00 PM", end:"9:00 PM"}, Sturdays: {start:"8:00 PM", end:"9:00 PM"}, Sundays: {start:"8:00 PM", end:"9:00 PM"}};
+    
     $scope.calendarRef = fbRef.child('freeTimes').child($routeParams.userId);
-      $scope.calendarRef.on('value', function(freeTime) {
-        $scope.freeTime = freeTime.val() || $scope.defaultFreeTime;
-        $scope.setTimes();
+    debugger;
+    $scope.calendarRef.update($scope.defaultFreeTime);
+
+    $scope.calendarRef.on('value', function(freeTime) {
+      $scope.freeTime = freeTime.val() || $scope.defaultFreeTime;
+      $scope.setTimes();
     });
 
     $scope.setTimes = function() {
@@ -51,6 +54,7 @@ mainApp = angular.module('mainApp', ['firebase', '$strap.directives', 'ui.calend
 
     $scope.$watch('dayTimes', function() {
       if ($scope.freeTime) {
+        debugger;
         $scope.calendarRef.update($scope.freeTime);
       }
     });
