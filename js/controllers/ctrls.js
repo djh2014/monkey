@@ -215,7 +215,6 @@ mainApp = angular.module('mainApp', ['firebase', '$strap.directives', 'ui.calend
         $scope.$apply();
       }
     });
-
     $rootScope.processEvent = function(newEvent) {
       $rootScope.myEventsRef.child(newEvent.id).update({alert:false});
       $rootScope.showMessage(newEvent.text);
@@ -226,45 +225,45 @@ mainApp = angular.module('mainApp', ['firebase', '$strap.directives', 'ui.calend
     }
     ////
 
-      $rootScope.checkRequireFields = function() {
-        if (!$rootScope.currentUser.skills || !$rootScope.currentUser.email) {
-          $rootScope.showMessage('please let us know about your skills.'); 
-          $scope.directToEditPage = false;
-          $location.path('edit/'+ $rootScope.currentUser.id+"/");   
-        }
+    $rootScope.checkRequireFields = function() {
+      if (!$rootScope.currentUser.skills || !$rootScope.currentUser.email) {
+        $rootScope.showMessage('please let us know about your skills.'); 
+        $scope.directToEditPage = false;
+        $location.path('edit/'+ $rootScope.currentUser.id+"/");   
       }
+    }
 
-      $scope.authClient = new FirebaseAuthClient(fbRef, function(error, facebookUser) { 
-        if (facebookUser) {
-          var id = utils.fbClean(facebookUser.username || facebookUser.id);
+    $scope.authClient = new FirebaseAuthClient(fbRef, function(error, facebookUser) { 
+      if (facebookUser) {
+        var id = utils.fbClean(facebookUser.username || facebookUser.id);
 
-          var currentUserRef = fbRef.child("users").child(id);
-          currentUserRef.on('value', function(FBUser) {
-              $rootScope.currentUser = jQuery.extend($rootScope.currentUser, FBUser.val());;
-              // new user: copy info from fb.
-              if (!$rootScope.currentUser.facebook) {
-                currentUserRef.update({
-                  user: facebookUser.username || "",
-                  name: facebookUser.name || "",
-                  id: id,
-                  email: facebookUser.email || "",
-                  facebook: facebookUser || "",
-                  img: "http://graph.facebook.com/"+ facebookUser.id+"/picture?type=large" || ""});
-              }
-              if ($location.path().indexOf('edit') == -1) {
-                $rootScope.checkRequireFields();
-              }
-              $rootScope.$broadcast("currentUserInit");
-              $scope.$apply();
-          });
-        } else {
-          $rootScope.currentUser = null;
-          $rootScope.$broadcast("currentUserInit");
-          // not login user should go home.
-          $location.path('/');
-          $scope.$apply();
-        }
-     });
+        var currentUserRef = fbRef.child("users").child(id);
+        currentUserRef.on('value', function(FBUser) {
+            $rootScope.currentUser = jQuery.extend($rootScope.currentUser, FBUser.val());;
+            // new user: copy info from fb.
+            if (!$rootScope.currentUser.facebook) {
+              currentUserRef.update({
+                user: facebookUser.username || "",
+                name: facebookUser.name || "",
+                id: id,
+                email: facebookUser.email || "",
+                facebook: facebookUser || "",
+                img: "http://graph.facebook.com/"+ facebookUser.id+"/picture?type=large" || ""});
+            }
+            if ($location.path().indexOf('edit') == -1) {
+              $rootScope.checkRequireFields();
+            }
+            $rootScope.$broadcast("currentUserInit");
+            $scope.$apply();
+        });
+      } else {
+        $rootScope.currentUser = null;
+        $rootScope.$broadcast("currentUserInit");
+        // not login user should go home.
+        $location.path('/');
+        $scope.$apply();
+      }
+    });
 
     $scope.facebookLogin = function() {
       $scope.directToEditPage = true;
@@ -313,13 +312,13 @@ mainApp = angular.module('mainApp', ['firebase', '$strap.directives', 'ui.calend
     var messageListRef = new Firebase(fullUrl);
     $scope.usersToView = [];
     
-    // navigate to stream if login.
-    // $rootScope.$on("currentUserInit", function() {
-    //   if ($rootScope.currentUser) {
-    //     $location.path('stream');
-    //     $scope.$apply();
-    //   }
-    // });
+    // navigate to users if login.
+    $rootScope.$on("currentUserInit", function() {
+      if ($rootScope.currentUser) {
+        $location.path('users');
+        $scope.$apply();
+      }
+    });
 
     // TODO(guti): probably remove this.
     messageListRef.on('value', function(snapshot) {
