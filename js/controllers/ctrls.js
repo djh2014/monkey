@@ -31,7 +31,12 @@ mainApp = angular.module('mainApp', ['firebase', '$strap.directives', 'ui.calend
     var DEFAULT_FREE_TIMES = ['Mondays', 'Tuesdays', 'wednesdays', 'thursdays', 'Fridays', 'Saturdays', 'Sundays']
     .map(function(day, index) {
       return {day:day, isAvailable:true ,start:'6:00 PM', end:'10:00 PM'};
-    })
+    });
+
+    $scope.editMode = false;
+    $scope.editFreeTimes = function() {
+      $scope.editMode = true;
+    }
 
     $scope.calendarRef = fbRef.child('freeTimes').child($routeParams.userId);
     $scope.calendarRef.on('value', function(freeTimes) {
@@ -39,8 +44,8 @@ mainApp = angular.module('mainApp', ['firebase', '$strap.directives', 'ui.calend
     });
 
     $scope.saveFreeTime = function() {
-      debugger;
       $scope.calendarRef.update(utils.removeHashKey($scope.freeTimes));
+      $scope.editMode = false;
     }
   }
 

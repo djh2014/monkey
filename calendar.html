@@ -1,23 +1,69 @@
-<h2>Tell us in what time you might be available <button ng-click="saveFreeTime()" class="btn">Save</button></h2>
+<h2>Your available times
+
+<span ng-switch on="editMode" >
+	<span ng-switch-when="true">
+		<button ng-click="saveFreeTime()" class="btn">Save</button>		
+	</span>
+	<span ng-switch-default>
+		<button ng-click="editFreeTimes()" class="btn">Edit</button>
+	</span>
+</span>
+
+ 
+
+</h2>
 <!-- TODO Time zone -->
 <table class="table">
 	<tr ng-repeat="day in freeTimes">
 	    <h3>
 	    <td><h3>On {{day.day}}:</h3></td>
-		<td><h4>Available: <input ng-model="day.isAvailable" type="checkbox"></h4></td>
-		<td><h4 ng-hide="!day.isAvailable">
-			starts: 		
-		  <input type="text" ng-model="day.start" bs-timepicker>
-		  <button type="button" class="btn" data-toggle="timepicker"><i class="icon-time"></i></buttoni>
+		<td>
+			<h4>Available: 
+			<span ng-switch on="editMode" >
+	        	<span ng-switch-when="true">
+	        		<input ng-model="day.isAvailable" type="checkbox">
+	        	</span>
+	        	<span ng-switch-default>
+	        		<span ng-switch on="day.isAvailable" >
+			        	<span ng-switch-when="true">
+			        		Yep!
+			        	</span>
+			        	<span ng-switch-default>
+			        		Nop!
+			        	</span>
+			      	</span>
+	        	</span>
+	      	</span>
+
+			</h4>
+		</td>
+		<td><h4 ng-hide="!day.isAvailable">starts:
+
+		  <span ng-switch on="editMode" >
+        	<span ng-switch-when="true">
+        		<input type="text" ng-model="day.end" bs-timepicker>
+		  		<button type="button" class="btn" data-toggle="timepicker"><i class="icon-time"></i></button>
+        	</span>
+        	<span ng-switch-default>
+        		{{day.end}}
+        	</span>
+      	  </span>
+
+		  
 		 </h4> 	
 		</td>
-		<td><h4 ng-hide="!day.isAvailable">
-			ends: 
-			<input type="text" ng-model="day.end" bs-timepicker>
-		  <button type="button" class="btn" data-toggle="timepicker"><i class="icon-time"></i></buttoni>
-		  	</h4>
-		</td>
-		</h3>
+		<td><h4 ng-hide="!day.isAvailable">ends:
+			<span ng-switch on="editMode" >
+        	<span ng-switch-when="true">
+        		<input type="text" ng-model="day.start" bs-timepicker>
+		  		<button type="button" class="btn" data-toggle="timepicker"><i class="icon-time"></i></button>
+        	</span>
+        	<span ng-switch-default>
+        		{{day.start}}
+        	</span>
+      	    </span>
+
+		</h4>
     </tr>
 </table>
 
