@@ -30,18 +30,20 @@ mainApp = angular.module('mainApp', ['firebase', '$strap.directives', 'ui.calend
   function CalendarCtrl ($rootScope, $routeParams, $scope, $location, utils, db, $modal, $q) {
     var DEFAULT_FREE_TIMES = ['Mondays', 'Tuesdays', 'wednesdays', 'thursdays', 'Fridays', 'Saturdays', 'Sundays']
     .map(function(day, index) {
-      return {day:day, isAvailable:true ,start:'6:00 PM', end:'10:00 PM'};
+      return {day:day, isAvailable:false ,start:'6:00 PM', end:'10:00 PM'};
     });
+    $scope.calendarRef = fbRef.child('freeTimes').child($routeParams.userId);
+    $scope.calendarRef.on('value', function(freeTimes) {
+      $scope.freeTimes = freeTimes.val() || DEFAULT_FREE_TIMES;
+      $scope.$apply();
+    });
+
+    db.get($scope, 'users/' + $routeParams.userId, 'user');
 
     $scope.editMode = false;
     $scope.editFreeTimes = function() {
       $scope.editMode = true;
     }
-
-    $scope.calendarRef = fbRef.child('freeTimes').child($routeParams.userId);
-    $scope.calendarRef.on('value', function(freeTimes) {
-      $scope.freeTimes = freeTimes.val() || DEFAULT_FREE_TIMES;
-    });
 
     $scope.saveFreeTime = function() {
       $scope.calendarRef.update(utils.removeHashKey($scope.freeTimes));

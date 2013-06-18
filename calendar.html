@@ -1,6 +1,7 @@
-<h2>Your available times
+<h2><profile user="user"></profile> available times
 
-<span ng-switch on="editMode" >
+
+<span ng-hide="currentUser.id != user.id" ng-switch on="editMode" >
 	<span ng-switch-when="true">
 		<button ng-click="saveFreeTime()" class="btn">Save</button>		
 	</span>
@@ -9,7 +10,6 @@
 	</span>
 </span>
 
- 
 
 </h2>
 <!-- TODO Time zone -->
@@ -41,11 +41,11 @@
 
 		  <span ng-switch on="editMode" >
         	<span ng-switch-when="true">
-        		<input type="text" ng-model="day.end" bs-timepicker>
+        		<input type="text" ng-model="day.start" bs-timepicker>
 		  		<button type="button" class="btn" data-toggle="timepicker"><i class="icon-time"></i></button>
         	</span>
         	<span ng-switch-default>
-        		{{day.end}}
+        		{{day.start}}
         	</span>
       	  </span>
 
@@ -55,11 +55,11 @@
 		<td><h4 ng-hide="!day.isAvailable">ends:
 			<span ng-switch on="editMode" >
         	<span ng-switch-when="true">
-        		<input type="text" ng-model="day.start" bs-timepicker>
+        		<input type="text" ng-model="day.end" bs-timepicker>
 		  		<button type="button" class="btn" data-toggle="timepicker"><i class="icon-time"></i></button>
         	</span>
         	<span ng-switch-default>
-        		{{day.start}}
+        		{{day.end}}
         	</span>
       	    </span>
 

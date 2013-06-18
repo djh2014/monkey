@@ -16,9 +16,10 @@
       <span ng-switch on="user.id == currentUser.id">
         <span ng-switch-when="true"><a href="#/edit/{{user.id}}" class="btn">Edit Your Skills</a></span>
         <span ng-switch-default>
-            <a role="button" ng-click="setRequest()" data-toggle="modal" class="btn btn-info"> Send {{user.name}} A Meeting Request Now</a>
+            <a role="button" ng-click="setRequest()" data-toggle="modal" class="btn btn-info"> Send Meeting Request</a>
         </span>
       </span>
+      <a role="button" href="#/calendar/{{user.id}}" data-toggle="modal" class="btn btn-info"> Available Times</a>
     </div>
 </div>
       
