@@ -20,7 +20,6 @@ mainApp = angular.module('mainApp', ['firebase', '$strap.directives', 'ui.calend
        $rootScope.global = {};
        var modalPromise = $modal({template: 'message.html', show: false, scope: $rootScope});
        $rootScope.showMessage = function(text) {
-         debugger;
          $rootScope.mainModalMessage = text;
          $q.when(modalPromise).then(function(modalEl) {modalEl.modal('show');});
        }
@@ -35,11 +34,7 @@ mainApp = angular.module('mainApp', ['firebase', '$strap.directives', 'ui.calend
     $scope.calendarRef = fbRef.child('freeTimes').child($routeParams.userId);
     $scope.calendarRef.on('value', function(freeTimes) {
       if (freeTimes.val()) {
-        $scope.freeTimes = mapfreeTimes.val().map(function(e, i) {
-          debugger;
-          e.start = utils.addTimeZone(e.start);
-          e.end = utils.addTimeZone(e.end);
-        });
+        $scope.freeTimes = mapfreeTimes.val();
       } else {
         $scope.freeTimes = DEFAULT_FREE_TIMES;
       }
@@ -65,7 +60,6 @@ mainApp = angular.module('mainApp', ['firebase', '$strap.directives', 'ui.calend
         height: 450,
         editiable: true,
         dayClick: function(){
-            debugger;
             $scope.$apply($scope.alertEventOnClick);
         }
     };
@@ -75,7 +69,6 @@ mainApp = angular.module('mainApp', ['firebase', '$strap.directives', 'ui.calend
         height: 450,
         editiable: true,
         dayClick: function(){
-            debugger;
             $scope.$apply($scope.alertEventOnClick);
         }
     };
@@ -107,13 +100,11 @@ mainApp = angular.module('mainApp', ['firebase', '$strap.directives', 'ui.calend
     });
 
     $scope.approve = function(meeting_id) {
-      debugger;
       fbRef.child("meetings").child(meeting_id).update({status:"APPROVED"});
       $scope.$apply();
     }
 
     $scope.reject = function(meeting_id) {
-      debugger;
       fbRef.child("meetings").child(meeting_id).update({status:"REJECT"});
       $scope.$apply();
     }
@@ -305,7 +296,6 @@ mainApp = angular.module('mainApp', ['firebase', '$strap.directives', 'ui.calend
           var res = listFBRef.push($scope.user);
           $location.path('/');
         }
-        debugger;
         $rootScope.checkRequireFields();
         $location.path('detail/'+$scope.user.id);
         $scope.$apply();
