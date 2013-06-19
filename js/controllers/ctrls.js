@@ -150,20 +150,24 @@ mainApp = angular.module('mainApp', ['firebase', '$strap.directives', 'ui.calend
     }
   }
 
-  function MeetingCtrl ($rootScope, $routeParams, $scope, $location, utils, db) {
-    
+  function MeetingCtrl ($rootScope, $routeParams, $scope, $location, utils, db, openTok) {
+    var listKey = utils.genKey($routeParams.userId1, $routeParams.userId2);
     /// OPEN TOK
+    
+    var sessionAndToken = openTok.getSessionAndToken(listKey);
+    
+
 
     TB.addEventListener("exception", exceptionHandler);
-      var session = TB.initSession("1_MX4yMTU1MTAxMn4xMjcuMC4wLjF-VHVlIEp1biAxOCAxOTowNzowMyBQRFQgMjAxM34wLjA1MTE3Mzk4NX4"); // Replace with your own session ID. See https://dashboard.tokbox.com/projects
+      var session = TB.initSession(sessionAndToken.session);
       session.addEventListener("sessionConnected", sessionConnectedHandler);
       session.addEventListener("streamCreated", streamCreatedHandler);
-      session.connect(21551012, "T1==cGFydG5lcl9pZD0yMTU1MTAxMiZzZGtfdmVyc2lvbj10YnJ1YnktdGJyYi12MC45MS4yMDExLTAyLTE3JnNpZz0xMWMwNGVmYWZkMjkwNWUzOTAwY2M3ZTlkYjAzYjkwOWY5ZmZkOWM2OnJvbGU9cHVibGlzaGVyJnNlc3Npb25faWQ9MV9NWDR5TVRVMU1UQXhNbjR4TWpjdU1DNHdMakYtVkhWbElFcDFiaUF4T0NBeE9Ub3dOem93TXlCUVJGUWdNakF4TTM0d0xqQTFNVEUzTXprNE5YNCZjcmVhdGVfdGltZT0xMzcxNjA3NjY4Jm5vbmNlPTAuMzE4MDU3NDY5MzgwODI0MjQmZXhwaXJlX3RpbWU9MTM3MTY5NDA3MSZjb25uZWN0aW9uX2RhdGE9"); // Replace with your API key and token. See https://dashboard.tokbox.com/projects
+      session.connect(21551012, sessionAndToken.token);
 
       function sessionConnectedHandler(event) {
          subscribeToStreams(event.streams);
 
-        var divProps = {};//{width: 400, height:300, name:"your stream"};
+        var divProps = {width: 400, height:300, name:"your stream"};
         var publisher = TB.initPublisher(21551012, 'publisher', divProps);
          session.publish(publisher);
       }
@@ -188,7 +192,7 @@ mainApp = angular.module('mainApp', ['firebase', '$strap.directives', 'ui.calend
     //
 
     // Messages: TODO(guti): make a directive:
-    var listKey = utils.genKey($routeParams.userId1, $routeParams.userId2);
+    
     $scope.listRef = fbRef.child("meeting_messages").child(listKey);
 
     $scope.listRef.on("value", function(messages) {
