@@ -12,6 +12,7 @@ mainApp = angular.module('mainApp', ['firebase', '$strap.directives', 'ui.calend
       when('/stream', {controller:StreamCtrl, templateUrl:'stream.html'}).
       when('/users', {controller:UsersCtrl, templateUrl:'users.html'}).
       when('/meetings/:userId', {controller:MeetingsCtrl, templateUrl:'meetings.html'}).
+      when('/messages/:userId', {controller: MessagesCtrl, templateUrl:'messages.html'}).
       when('/meeting/:userId1/:userId2', {controller:MeetingCtrl, templateUrl:'meeting.html'}).
       when('/detail/:userId', {controller:DetailCtrl, templateUrl:'detail.html'}).
       when('/edit/:userId', {controller:EditProfileCtrl, templateUrl:'editProfile.html'}).
@@ -28,6 +29,19 @@ mainApp = angular.module('mainApp', ['firebase', '$strap.directives', 'ui.calend
        }
      }
   ]);
+
+  function MessagesCtrl($rootScope, $routeParams, $scope, $location, utils, db, $modal, $q) {
+    var messagesRef = fbRef.child("messages").child($routeParams.userId);
+    messagesRef.on('value', function(messages) {
+      $scope.messages = utils.listValues(messages.val());
+      if ($scope.messages.length <= 0 ) {
+        fbRef.child("users").child("bad-gerry").on('value', function(badgerryObject) {
+          var badgerry = badgerryObject.val();
+          messagesRef.push({'user': badgerry, 'text': 'Hi, welcome, in GetBadgers you can find talented people that will help you, and in return you sohuld help others in the community. find the help you need at Find People'});
+        });
+      }
+    })
+  }
 
   function CalendarCtrl ($rootScope, $routeParams, $scope, $location, utils, db, $modal, $q) {
     var DEFAULT_FREE_TIMES = ['Mondays', 'Tuesdays', 'wednesdays', 'thursdays', 'Fridays', 'Saturdays', 'Sundays']
