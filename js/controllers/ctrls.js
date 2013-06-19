@@ -34,7 +34,7 @@ mainApp = angular.module('mainApp', ['firebase', '$strap.directives', 'ui.calend
     $scope.calendarRef = fbRef.child('freeTimes').child($routeParams.userId);
     $scope.calendarRef.on('value', function(freeTimes) {
       if (freeTimes.val()) {
-        $scope.freeTimes = mapfreeTimes.val();
+        $scope.freeTimes = freeTimes.val();
       } else {
         $scope.freeTimes = DEFAULT_FREE_TIMES;
       }
