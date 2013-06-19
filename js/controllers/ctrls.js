@@ -14,6 +14,7 @@ mainApp = angular.module('mainApp', ['firebase', '$strap.directives', 'ui.calend
       when('/edit/:userId', {controller:EditProfileCtrl, templateUrl:'editProfile.html'}).
       when('/calendar/:userId', {controller:CalendarCtrl, templateUrl:'calendar.html'}).
       when('/test', {controller:TestCtrl, templateUrl:'test.html'}).
+      when('/video', {controller:VideoCtrl, templateUrl:'video.html'}).
       otherwise({redirectTo:'/'});
   }).run(["$rootScope", "$location", "$modal", "$q",
      function ($rootScope, $location, $modal, $q) {
@@ -25,6 +26,10 @@ mainApp = angular.module('mainApp', ['firebase', '$strap.directives', 'ui.calend
        }
      }
   ]);
+
+  function VideoCtrl ($rootScope, $routeParams, $scope, $location, utils, db, $modal, $q) {
+
+  }  
 
   function CalendarCtrl ($rootScope, $routeParams, $scope, $location, utils, db, $modal, $q) {
     var DEFAULT_FREE_TIMES = ['Mondays', 'Tuesdays', 'wednesdays', 'thursdays', 'Fridays', 'Saturdays', 'Sundays']
@@ -146,6 +151,57 @@ mainApp = angular.module('mainApp', ['firebase', '$strap.directives', 'ui.calend
   }
 
   function MeetingCtrl ($rootScope, $routeParams, $scope, $location, utils, db) {
+    
+    /// OPEN TOK
+
+    TB.addEventListener("exception", exceptionHandler);
+      var session = TB.initSession("1_MX4yMTU1MTAxMn4xMjcuMC4wLjF-VHVlIEp1biAxOCAxOTowNzowMyBQRFQgMjAxM34wLjA1MTE3Mzk4NX4"); // Replace with your own session ID. See https://dashboard.tokbox.com/projects
+      session.addEventListener("sessionConnected", sessionConnectedHandler);
+      session.addEventListener("streamCreated", streamCreatedHandler);
+      session.connect(21551012, "T1==cGFydG5lcl9pZD0yMTU1MTAxMiZzZGtfdmVyc2lvbj10YnJ1YnktdGJyYi12MC45MS4yMDExLTAyLTE3JnNpZz0xMWMwNGVmYWZkMjkwNWUzOTAwY2M3ZTlkYjAzYjkwOWY5ZmZkOWM2OnJvbGU9cHVibGlzaGVyJnNlc3Npb25faWQ9MV9NWDR5TVRVMU1UQXhNbjR4TWpjdU1DNHdMakYtVkhWbElFcDFiaUF4T0NBeE9Ub3dOem93TXlCUVJGUWdNakF4TTM0d0xqQTFNVEUzTXprNE5YNCZjcmVhdGVfdGltZT0xMzcxNjA3NjY4Jm5vbmNlPTAuMzE4MDU3NDY5MzgwODI0MjQmZXhwaXJlX3RpbWU9MTM3MTY5NDA3MSZjb25uZWN0aW9uX2RhdGE9"); // Replace with your API key and token. See https://dashboard.tokbox.com/projects
+
+      function sessionConnectedHandler(event) {
+         subscribeToStreams(event.streams);
+
+
+        var divProps = {width: 400, height:300, name:"your stream"};
+        var publisher = TB.initPublisher(21551012, 'publisher', divProps);
+         session.publish(publisher);
+      }
+      
+      function streamCreatedHandler(event) {
+        subscribeToStreams(event.streams);
+      }
+      
+      function subscribeToStreams(streams) {
+        for (var i = 0; i < streams.length; i++) {
+          var stream = streams[i];
+          if (stream.connection.connectionId != session.connection.connectionId) {
+            session.subscribe(stream, 'stream')
+          }
+        }
+      }
+      
+      function exceptionHandler(event) {
+        alert(event.message);
+      }
+
+
+
+
+
+
+
+
+    //
+
+
+
+
+
+
+
+
     // Messages: TODO(guti): make a directive:
     var listKey = utils.genKey($routeParams.userId1, $routeParams.userId2);
     $scope.listRef = fbRef.child("meeting_messages").child(listKey);
