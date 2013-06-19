@@ -2,6 +2,9 @@ var fbUrl = 'https://getbadgers.firebaseio.com';
 var fbRef = new Firebase(fbUrl);
 var fbUsersRef = new Firebase(fbUrl + '/users');
 
+//temp:
+doneFlag = true;
+
 mainApp = angular.module('mainApp', ['firebase', '$strap.directives', 'ui.calendar'])
   .config(function($routeProvider) {
     $routeProvider.
@@ -156,7 +159,8 @@ mainApp = angular.module('mainApp', ['firebase', '$strap.directives', 'ui.calend
     
     var sessionAndToken = openTok.getSessionAndToken(listKey);
     
-
+    //temp
+    $scope.streams = []
 
     TB.addEventListener("exception", exceptionHandler);
       var session = TB.initSession(sessionAndToken.session);
@@ -167,8 +171,8 @@ mainApp = angular.module('mainApp', ['firebase', '$strap.directives', 'ui.calend
       function sessionConnectedHandler(event) {
          subscribeToStreams(event.streams);
 
-        var divProps = {width: 400, height:300, name:"your stream"};
-        var publisher = TB.initPublisher(21551012, 'publisher', divProps);
+        // var divProps = {width: 400, height:300, name:"your stream"};
+        var publisher = TB.initPublisher(21551012, 'publisher');//, divProps);
          session.publish(publisher);
       }
       
@@ -180,7 +184,12 @@ mainApp = angular.module('mainApp', ['firebase', '$strap.directives', 'ui.calend
         for (var i = 0; i < streams.length; i++) {
           var stream = streams[i];
           if (stream.connection.connectionId != session.connection.connectionId) {
-            session.subscribe(stream, 'stream')
+            debugger;
+            if ($.inArray(stream.id, $scope.streams) == -1) {
+              $scope.streams.push(stream.id);
+              session.subscribe(stream, 'stream')
+              //$scope.$apply();
+            }
           }
         }
       }
