@@ -163,7 +163,7 @@ mainApp = angular.module('mainApp', ['firebase', '$strap.directives', 'ui.calend
       function sessionConnectedHandler(event) {
          subscribeToStreams(event.streams);
 
-        var divProps = {width: 400, height:300, name:"your stream"};
+        var divProps = {};//{width: 400, height:300, name:"your stream"};
         var publisher = TB.initPublisher(21551012, 'publisher', divProps);
          session.publish(publisher);
       }
