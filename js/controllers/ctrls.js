@@ -17,7 +17,6 @@ mainApp = angular.module('mainApp', ['firebase', '$strap.directives', 'ui.calend
       when('/edit/:userId', {controller:EditProfileCtrl, templateUrl:'editProfile.html'}).
       when('/calendar/:userId', {controller:CalendarCtrl, templateUrl:'calendar.html'}).
       when('/test', {controller:TestCtrl, templateUrl:'test.html'}).
-      when('/video', {controller:VideoCtrl, templateUrl:'video.html'}).
       otherwise({redirectTo:'/'});
   }).run(["$rootScope", "$location", "$modal", "$q",
      function ($rootScope, $location, $modal, $q) {
@@ -29,10 +28,6 @@ mainApp = angular.module('mainApp', ['firebase', '$strap.directives', 'ui.calend
        }
      }
   ]);
-
-  function VideoCtrl ($rootScope, $routeParams, $scope, $location, utils, db, $modal, $q) {
-
-  }  
 
   function CalendarCtrl ($rootScope, $routeParams, $scope, $location, utils, db, $modal, $q) {
     var DEFAULT_FREE_TIMES = ['Mondays', 'Tuesdays', 'wednesdays', 'thursdays', 'Fridays', 'Saturdays', 'Sundays']
@@ -153,11 +148,8 @@ mainApp = angular.module('mainApp', ['firebase', '$strap.directives', 'ui.calend
     }
   }
 
-  function MeetingCtrl ($rootScope, $routeParams, $scope, $location, utils, db, openTok) {
-    var listKey = utils.genKey($routeParams.userId1, $routeParams.userId2);
-    /// OPEN TOK
-    
-    var sessionAndToken = openTok.getSessionAndToken(listKey);
+  function VideoCtrl($rootScope, $routeParams, $scope, $location, utils, db, openTok) {
+    var sessionAndToken = openTok.getSessionAndToken();
     
     //temp
     $scope.streams = []
@@ -192,13 +184,19 @@ mainApp = angular.module('mainApp', ['firebase', '$strap.directives', 'ui.calend
             }
           }
         }
-      }
-      
+      }      
       function exceptionHandler(event) {
-        alert(event.message);
+        //alert(event.message);
       }
+  }
 
-    //
+  function MeetingCtrl($rootScope, $routeParams, $scope, $location, utils, db, openTok) {
+    var listKey = utils.genKey($routeParams.userId1, $routeParams.userId2);
+    
+    $scope.showVideo = false;
+    $scope.showVideoSection = function() {
+      $scope.showVideo = true;
+    }
 
     // Messages: TODO(guti): make a directive:
     

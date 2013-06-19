@@ -3,23 +3,40 @@
 	<profile user="user1"/> <b>+</b>
 	<profile user="user2"/>
 	<hr/>
-	<h3>Start Video:</h3>
-	<ol>
-		<li>Use Chrome!</li>
-		<li>See allow on the top right of the page!</li>
-		<li>Boom! (Or refresh and try again)</li>
-	</ol>
 	
-	<div style="text-align:center;">
-	    <div style="border:1px solid #000; display:inline-block;">
-	    	Your partner:	
-	    	<div id="stream"></div>
-	    </div>
-	    <div style="border:1px solid red; display:inline-block;">
-	    	You:
-			<div id="publisher"></div>	
-	    </div>
-	</div>  
+	
+	<span ng-switch on="showVideo">
+        <span ng-switch-when="false"><a ng-click="showVideoSection()">Show Video Section(Chrome only)</a></span>
+        <span ng-switch-default>
+        	
+			<div ng-controller="VideoCtrl">
+		<h3>3 steps to start the video:</h3>
+		<ol>
+			<li>Use Chrome!</li>
+			<li>See allow on the top right of the page!</li>
+			<li>Boom! (Or refresh and try again)</li>
+		</ol>
+		
+		<div style="text-align:center;">
+		    <div style="border:1px solid #000; display:inline-block;">
+		    	Your partner:	
+		    	<div id="stream"></div>
+		    </div>
+		    <div style="border:1px solid red; display:inline-block;">
+		    	You:
+				<div id="publisher"></div>	
+		    </div>
+		</div>
+	</div>
+
+
+        
+        </span>
+      </span>
+
+	
+	</div>
+
 </div>
 <div class="span5">
 	<h3>Chat between {{user1.name}} and {{user2.name}}:</h3>
