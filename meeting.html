@@ -2,21 +2,24 @@
 	<u><h3>Meeting Page</h3></u>
 	<profile user="user1"/> <b>+</b>
 	<profile user="user2"/>
-
 	<hr/>
 	<h3>Start Video:</h3>
-	<ul>
+	<ol>
 		<li>Use Chrome!</li>
-		<li>See the gray allow on the top of the page!</li>
-		<li>Boom!</li>
-	</ul>	
-	Your partner:
-	<div id="stream"></div>
-	<hr/>
-	You:
-	<div id="publisher"></div>	
-
+		<li>See allow on the top right of the page!</li>
+		<li>Boom! (Or refresh and try again)</li>
+	</ol>
 	
+	<div style="text-align:center;">
+	    <div style="border:1px solid #000; display:inline-block;">
+	    	Your partner:	
+	    	<div id="stream"></div>
+	    </div>
+	    <div style="border:1px solid red; display:inline-block;">
+	    	You:
+			<div id="publisher"></div>	
+	    </div>
+	</div>  
 </div>
 <div class="span5">
 	<h3>Chat between {{user1.name}} and {{user2.name}}:</h3>
