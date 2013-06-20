@@ -2,7 +2,7 @@ var fbUrl = 'https://getbadgers.firebaseio.com';
 var fbRef = new Firebase(fbUrl);
 var fbUsersRef = new Firebase(fbUrl + '/users');
 
-mainApp = angular.module('mainApp', ['firebase', '$strap.directives', 'ui.calendar'])
+mainApp = angular.module('mainApp', ['ngCookies', 'firebase', '$strap.directives', 'ui.calendar'])
   .config(function($routeProvider) {
     $routeProvider.
       when('/', {controller:HomeCtrl, templateUrl:'home.html'}).
@@ -300,8 +300,7 @@ mainApp = angular.module('mainApp', ['firebase', '$strap.directives', 'ui.calend
     }
   }
 
-  function LoginCtrl($rootScope, $scope, $location, utils) {
-    // Events: 
+function EventCtrl($rootScope, $scope, $location, utils, $cookies) {
     $rootScope.$on("currentUserInit", function() {
       if ($rootScope.currentUser) {
         $rootScope.myEventsRef = fbRef.child('events').child($rootScope.currentUser.id);
@@ -324,7 +323,48 @@ mainApp = angular.module('mainApp', ['firebase', '$strap.directives', 'ui.calend
        $location.path(newEvent.path);
       $scope.$apply();
     }
-    ////
+  }
+
+  function LoginCtrl($rootScope, $scope, $location, utils, $cookies) {
+    if ($cookies.currentUser) {
+      $rootScope.currentUser = JSON.parse($cookies.currentUser);
+    }
+    $scope.authClient = new FirebaseAuthClient(fbRef, function(error, facebookUser) {
+      // If login:
+      if (facebookUser) {
+        var id = utils.fbClean(facebookUser.username || facebookUser.id);
+
+        var currentUserRef = fbRef.child("users").child(id);
+        currentUserRef.on('value', function(FBUser) {
+            $rootScope.currentUser = jQuery.extend($rootScope.currentUser, FBUser.val());
+            $cookies.currentUser = JSON.stringify($rootScope.currentUser);
+            $rootScope.$broadcast("currentUserInit");
+            
+            // Handle new user: 
+            if (!$rootScope.currentUser.facebook) {
+              currentUserRef.update({
+                user: facebookUser.username || "", name: facebookUser.name || "", id: id, email: facebookUser.email || "", facebook: facebookUser || "",
+                img: "http://graph.facebook.com/"+ facebookUser.id+"/picture?type=large" || ""});
+            }
+            // Direct to edit page if don't have require skills:
+            if ($location.path().indexOf('edit') == -1) {
+              $rootScope.checkRequireFields();
+            }
+
+            $scope.$apply();
+        });
+      // Not login:
+      } else {
+        $rootScope.currentUser = null;
+        delete $cookies.currentUser
+        $rootScope.$broadcast("currentUserInit");
+        // not login user should go home.
+        $location.path('/');
+        $scope.$apply();
+      }
+    });
+
+    
 
     $rootScope.checkRequireFields = function() {
       if (!$rootScope.currentUser.skills) {
@@ -334,37 +374,7 @@ mainApp = angular.module('mainApp', ['firebase', '$strap.directives', 'ui.calend
       }
     }
 
-    $scope.authClient = new FirebaseAuthClient(fbRef, function(error, facebookUser) { 
-      if (facebookUser) {
-        var id = utils.fbClean(facebookUser.username || facebookUser.id);
-
-        var currentUserRef = fbRef.child("users").child(id);
-        currentUserRef.on('value', function(FBUser) {
-            $rootScope.currentUser = jQuery.extend($rootScope.currentUser, FBUser.val());;
-            // new user: copy info from fb.
-            if (!$rootScope.currentUser.facebook) {
-              currentUserRef.update({
-                user: facebookUser.username || "",
-                name: facebookUser.name || "",
-                id: id,
-                email: facebookUser.email || "",
-                facebook: facebookUser || "",
-                img: "http://graph.facebook.com/"+ facebookUser.id+"/picture?type=large" || ""});
-            }
-            if ($location.path().indexOf('edit') == -1) {
-              $rootScope.checkRequireFields();
-            }
-            $rootScope.$broadcast("currentUserInit");
-            $scope.$apply();
-        });
-      } else {
-        $rootScope.currentUser = null;
-        $rootScope.$broadcast("currentUserInit");
-        // not login user should go home.
-        $location.path('/');
-        $scope.$apply();
-      }
-    });
+    
 
     $scope.facebookLogin = function() {
       $scope.directToEditPage = true;

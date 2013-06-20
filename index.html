@@ -32,17 +32,20 @@
   <meta http-equiv="X-UA-Compatible" content="chrome=1">
   <script src="http://static.opentok.com/webrtc/v2.0/js/TB.min.js" type="text/javascript" charset="utf-8"></script>
   
-
+  <!-- The main frameworks -->
   <script type="text/javascript" src="components/jquery/jquery.js"></script>
   <script type="text/javascript" src="components/jquery-ui/ui/jquery-ui.js"></script>
   <script src="js/bootstrap.min.js"></script>
-
-
   <script src="components/angular/angular.js"></script>
   <script src="js/firebase.js"></script>
+
   <script src="https://cdn.firebase.com/v0/firebase-auth-client.js"></script>
-  <script src="components/angular-fire/angularFire.js"></script>
   
+  
+  <!-- angular libs -->
+  <script src="components/angular-fire/angularFire.js"></script>
+  <script src="components/angular-cookies/angular-cookies.js"></script>
+
   <!-- angular boostrap -->
   <script src="components/fullcalendar/fullcalendar.js"></script>
   <script src="components/fullcalendar/gcal.js"></script>
@@ -53,6 +56,7 @@
   <script src="//cdnjs.cloudflare.com/ajax/libs/angular-strap/0.7.2/angular-strap.min.js"></script>
 
   <!-- More libs -->
+
   <script src="components/timezone-js/src/date.js"></script>
   <script>
     timezoneJS.timezone.zoneFileBasePath = '/tz';
@@ -100,8 +104,8 @@ ga('send', 'pageview');
 
   </head>
 
-  <body ng-app="mainApp" ng-controller="LoginCtrl">
-
+  <body ng-app="mainApp"  ng-controller="EventCtrl" >
+  <span ng-controller="LoginCtrl">
     <!--<section id="main" class="container">--> <!--Moved to after top header -->
         <div class="row top-header" id="no-margin" style="margin-bottom: 10px">
                 <div class="span3"><a href='/'><img src="img/badgerlogo.png" alt="" /></a></div>
@@ -119,12 +123,12 @@ ga('send', 'pageview');
                         <li>
                             <a ng-click="facebookLogin()" class="facebook"><span>Facebook</span></a>
                         </li>-->
-                        <li>
+                        <!-- <li>
                             <span ng-switch-default>
                                 <a class="btn btn-large btn-danger home-button" ng-click="facebookLogin()">Register</a>
                                 <a class="btn btn-large btn-success home-button" ng-click="facebookLogin()">Login</a>
                             </span>
-                        </li>
+                        </li> -->
                     </ul>
                 </div>
             </div>
@@ -187,6 +191,6 @@ ga('send', 'pageview');
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
 
-    
+  </span>
   </body>
 </html>
