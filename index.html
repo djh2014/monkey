@@ -79,28 +79,40 @@ ga('send', 'pageview');
 
   <body ng-app="mainApp" ng-controller="LoginCtrl">
 
-    <section id="main" class="container">
-        <div class="row" style="margin-bottom: 10px">
+    <!--<section id="main" class="container">--> <!--Moved to after top header -->
+        <div class="row top-header" id="no-margin" style="margin-bottom: 10px">
                 <div class="span3"><a href='/'><img src="img/badgerlogo.png" alt="" /></a></div>
                 <div class="span9">
-                    <ul class="socialize pull-right">
-                        <li>
-                            <a href="#" class="flickr"><span>Flickr</span></a>
-                        </li>
-                        <li>
-                            <a href="#" class="rss"><span>Rss Feed</span></a>
-                        </li>
-                        <li>
-                            <a href="#" class="twitter"><span>Twitter</span></a>
-                        </li>
-                        <li>
+                    <ul class="register">
+                        <!--<li>
                             <a href="#" class="facebook"><span>Facebook</span></a>
+                        </li>-->
+                        <!--<li>
+                            <button class="btn btn-danger home-button"><a ng-click="facebookLogin()">Register</a>
+                            </button>
+                        </li>-->
+                        <li class="dropdown main-menu-element">
+                            <div ng-switch on="currentUser != null" >
+                                <span ng-switch-when="true">
+                                    <a href="/#/stream">Stream</a>
+                                    <a href="/#/users">ALL</a>
+                                    <profile user="currentUser"/></profile>
+                                    <a href="#/detail/{{currentUser.id}}" title="{{currentUser.name}}"></a>(<a ng-click="logOut()">logout</a>)
+                                </span>
+                                <span ng-switch-default>
+                                    <button class="btn btn-large btn-danger home-button"><a ng-click="facebookLogin()">Register</a>
+                                    </button>
+                                    <button class="btn btn-large btn-success home-button"><a ng-click="facebookLogin()">Login</a>
+                                    </button>
+                                </span>
+                            </div>
                         </li>
-
                     </ul>
                 </div>
             </div>
-            <div class="navbar">
+    <section id="main" class="container">
+
+            <!--<div class="navbar">
                 <div class="navbar-inner">
                     <div class="container">
                         <a data-target=".nav-collapse" data-toggle="collapse" class="btn btn-navbar">
@@ -117,7 +129,7 @@ ga('send', 'pageview');
                                 <button ng-click="search()" class="btn btn-inverse"><i class="icon-search icon-white"></i></button>
                             </form>
                           <ul class="nav pull-right">
-                                <!--<li class="main-menu-element"><a href="#"><i class="icon-shopping-cart"></i> Your Cart</a></li>-->
+                              
                                 <li class="divider-vertical"></li>
                                 <li class="dropdown main-menu-element">
                                      <div ng-switch on="currentUser != null" >
@@ -135,14 +147,15 @@ ga('send', 'pageview');
                                         </span>
                                     </div>
                                 </li>
-                            </ul>
+                            </ul>-->
 
-                        </div><!-- /.nav-collapse -->
-                    </div>
-                </div><!-- /navbar-inner -->
+                        <!--</div>
+                    </div>-->
+                <!--</div>-->
             </div>
             <div ng-view>
             </div>
+            <section id="main" class="container">
 
 
 

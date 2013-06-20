@@ -1,6 +1,6 @@
 body {
-    padding-top: 40px;
-    padding-bottom: 40px;
+    /*padding-top: 40px;
+    padding-bottom: 40px;*/
     background: whitesmoke;
     color: #999999;
     font-family: 'Arimo', sans-serif;
@@ -9,12 +9,61 @@ body {
 /**
  *  Override some bootstrap style
  **/
+ .row-top-header {
+    margin-bottom: 0px;
+ }
+ .top-header {
+    background: white;
+    border-bottom:2px solid #333;
+    padding-top: 1%;
+    padding-bottom: 1%;
+    padding-left: 2%;
+    margin-bottom: 0px;
+ }
+ #no-margin {
+    margin-bottom: 0px;
+ }
+ .site-description {
+    position: absolute;
+    padding-top:10%;
+    padding-left: 15%;
+    float:left;
+ }
+ .money-text {
+    display: inline-block;
+    position: relative;
+    color: white;
+    font-size: 60px;
+ }
+ .money-description {
+    display: inline-block;
+    position: relative;
+    color:white;
+    font-size: 25px;
+    margin-top: 2px;
+ }
+ .search-bar {
+    position: relative;
+ }
+ #search-height {
+    height:25px;
+ }
+ #icon-box {
+    height:34px;
+ }
+ .register {
+    display: block;
+    text-decoration: none;
+    float:right;
+    list-style-type:none;
+    vertical-align: middle;
+    padding-top:35px;
+ }
 
 .first-orange {
-    background: #FAA732;
-    padding-right: 50px;
-    margin-left: 0px;
-    margin-right: 0px;
+    background-image: linear-gradient(to bottom, #ee5f5b, #bd362f);
+    padding-right: 0px;
+    padding-left: 0px;
 }
 .first-name {
     position: absolute;
@@ -112,6 +161,9 @@ div.page-header h3 small{
     margin-bottom: 20px;
     margin-left:auto;
     margin-right:auto;
+}
+#apply {
+    padding-left: 30px;
 }
 .description {
     color:black;
@@ -311,8 +363,8 @@ div.product-filter select{
  **/
 section#main{
     background-color:#FFFFFF;
-    padding: 20px 20px 0px 20px;
-    /*border-radius: 5px;*/
+    /*padding: 10px 20px 0px 20px;*/
+    border-radius: 5px;
 }
 
 section#main h2{
@@ -783,7 +835,6 @@ div.red .action a{
 .pre-footer{
     background: url("../img/back_stitch_dark.png") repeat-x scroll left bottom #252525;
     height: 65px;
-    margin: 0 -20px 0 -20px;
     clear:both;
 }
 
@@ -792,7 +843,6 @@ footer{
     background: url("../img/shadow_big.png") no-repeat scroll center top #252525;
     padding-top: 20px;
     padding-bottom: 4px;
-    margin: 0 -20px 0 -20px;
 }
 
 footer .page-header{
