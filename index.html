@@ -123,12 +123,25 @@ ga('send', 'pageview');
                         <li>
                             <a ng-click="facebookLogin()" class="facebook"><span>Facebook</span></a>
                         </li>-->
+
+
+
                         <li class="register">
-                            <span>
-                                <a class="btn btn-large btn-danger home-button" ng-click="facebookLogin()">Register</a>
-                                <a class="btn btn-large btn-success home-button" ng-click="facebookLogin()">Login</a>
-                            </span>
+                         <span ng-switch on="currentUser != null" >
+                          <span ng-switch-when="true">
+                            <a href="/#/stream" class="btn btn-large btn-info">News feed</a>
+                            <a href="/#/users" class="btn btn-large btn-info">Find People</a>
+                            <a href="/#/messages/{{currentUser.id}}" class="btn btn-large btn-info">Messages</a>
+                            <profile user="currentUser"/></profile>
+                            <a href="#/detail/{{currentUser.id}}" title="{{currentUser.name}}"></a>(<a ng-click="logOut()">logout</a>)
+                          </span>
+                          <span ng-switch-default>
+                              <a class="btn btn-danger home-button" ng-click="facebookLogin()">Register</a>
+                              <a class="btn btn-success home-button" ng-click="facebookLogin()">Login</a>
+                          </span>
+                          </span>
                         </li>
+
                     </ul>
                 </div>
             </div>
@@ -158,23 +171,7 @@ ga('send', 'pageview');
 
   <!-- <a href="/#/stream" class="btn btn-large btn-info" >Stream</a> -->
   
-  <div ng-switch on="currentUser != null" >
-    <span ng-switch-when="true">
 
-    <a href="/#/stream" class="btn btn-large btn-info">News feed</a>
-    <a href="/#/users" class="btn btn-large btn-info">Find People</a>
-    <a href="/#/messages/{{currentUser.id}}" class="btn btn-large btn-info">Messages</a>
-      
-                  <profile user="currentUser"/></profile>
-                  <a href="#/detail/{{currentUser.id}}" title="{{currentUser.name}}"></a>(<a ng-click="logOut()">logout</a>)
-              </span>
-              <span ng-switch-default>
-                  <a class="btn btn-danger home-button" ng-click="facebookLogin()">Register</a>
-                  <a class="btn btn-success home-button" ng-click="facebookLogin()">Login</a>
-              </span>
-          </div>
-      </li>
-  </ul>
 
                         <!--</div>
                     </div>-->

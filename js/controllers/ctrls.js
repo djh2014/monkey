@@ -352,7 +352,7 @@ function EventCtrl($rootScope, $scope, $location, utils, $cookies) {
             }
 
             $scope.$apply();
-        });
+        }); 
       // Not login:
       } else {
         $rootScope.currentUser = null;
