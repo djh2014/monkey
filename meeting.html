@@ -1,0 +1,52 @@
+<div class="span5">
+	<u><h3>Meeting Page</h3></u>
+	<profile user="user1"/> <b>+</b>
+	<profile user="user2"/>
+	<hr/>
+	
+	<span ng-switch on="showVideo">
+        <span ng-switch-when="false"><a ng-click="showVideoSection()">Show Video Section(Chrome only)</a></span>
+        <span ng-switch-default>
+        	
+			<div ng-controller="VideoCtrl">
+		<h3>3 steps to start the video:</h3>
+		<ol>
+			<li>Use Chrome!</li>
+			<li>See allow on the top right of the page!</li>
+			<li>Boom! (Or refresh and try again)</li>
+		</ol>
+		
+		<div style="text-align:center;">
+		    <div style="border:1px solid #000; display:inline-block;">
+		    	Your partner:	
+		    	<div id="stream"></div>
+		    </div>
+		    <div style="border:1px solid red; display:inline-block;">
+		    	You:
+				<div id="publisher"></div>	
+		    </div>
+		</div>
+	</div>
+
+
+        
+        </span>
+      </span>
+
+	
+	</div>
+
+</div>
+<div class="span5">
+	<h3>Chat between {{user1.name}} and {{user2.name}}:</h3>
+	<form class="well">
+		<profile user="currentUser"/>
+		<input type="text" ng-model="newItem.text">
+		<input ng-click="addNew()" class="btn btn-success" type="submit" value="Send message">
+	</form>
+
+	<div class="well" ng-repeat="item in items">
+		<div class="span1"><profile user="item.user"/></div>
+		 <h3>{{item.text}}</h3>
+	</div>
+</div>

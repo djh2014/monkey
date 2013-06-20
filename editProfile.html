@@ -1,50 +1,21 @@
 <form id="tab">
     <div class="row">
-    <div class="span6">
-        <label>Name</label>
-        <input ng-model="user.name" type="text" value="" class="input-xlarge" placeholder="First and Last Name">
-        
-<!--         <label>Email</label>
-        <input ng-model="user.email" type="text" value="" class="input-xlarge" placeholder="Email">
- -->        
-
-<!--         <label>Image Url (Put Image Link)</label>
-        <input ng-model="user.img" type="text" value="" class="input-xlarge" placeholder="Image Url">
-        
- -->
-        <label>Skills:</label>
-        <textarea ng-model="user.skills" value="" rows="6" class="input-xlarge" placeholder="What skills do you have that you can teach, e.g programming, design, business, law, finance"></textarea>
-        
-        <!-- 
-        <label>I want..</label>
-        <textarea ng-model="user.iWant" value="Smith" rows="6" class="input-xlarge" placeholder="And now how can other help you, what you would like to learn, get help with in 1:1 video session, from people with the right knowladge."></textarea>
-
-        <hr/>
-        <h1>TODO(danny): Now this is field I don't like that much</h1> 
-
-        <label>Company image Url</label>
-        <input ng-model="user.companyImg" type="text" value="" class="input-xlarge" placeholder="Image Url">
-        
-
-        <label>Company</label>
-        <input ng-model="user.company" type="text" value="" class="input-xlarge" placeholder="Company name">
-        <label>Time Available</label>
-        <input ng-model="user.time" type="text" value="" class="input-xlarge" placeholder="time?">
-        
-        <label>Skills</label>
-        <textarea ng-model="user.skills" value="Smith" rows="6" class="input-xlarge" placeholder="Skills"></textarea>
-
-        <label>About Me</label>
-        <textarea ng-model="user.love" value="Smith" rows="6" class="input-xlarge" placeholder="Profile Description"></textarea>
-      
-
- -->
-        <div>
-          <button ng-click="saveUser()" class="btn btn-primary">Save</button>
+        <div class="span3">
+                    <img src="http://i.embed.ly/1/image/crop?url={{user.img}}&amp;key=92b31102528511e1a2ec4040d3dc5c07&amp;width=200&amp;height=200" alt="?" class="pull-left span2 clearfix" style='margin-right:10px'>
         </div>
-    </div>
-    <div class="span6">
-        <img src="{{user.img}}">
-    </div>
+        <div class="span3">
+            <!-- Only for Google hangouts:
+            <div ng-show="currentEmail == null || currentEmail == ''">
+            <label>Gmail</label>
+            <input ng-model="user.email" type="text" value="" class="input-xlarge" placeholder="Gmail address">
+            </div> -->
+
+            <label>Skills:</label>
+            <textarea ng-model="user.skills" value="" rows="6" class="input-xlarge" placeholder="What skills do you have that you can teach, e.g programming, design, business, law, finance"></textarea>
+            
+            <div>
+              <button ng-click="saveUser()" class="btn btn-primary">Save</button>
+            </div>
+        </div>
     </div>
 </form>

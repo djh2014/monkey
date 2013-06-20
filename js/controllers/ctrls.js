@@ -2,22 +2,287 @@ var fbUrl = 'https://getbadgers.firebaseio.com';
 var fbRef = new Firebase(fbUrl);
 var fbUsersRef = new Firebase(fbUrl + '/users');
 
-mainApp = angular.module('mainApp', ['firebase', '$strap.directives'])
+mainApp = angular.module('mainApp', ['firebase', '$strap.directives', 'ui.calendar'])
   .config(function($routeProvider) {
     $routeProvider.
       when('/', {controller:HomeCtrl, templateUrl:'home.html'}).
-      when('/detail/:userId', {controller:DetailCtrl, templateUrl:'detail.html'}).
-      when('/users', {controller:UsersCtrl, templateUrl:'users.html'}).
-      when('/login', {controller:LoginCtrl, templateUrl:'login.html'}).
-      when('/video/:userId/:secondUserId', {controller:VideoCtrl, templateUrl:'video.html'}).
-      when('/requests/:userId', {templateUrl:'request.html'}).
-      when('/edit/:userId', {controller:EditProfileCtrl, templateUrl:'editProfile.html'}).
-      when('/sessions/:userId', {controller:SessionsCtrl, templateUrl:'sessions.html'}).
       when('/stream', {controller:StreamCtrl, templateUrl:'stream.html'}).
+      when('/users', {controller:UsersCtrl, templateUrl:'users.html'}).
+      when('/meetings/:userId', {controller:MeetingsCtrl, templateUrl:'meetings.html'}).
+      when('/messages/:userId', {controller: MessagesCtrl, templateUrl:'messages.html'}).
+      when('/meeting/:userId1/:userId2', {controller:MeetingCtrl, templateUrl:'meeting.html'}).
+      when('/detail/:userId', {controller:DetailCtrl, templateUrl:'detail.html'}).
+      when('/edit/:userId', {controller:EditProfileCtrl, templateUrl:'editProfile.html'}).
+      when('/calendar/:userId', {controller:CalendarCtrl, templateUrl:'calendar.html'}).
+      when('/test', {controller:TestCtrl, templateUrl:'test.html'}).
       otherwise({redirectTo:'/'});
-  });
+  }).run(["$rootScope", "$location", "$modal", "$q",
+     function ($rootScope, $location, $modal, $q) {
+       $rootScope.global = {};
+       var modalPromise = $modal({template: 'message.html', show: false, scope: $rootScope});
+       $rootScope.showMessage = function(text) {
+         $rootScope.mainModalMessage = text;
+         $q.when(modalPromise).then(function(modalEl) {modalEl.modal('show');});
+       }
+     }
+  ]);
 
-  function StreamCtrl($rootScope, $routeParams, $scope, $location) {
+  function MessagesCtrl($rootScope, $routeParams, $scope, $location, utils, db, $modal, $q) {
+    var messagesRef = fbRef.child("messages").child($routeParams.userId);
+    messagesRef.on('value', function(messages) {
+      $scope.messages = utils.listValues(messages.val());
+      if ($scope.messages.length <= 0 ) {
+        fbRef.child("users").child("bad-gerry").on('value', function(badgerryObject) {
+          var badgerry = badgerryObject.val();
+          messagesRef.push({'user': badgerry, 'text': 'Hi, welcome, in GetBadgers you can find talented people that will help you, and in return you sohuld help others in the community. find the help you need at Find People'});
+        });
+      }
+    })
+  }
+
+  function CalendarCtrl ($rootScope, $routeParams, $scope, $location, utils, db, $modal, $q) {
+    var DEFAULT_FREE_TIMES = ['Mondays', 'Tuesdays', 'wednesdays', 'thursdays', 'Fridays', 'Saturdays', 'Sundays']
+    .map(function(day, index) {
+      return {day:day, isAvailable:true ,start:'6:00 PM', end:'10:00 PM'};
+    });
+    $scope.calendarRef = fbRef.child('freeTimes').child($routeParams.userId);
+    $scope.calendarRef.on('value', function(freeTimes) {
+      if (freeTimes.val()) {
+        $scope.freeTimes = freeTimes.val();
+      } else {
+        $scope.freeTimes = DEFAULT_FREE_TIMES;
+      }
+      
+      $scope.$apply();
+    });
+
+    db.get($scope, 'users/' + $routeParams.userId, 'user');
+
+    $scope.editMode = false;
+    $scope.editFreeTimes = function() {
+      $scope.editMode = true;
+    }
+
+    $scope.saveFreeTime = function() {
+      $scope.calendarRef.update(utils.removeHashKey($scope.freeTimes));
+      $scope.editMode = false;
+    }
+  }
+
+  function TestCtrl ($rootScope, $routeParams, $scope, $location, utils, db, $modal, $q) {
+    $scope.calendarConfig = {
+        height: 450,
+        editiable: true,
+        dayClick: function(){
+            $scope.$apply($scope.alertEventOnClick);
+        }
+    };
+
+    ///
+    $scope.calendarConfig = {
+        height: 450,
+        editiable: true,
+        dayClick: function(){
+            $scope.$apply($scope.alertEventOnClick);
+        }
+    };
+
+    $scope.eventSources = [{
+      events: function(start, end, cb) {
+        $scope.calendarRef = fbRef.child("calendars").child($routeParams.userId);
+        $scope.calendarRef.on('value', function(calendar) {
+            cb( );
+        })
+      },
+      //color: 'yellow',   // an option!
+      //textColor: 'black' // an option!
+    }];
+    ///
+
+    $scope.click = function() {
+      $rootScope.showMessage("test?");
+    };  
+  }  
+
+  function MeetingsCtrl ($rootScope, $routeParams, $scope, $location, utils, db) {
+    db.get($scope, 'meetings', 'meetings', function() {
+      $scope.meetings = utils.listValues($scope.meetings);
+      $scope.meetings = $scope.meetings.filter(function(e, i) {
+        return e.teacher.id == $routeParams.userId || e.student.id == $routeParams.userId;
+      });
+      $scope.$apply();
+    });
+
+    $scope.approve = function(meeting_id) {
+      fbRef.child("meetings").child(meeting_id).update({status:"APPROVED"});
+      $scope.$apply();
+    }
+
+    $scope.reject = function(meeting_id) {
+      fbRef.child("meetings").child(meeting_id).update({status:"REJECT"});
+      $scope.$apply();
+    }
+  }
+
+  function DetailCtrl($scope, $rootScope, $location, $routeParams,db, utils) {      
+    $scope.viewedUserRef = fbRef.child("users").child($routeParams.userId);
+
+    $scope.viewedUserRef.on('value', function(viewedUser) { 
+      $scope.user = viewedUser.val();
+      $scope.user.id = $routeParams.userId;
+      $scope.user.badgersArray = utils.range($scope.user.badgers);
+      if($scope.user.requests) {
+        $scope.user.requests = Object.keys($scope.user.requests);
+      }
+      $scope.$apply();
+    });
+
+    $scope.setRequest = function() {      
+      if($rootScope.currentUser) {
+        var key = utils.genKey($scope.user.id, $rootScope.currentUser.id);
+        var meeting = {};
+        meeting[key] = {'teacher':$scope.user, 'student':$rootScope.currentUser, 'status':"NEW", 'id': key};
+        fbRef.child('meetings').update(meeting);
+        var meetingPath = 'meeting/' + $rootScope.currentUser.id + '/' + $scope.user.id 
+        
+        // Send event
+        fbRef.child('events').child($scope.user.id).push(
+          {text: $rootScope.currentUser.name + ' want to start the video session with you',
+           path:meetingPath,
+           alert:true});
+
+        $rootScope.showMessage('we notify ' + $scope.user.name + '. copy his email and click the red button');
+        $location.path(meetingPath);
+      } else {
+        $rootScope.showMessage("you need to sign in first");
+      }
+    }
+  }
+
+  function VideoCtrl($rootScope, $routeParams, $scope, $location, utils, db, openTok) {
+    var sessionAndToken = openTok.getSessionAndToken();
+    
+    //temp
+    $scope.streams = []
+
+    TB.addEventListener("exception", exceptionHandler);
+      var session = TB.initSession(sessionAndToken.session);
+      session.addEventListener("sessionConnected", sessionConnectedHandler);
+      session.addEventListener("streamCreated", streamCreatedHandler);
+      session.connect(21551012, sessionAndToken.token);
+
+      function sessionConnectedHandler(event) {
+         subscribeToStreams(event.streams);
+
+        // var divProps = {width: 400, height:300, name:"your stream"};
+        var publisher = TB.initPublisher(21551012, 'publisher');//, divProps);
+         session.publish(publisher);
+      }
+      
+      function streamCreatedHandler(event) {
+        subscribeToStreams(event.streams);
+      }
+      
+      function subscribeToStreams(streams) {
+        for (var i = 0; i < streams.length; i++) {
+          var stream = streams[i];
+          if (stream.connection.connectionId != session.connection.connectionId) {
+            debugger;
+            if ($.inArray(stream.id, $scope.streams) == -1) {
+              $scope.streams.push(stream.id);
+              session.subscribe(stream, 'stream')
+              //$scope.$apply();
+            }
+          }
+        }
+      }      
+      function exceptionHandler(event) {
+        //alert(event.message);
+      }
+  }
+
+  function MeetingCtrl($rootScope, $routeParams, $scope, $location, utils, db, openTok) {
+    var listKey = utils.genKey($routeParams.userId1, $routeParams.userId2);
+    
+    $scope.showVideo = false;
+    $scope.showVideoSection = function() {
+      $scope.showVideo = true;
+    }
+
+    // Messages: TODO(guti): make a directive:
+    
+    $scope.listRef = fbRef.child("meeting_messages").child(listKey);
+
+    $scope.listRef.on("value", function(messages) {
+      $scope.items  = utils.listValues(messages.val());
+      // TODO(guti): I put it here just to sync, wonder how you sync correctly.
+      db.get($scope, 'users/' + $routeParams.userId1, 'user1');
+      db.get($scope, 'users/' + $routeParams.userId2, 'user2', function() {
+         // TODO: remove this, it's not nice to send message for others.
+         // if ($scope.items.length == 0) {
+         //    var item = {user:$scope.user2, text:'Hi, when can we start.'};  
+         //    $scope.listRef.push(item);
+         // }
+      });  
+    });
+
+    $scope.newItem = {};
+    $scope.addNew = function() { 
+      if ($rootScope.currentUser.id ==  $scope.user1.id || 
+          $rootScope.currentUser.id ==  $scope.user2.id) {
+        
+        $scope.newItem.user = $rootScope.currentUser;
+        $scope.listRef.push($scope.newItem);
+        $scope.newItem = {};      
+      } else {
+        $rootScope.showMessage('sorry you are not a user');
+      }
+    }
+  }
+
+  function StreamCtrl($rootScope, $routeParams, $scope, $location, utils, db) {
+    var LENGTH = 5;
+    var itemsRef = fbRef.child("requests");
+    $scope.items = []
+    $scope.hiddenItems = []
+
+    itemsRef.once('value', function(items) {
+       $scope.items = []
+       for(var key in items.val()) {
+          var item = items.val()[key];
+          if ($scope.items.length <= LENGTH) {
+            $scope.items.unshift(item);
+          } else {
+            $scope.hiddenItems.unshift(item);
+          }
+       };
+       $scope.$apply();
+    });
+
+    itemsRef.on('child_added', function(item) {
+       $scope.items.unshift(item.val());
+       $scope.hiddenItems.unshift($scope.items.pop());
+    });
+
+    $scope.min = 0;
+
+    var timer = setInterval(function() {
+      $scope.items.unshift($scope.hiddenItems.pop());
+      $scope.hiddenItems.unshift($scope.items.pop());
+      $scope.$apply();
+    }, 5000);
+
+    $scope.accept = function(item) {
+      $location.path('video/' + item.user.id + "/" + $rootScope.currentUser.id);
+      $scope.$apply();
+    }
+
+    $scope.newItem = {}
+    $scope.addNew = function() {
+      $scope.newItem.user = $rootScope.currentUser;
+      itemsRef.push($scope.newItem);
+      $scope.newItem = {}
+    }
   }
 
   function SearchCtrl($rootScope, $routeParams, $scope, $location) {
@@ -35,124 +300,71 @@ mainApp = angular.module('mainApp', ['firebase', '$strap.directives'])
     }
   }
 
-  function VideoCtrl($rootScope, $routeParams, $scope, $location) {
-    
-    $scope.newItem = {};
-    var listKey = genKey($routeParams.userId, $routeParams.secondUserId);
-    $scope.listRef = fbRef.child("videoMessages").child(listKey);
+  function LoginCtrl($rootScope, $scope, $location, utils) {
+    // Events: 
+    $rootScope.$on("currentUserInit", function() {
+      if ($rootScope.currentUser) {
+        $rootScope.myEventsRef = fbRef.child('events').child($rootScope.currentUser.id);
 
-    $scope.addNew = function() { 
-      $scope.newItem.user = $rootScope.currentUser;
-      $scope.listRef.push($scope.newItem);
-      $scope.newItem = {};      
-    }
-
-    $scope.listRef.on("value", function(messages) {
-      $scope.items  = listValues(messages);
-    });
-
-
-    $scope.viewedUserRef = fbRef.child("users").child($routeParams.userId);
-    $scope.viewedUserRef.on('value', function(viewedUser) {
-      $scope.userToView = viewedUser.val();
-      $scope.userToView.id = $routeParams.userId;
-      if($scope.userToView.requests) {
-        $scope.userToView.requests = Object.keys($scope.userToView.requests);
-      }
-      $scope.$apply();
-      $scope.userToView
-    });
-  }
-  
-  function SessionsCtrl($rootScope, $routeParams, $scope, $location) {
-      var userId = $routeParams.userId;
-      var APPROVED = "APPROVED", REJECT= "REJECT", NEW ="NEW", DONE = "DONE";
-
-      if (userId) {
-        fbRef.child("users").child(userId).on('value', function(user) {
-              $scope.viewedUser = user.val();
-              $scope.newSession = {}
-
-              fbRef.child("sessions").on("value", function(sessions) {
-                var allSessions = sessions.val();
-                // TODO: replace with nice angular filter:
-                filterSessions = []; 
-                for(var key in allSessions) {
-                  var session = allSessions[key];
-                  if (session.teacher.id != null && session.teacher.id == $scope.viewedUser.id) {
-                    filterSessions.push(session);
-                  }
-                }
-                $scope.sessions = filterSessions;
-                $scope.$apply();
-              });
-              $scope.$apply();
+        $rootScope.myEventsRef.on('child_added', function(eventObject) {
+          var newEvent = eventObject.val();
+          newEvent.id = eventObject.name();
+          if(newEvent.alert == true) {
+            $rootScope.processEvent(newEvent);
+          }
         });
-      }
-
-      $scope.approve = function(session) {
-        fbRef.child("sessions").child(session.id).update({status:APPROVED});
         $scope.$apply();
       }
-
-      $scope.reject = function(session) {
-        fbRef.child("sessions").child(session.id).update({status:REJECT});
-        $scope.$apply();
-      }
-
-      $scope.addNewSession = function() {
-        if ($rootScope.currentUser) {
-          var sessionRef = fbRef.child("sessions").push()
-          $scope.newSession.student = $rootScope.currentUser;
-          $scope.newSession.teacher = $scope.viewedUser;
-          $scope.newSession.status = NEW;
-          $scope.newSession.id = sessionRef.name();
-          sessionRef.update($scope.newSession);
-          $scope.newSession = {}
-        } else {
-          window.alert("You need to login first, in order to send a request.");
-        }
-
-      }
-  }
-
-  function LoginCtrl($rootScope, $scope, $location) {
-        $scope.authClient = new FirebaseAuthClient(fbRef, function(error, facebookUser) { 
-        if (facebookUser) {
-          var id = fbClean(facebookUser.username || facebookUser.id);
-
-          var currentUserRef = fbRef.child("users").child(id);
-          currentUserRef.on('value', function(FBUser) {
-              $rootScope.currentUser = jQuery.extend($rootScope.currentUser, FBUser.val());;
-              // new user: copy info from fb.
-              if (!$rootScope.currentUser.facebook) {
-                currentUserRef.update({
-                  user: facebookUser.username || "",
-                  name: facebookUser.name || "",
-                  id: id,
-                  email: facebookUser.email || "",
-                  facebook: facebookUser || "",
-                  img: "http://graph.facebook.com/"+ facebookUser.id+"/picture?type=large" || ""});
-              }
-              if (!$rootScope.currentUser.skills) {
-                  window.alert('please let us know about your skills'); 
-                  $scope.directToEditPage = false;
-                  $location.path('edit/'+ $rootScope.currentUser.id+"/");   
-              }
-              $rootScope.$broadcast("currentUserInit");
-              $scope.$apply();
-          });
-        } else {
-          $rootScope.currentUser = null;
-          $rootScope.$broadcast("currentUserInit");
-        }
     });
-
-    $rootScope.getFacebookUser = function(cb) {
-      new FirebaseAuthClient(fbRef, function(error, facebookUser) { 
-        cb(facebookUser);
-      });
+    $rootScope.processEvent = function(newEvent) {
+      $rootScope.myEventsRef.child(newEvent.id).update({alert:false});
+      $rootScope.showMessage(newEvent.text);
+      // TODO(guti).
+      //$location.path('meetings');
+       $location.path(newEvent.path);
+      $scope.$apply();
     }
+    ////
+
+    $rootScope.checkRequireFields = function() {
+      if (!$rootScope.currentUser.skills) {
+        $rootScope.showMessage('please let us know about your skills.'); 
+        $location.path('edit/' + $rootScope.currentUser.id + '/');   
+        $scope.$apply();
+      }
+    }
+
+    $scope.authClient = new FirebaseAuthClient(fbRef, function(error, facebookUser) { 
+      if (facebookUser) {
+        var id = utils.fbClean(facebookUser.username || facebookUser.id);
+
+        var currentUserRef = fbRef.child("users").child(id);
+        currentUserRef.on('value', function(FBUser) {
+            $rootScope.currentUser = jQuery.extend($rootScope.currentUser, FBUser.val());;
+            // new user: copy info from fb.
+            if (!$rootScope.currentUser.facebook) {
+              currentUserRef.update({
+                user: facebookUser.username || "",
+                name: facebookUser.name || "",
+                id: id,
+                email: facebookUser.email || "",
+                facebook: facebookUser || "",
+                img: "http://graph.facebook.com/"+ facebookUser.id+"/picture?type=large" || ""});
+            }
+            if ($location.path().indexOf('edit') == -1) {
+              $rootScope.checkRequireFields();
+            }
+            $rootScope.$broadcast("currentUserInit");
+            $scope.$apply();
+        });
+      } else {
+        $rootScope.currentUser = null;
+        $rootScope.$broadcast("currentUserInit");
+        // not login user should go home.
+        $location.path('/');
+        $scope.$apply();
+      }
+    });
 
     $scope.facebookLogin = function() {
       $scope.directToEditPage = true;
@@ -161,10 +373,12 @@ mainApp = angular.module('mainApp', ['firebase', '$strap.directives'])
 
     $scope.logOut = function() {
       $scope.authClient.logout();
+      $location.path('/');
+      $scope.$apply();
     }
   }
 
-  function EditProfileCtrl($scope, $routeParams, $location){
+  function EditProfileCtrl($rootScope, $scope, $routeParams, $location){
       //TODO(guti): make it a service:
       var userId = $routeParams.userId;
       if (userId) {
@@ -173,107 +387,77 @@ mainApp = angular.module('mainApp', ['firebase', '$strap.directives'])
 
         userFBRef.on('value', function(FBUser) {
               $scope.user = FBUser.val();
+              $scope.currentEmail = $scope.user.email;
               $scope.$apply();
         });
       }
 
       $scope.saveUser = function() {
-        if (userId) {
-          userFBRef.update($scope.user);
-        } else {
-          var listFBURL = 'https://getbadgers.firebaseio.com/users/';
-          var listFBRef = new Firebase(listFBURL);
-          var res = listFBRef.push($scope.user);
-          $location.path('/');
-        }
-        window.alert("Changes Saved");
+        userFBRef.update($scope.user);
+        $rootScope.checkRequireFields();
+        if ($scope.user.skills && $scope.user.skills != '') {
+          $rootScope.showMessage("Thanks, now, let us know how others can help you!");
           $location.path('stream');
           $scope.$apply();
+        } else {
+          $rootScope.showMessage("For people to be able to ask for your advice let us know what are your skills.");
+        }
       }
   }
 
   function HomeCtrl($scope, $location, angularFireCollection, $rootScope) {
-      var fullUrl = 'https://getbadgers.firebaseio.com/users/';
-      var messageListRef = new Firebase(fullUrl);
-      $scope.usersToView = [];
-      
-      $rootScope.$on("currentUserInit", function() {
-        if ($rootScope.currentUser) {
-          $location.path('stream');
-          $scope.$apply();
-        }
-      });
-
-      $scope.applicant = {}
-      $scope.apply = function() {
-        fbRef.child("applicants").push($scope.applicant);
-        $scope.applicant = {}
-        window.alert("Thanks we will get back to you shortly.");
-        $scope.$apply()
-      }
-
-      messageListRef.on('value', function(snapshot) {
-            // For index.html page:
-            var BIG_IMG = [600, 450, 6], MEDIUM_IMG = [260, 200, 3], SMALL_IMG = [225, 200, 3];
-            var IMG_SIZES = [[BIG_IMG, MEDIUM_IMG, MEDIUM_IMG], [MEDIUM_IMG, MEDIUM_IMG, BIG_IMG], [SMALL_IMG, SMALL_IMG, SMALL_IMG, SMALL_IMG]];
-            var usersObject = snapshot.val();
-            var ids = Object.keys(usersObject);
-            var userGroups = []
-            for (var i = 0; i < IMG_SIZES.length; i++) {
-              var userGroup = []
-              for (var j = 0; j < IMG_SIZES[i].length; j++) {
-                if(ids.length <= 0){
-                  break;
-                }
-                var id = ids.pop();
-                var user = usersObject[id];
-                user.imgWidth = IMG_SIZES[i][j][0];
-                user.imgHeight = IMG_SIZES[i][j][1];
-                user.spanSize = IMG_SIZES[i][j][2];
-                user.id = id;
-                userGroup.push(user);
-              };
-              userGroups.push(userGroup);
-            };
-            $scope.userGroupsToView = userGroups;
-            $scope.$apply();
-      });
-  }
-  function DetailCtrl($scope, $rootScope, $location, $routeParams, angularFireCollection) {      
-      $scope.viewedUserRef = fbRef.child("users").child($routeParams.userId);
-
-      $scope.viewedUserRef.on('value', function(viewedUser) { 
-            $scope.userToView = viewedUser.val();
-            $scope.userToView.id = $routeParams.userId;
-            if($scope.userToView.requests) {
-              $scope.userToView.requests = Object.keys($scope.userToView.requests);
-            }
-            $scope.$apply();
-      });
-
-      $scope.setRequest = function() {
-        if($rootScope.currentUser) {
-          $scope.viewedUserRef.child("requests").child($rootScope.currentUser.name).set("request");
-          $location.path('sessions/' + $routeParams.userId);
-          //window.alert("request was added, will come back to you soon.");
-        } else {
-          window.alert("you need to sign in first");
-          $location.path('login/');
-        }
-      }
-  }
-
-  function UsersCtrl($scope, $location, $routeParams, angularFireCollection) {
-      fbRef.child("users").on('value', function(users) {
-        $scope.users = users.val();
+    var fullUrl = 'https://getbadgers.firebaseio.com/users/';
+    var messageListRef = new Firebase(fullUrl);
+    $scope.usersToView = [];
+    
+    // navigate to users if login.
+    $rootScope.$on("currentUserInit", function() {
+      if ($rootScope.currentUser && $rootScope.currentUser.skills) {
+        $location.path('users');
         $scope.$apply();
-      });
-
-      $scope.newUser = {'img':''};
-      $scope.saveNewUser = function(newUser) {
-        $scope.users.add(newUser);
-        $scope.newUser = {'img':''};
       }
-}
+    });
+
+    // TODO(guti): probably remove this.
+    messageListRef.on('value', function(snapshot) {
+      // For index.html page:
+      var BIG_IMG = [600, 450, 6], MEDIUM_IMG = [260, 200, 3], SMALL_IMG = [225, 200, 3];
+      var IMG_SIZES = [[BIG_IMG, MEDIUM_IMG, MEDIUM_IMG], [MEDIUM_IMG, MEDIUM_IMG, BIG_IMG], [SMALL_IMG, SMALL_IMG, SMALL_IMG, SMALL_IMG]];
+      var usersObject = snapshot.val();
+      var ids = Object.keys(usersObject);
+      var userGroups = []
+      for (var i = 0; i < IMG_SIZES.length; i++) {
+        var userGroup = []
+        for (var j = 0; j < IMG_SIZES[i].length; j++) {
+          if(ids.length <= 0){
+            break;
+          }
+          var id = ids.pop();
+          var user = usersObject[id];
+          user.imgWidth = IMG_SIZES[i][j][0];
+          user.imgHeight = IMG_SIZES[i][j][1];
+          user.spanSize = IMG_SIZES[i][j][2];
+          user.id = id;
+          userGroup.push(user);
+        };
+        userGroups.push(userGroup);
+      };
+      $scope.userGroupsToView = userGroups;
+      $scope.$apply();
+    });
+  }
+
+  function UsersCtrl($scope, $location, $routeParams, angularFireCollection, utils) {
+    fbRef.child("users").on('value', function(users) {
+      $scope.users = utils.listValues(users.val());
+      $scope.$apply();
+    });
+
+    $scope.newUser = {'img':''};
+    $scope.saveNewUser = function(newUser) {
+      $scope.users.add(newUser);
+      $scope.newUser = {'img':''};
+    }
+  }
 
 

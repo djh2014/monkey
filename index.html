@@ -7,27 +7,31 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <!-- Le styles -->
+    <!-- CSS -->
     <link href="css/bootstrap.css" rel="stylesheet">
     <link href="css/bootstrap-responsive.css" rel="stylesheet">
     <link href="css/bootstrap-custom.css" rel="stylesheet">
-
     <!--Font-->
     <link href="css/font-ubuntu.css" rel="stylesheet">
     <link href='css/font-arimo.css' rel='stylesheet' type='text/css'>
-
     <!-- Le fav and touch icons -->
     <link rel="shortcut icon" href="ico/favicon.ico">
     <link rel="apple-touch-icon-precomposed" sizes="144x144" href="ico/apple-touch-icon-144-precomposed.png">
     <link rel="apple-touch-icon-precomposed" sizes="114x114" href="ico/apple-touch-icon-114-precomposed.png">
     <link rel="apple-touch-icon-precomposed" sizes="72x72" href="ico/apple-touch-icon-72-precomposed.png">
     <link rel="apple-touch-icon-precomposed" href="ico/apple-touch-icon-57-precomposed.png">
-
     <!--    Slider-->
     <link rel="stylesheet" type="text/css" href="css/slider.css" />
-
     <!-- super fish menu -->
     <link rel="stylesheet" type="text/css" href="css/superfish.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="http://mgcrea.github.io/angular-strap/vendor/bootstrap-datepicker.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="http://mgcrea.github.io/angular-strap/vendor/bootstrap-timepicker.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="components/fullcalendar/fullcalendar.css" />
+
+  <!-- OPEN TOK -->
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <script src="http://static.opentok.com/webrtc/v2.0/js/TB.min.js" type="text/javascript" charset="utf-8"></script>
+  
 
   <script type="text/javascript" src="components/jquery/jquery.js"></script>
   <script type="text/javascript" src="components/jquery-ui/ui/jquery-ui.js"></script>
@@ -39,24 +43,43 @@
   <script src="https://cdn.firebase.com/v0/firebase-auth-client.js"></script>
   <script src="components/angular-fire/angularFire.js"></script>
   
+  <!-- angular boostrap -->
+  <script src="components/fullcalendar/fullcalendar.js"></script>
+  <script src="components/fullcalendar/gcal.js"></script>
+  <script src="components/angular-ui-calendar/src/calendar.js"></script>
+
+  <script src="components/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+  <script src="http://mgcrea.github.io/angular-strap/vendor/bootstrap-timepicker.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/angular-strap/0.7.2/angular-strap.min.js"></script>
+
+  <!-- More libs -->
+  <script src="components/timezone-js/src/date.js"></script>
+  <script>
+    timezoneJS.timezone.zoneFileBasePath = '/tz';
+    timezoneJS.timezone.init();
+  </script>
   
+
   <!--Application-->
   <script src="js/utils.js"></script>
   <script src="js/controllers/ctrls.js"></script>
   <script src="js/directives/directives.js"></script>
+  <script src="js/services/services.js"></script>
  
   <!-- TODO: figure out the js file mess -->
+<!--  
   <script src="components/angular-strap/src/common.js"></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/angular-strap/0.7.2/angular-strap.min.js"></script>
-  <script src="http://mgcrea.github.io/angular-strap/vendor/bootstrap-datepicker.js"></script>
-  <link rel="stylesheet" type="text/css" href="http://mgcrea.github.io/angular-strap/vendor/bootstrap-datepicker.css" media="screen">
+  
+ -->
 
   <!-- Template stuff -->
+  <!-- 
   <script type="text/javascript" src="js/jquery.eislideshow.js"></script>
   <script type="text/javascript" src="js/jquery.easing.1.3.js"></script>
   <script type="text/javascript" src="js/superfish.js"></script>
   <script type="text/javascript" src="js/application.js"></script>
-
+ -->
 
 <!-- Google Analytics -->
  <script>
@@ -83,29 +106,18 @@ ga('send', 'pageview');
         <div class="row top-header" id="no-margin" style="margin-bottom: 10px">
                 <div class="span3"><a href='/'><img src="img/badgerlogo.png" alt="" /></a></div>
                 <div class="span9">
-                    <ul class="register">
-                        <!--<li>
-                            <a href="#" class="facebook"><span>Facebook</span></a>
-                        </li>-->
-                        <!--<li>
-                            <button class="btn btn-danger home-button"><a ng-click="facebookLogin()">Register</a>
-                            </button>
-                        </li>-->
-                        <li class="dropdown main-menu-element">
-                            <div ng-switch on="currentUser != null" >
-                                <span ng-switch-when="true">
-                                    <a href="/#/stream">Stream</a>
-                                    <a href="/#/users">ALL</a>
-                                    <profile user="currentUser"/></profile>
-                                    <a href="#/detail/{{currentUser.id}}" title="{{currentUser.name}}"></a>(<a ng-click="logOut()">logout</a>)
-                                </span>
-                                <span ng-switch-default>
-                                    <button class="btn btn-large btn-danger home-button"><a ng-click="facebookLogin()">Register</a>
-                                    </button>
-                                    <button class="btn btn-large btn-success home-button"><a ng-click="facebookLogin()">Login</a>
-                                    </button>
-                                </span>
-                            </div>
+                    <ul class="socialize pull-right">
+                        <!-- <li>
+                            <a href="#" class="flickr"><span>Flickr</span></a>
+                        </li>
+                        <li>
+                            <a href="#" class="rss"><span>Rss Feed</span></a>
+                        </li>
+                        <li>
+                            <a href="#" class="twitter"><span>Twitter</span></a>
+                        </li> -->
+                        <li>
+                            <a ng-click="facebookLogin()" class="facebook"><span>Facebook</span></a>
                         </li>
                     </ul>
                 </div>
@@ -125,8 +137,8 @@ ga('send', 'pageview');
                         <div class="nav-collapse">
 
                             <form ng-controller="SearchCtrl" class="navbar-search pull-left" >
-                                <input type="text" ng-model="query.text" placeholder="Search" class="search-query span2">
-                                <button ng-click="search()" class="btn btn-inverse"><i class="icon-search icon-white"></i></button>
+                                <input type="text" ng-model="global.search" placeholder="Search" class="search-query span2">
+                                <a href="/#/users" class="btn btn-inverse"><i class="icon-search icon-white"></i></a>
                             </form>
                           <ul class="nav pull-right">
                               
@@ -134,20 +146,23 @@ ga('send', 'pageview');
                                 <li class="dropdown main-menu-element">
                                      <div ng-switch on="currentUser != null" >
                                         <span ng-switch-when="true">
-                                            <a href="/#/stream">Stream</a>
-                                            <a href="/#/users">ALL</a>
+
+
+  <!-- <a href="/#/stream" class="btn btn-large btn-info" >Stream</a> -->
+  <a href="/#/stream" class="btn btn-large btn-info">News feed</a>
+  <a href="/#/users" class="btn btn-large btn-info">Find People</a>
+  <a href="/#/messages/{{currentUser.id}}" class="btn btn-large btn-info">Messages</a>
+
                                             <profile user="currentUser"/></profile>
                                             <a href="#/detail/{{currentUser.id}}" title="{{currentUser.name}}"></a>(<a ng-click="logOut()">logout</a>)
                                         </span>
                                         <span ng-switch-default>
-                                            <button class="btn btn-danger home-button"><a ng-click="facebookLogin()">Register</a>
-                                            </button>
-                                            <button class="btn btn-success home-button"><a ng-click="facebookLogin()">Login</a>
-                                            </button>
+                                            <a class="btn btn-danger home-button" ng-click="facebookLogin()">Register</a>
+                                            <a class="btn btn-success home-button" ng-click="facebookLogin()">Login</a>
                                         </span>
                                     </div>
                                 </li>
-                            </ul>-->
+                            </ul>
 
                         <!--</div>
                     </div>-->
@@ -157,40 +172,7 @@ ga('send', 'pageview');
             </div>
             <section id="main" class="container">
 
-
-
             <div class="pre-footer"></div>
-            <footer>
-                <div class="container">
-                    <div class="row">
-                        <div class="span6">
-                            <div class="page-header">
-                                <h2>About Us</h2>
-                            </div>
-                            <p>Why not leverage your skills and strenghts in order to imrove areas you are weak in? What if you could help others with your talent but get something in return.  What if you could eliminate the need for cash and instead trade talents? However, instead of a direct trade between two people, you accumulate virtual currency (Badgers) by helping others and you can spend that currency (Badgers) anyway you want.  No matching skill sets or give and return.  The currency is based on time and the more time you put in, the more you get out.</p>
-                            <address>
-                                <strong>FuckingBOLD, Inc.</strong><br>
-                                200 12th Street<br>
-                                San Francisco, CA 94103<br>
-                                <abbr title="Phone">P:</abbr> (631) 921-7522
-                            </address>
-                            <address>
-                                <strong>danny@getbadgers.com</strong><br>
-                                <a href="mailto:#">danny@getbadgers.com</a>
-                            </address>
-                        </div>                        
-                </div>
-                <div id="copyright">
-                    <div class="container">
-                        <div class="row">
-                            <div class="span12">
-                                <span class="pull-right">Copyright GetBadgers! &copy; 2013</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </footer>
-
     </section>
 
     <!-- Le javascript

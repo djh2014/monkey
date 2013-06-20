@@ -75,8 +75,8 @@
             var drop =
                 "<div class='btn-group bootstrap-select'>" +
                     "<button type='button' class='btn dropdown-toggle' data-toggle='dropdown'>" +
-                        "<span class='filter-option pull-left'></span>&nbsp;" +
-                        "<span class='caret'></span>" +
+                        "<div class='filter-option pull-left'></div>&nbsp;" +
+                        "<div class='caret'></div>" +
                     "</button>" +
                     "<ul class='dropdown-menu' role='menu'>" +
                     "</ul>" +
@@ -196,23 +196,31 @@
             });
 
             var selectedItems = this.$element.find('option:selected').map(function(index,value) {
+                var subtext;
+                if (_this.options.showSubtext && $(this).attr('data-subtext') && !_this.multiple) {
+                    subtext = ' <small class="muted">'+$(this).data('subtext') +'</small>';
+                } else {
+                    subtext = '';
+                }
                 if($(this).attr('title')!=undefined) {
                     return $(this).attr('title');
                 } else {
-                    return $(this).text();
+                    return $(this).text() + subtext;
                 }
             }).toArray();
 
             //Fixes issue in IE10 occurring when no default option is selected and at least one option is disabled
             //Convert all the values into a comma delimited string
-            var title = !this.multiple ? selectedItems[0] : selectedItems.join(", ");
+            var title = !this.multiple ? selectedItems[0] : selectedItems.join(", "),
+                separator = _this.options.separatorText || _this.options.defaultSeparatorText,
+                selected = _this.options.selectedText || _this.options.defaultSelectedText;
 
             //If this is multi select, and the selectText type is count, the show 1 of 2 selected etc..
             if(_this.multiple && _this.options.selectedTextFormat.indexOf('count') > -1) {
                 var max = _this.options.selectedTextFormat.split(">");
                 var notDisabled = this.options.hideDisabled ? ':not([disabled])' : '';
                 if( (max.length>1 && selectedItems.length > max[1]) || (max.length==1 && selectedItems.length>=2)) {
-                    title = selectedItems.length +' of ' + this.$element.find('option:not([data-divider="true"]):not([data-hidden="true"])'+notDisabled).length + ' selected';
+                    title = _this.options.countSelectedText.replace('{0}', selectedItems.length).replace('{1}', this.$element.find('option:not([data-divider="true"]):not([data-hidden="true"])'+notDisabled).length);
                 }
              }
 
@@ -221,7 +229,19 @@
                 title = _this.options.title != undefined ? _this.options.title : _this.options.noneSelectedText;
             }
 
-            _this.$newElement.find('.filter-option').html( title );
+            var subtext;
+            if (this.options.showSubtext && this.$element.find('option:selected').attr('data-subtext')) {
+                subtext = ' <small class="muted">'+this.$element.find('option:selected').data('subtext') +'</small>';
+            } else {
+                subtext = '';
+            }
+
+            var icon = this.$element.find('option:selected').data('icon') || '';
+            if(icon.length) {
+                icon = '<i class="' + icon + '"></i> ';
+            }
+
+            _this.$newElement.find('.filter-option').html(icon + title + subtext);
         },
 
         setSize:function() {
@@ -377,22 +397,20 @@
                 if (_this.$element.not(':disabled') && !$(this).parent().hasClass('disabled')){
                     //Deselect all others if not multi select box
                     if (!_this.multiple) {
-                        _this.$element.find('option').prop('selected',true).removeAttr('selected');
-                        _this.$element.find('option').eq(clickedIndex).prop('selected', true).attr('selected', 'selected');
+                        _this.$element.find('option').prop('selected', false);
+                        _this.$element.find('option').eq(clickedIndex).prop('selected', true);
                     }
                     //Else toggle the one we have chosen if we are multi select.
                     else {
                         var selected = _this.$element.find('option').eq(clickedIndex).prop('selected');
 
                         if(selected) {
-                            _this.$element.find('option').eq(clickedIndex).removeAttr('selected');
+                            _this.$element.find('option').eq(clickedIndex).prop('selected', false);
                         } else {
-                            _this.$element.find('option').eq(clickedIndex).prop('selected', true).attr('selected', 'selected');
+                            _this.$element.find('option').eq(clickedIndex).prop('selected', true);
                         }
                     }
 
-
-                    $select.find('.filter-option').html($this.text());
                     $select.find('button').focus();
 
                     // Trigger select 'change'
@@ -566,9 +584,11 @@
         title: null,
         selectedTextFormat : 'values',
         noneSelectedText : 'Nothing selected',
+        countSelectedText: '{0} of {1} selected',
         width: null,
         container: false,
-        hideDisabled: false
+        hideDisabled: false,
+        showSubtext: false
     }
 
     $(document)
