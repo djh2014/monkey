@@ -413,7 +413,7 @@ mainApp = angular.module('mainApp', ['firebase', '$strap.directives', 'ui.calend
     // navigate to users if login.
     $rootScope.$on("currentUserInit", function() {
       if ($rootScope.currentUser && $rootScope.currentUser.skills) {
-        $location.path('users');
+        $location.path('stream');
         $scope.$apply();
       }
     });
