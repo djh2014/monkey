@@ -285,10 +285,9 @@ mainApp = angular.module('mainApp', ['firebase', '$strap.directives', 'ui.calend
     ////
 
     $rootScope.checkRequireFields = function() {
-      if (!$rootScope.currentUser.skills || !$rootScope.currentUser.email) {
+      if (!$rootScope.currentUser.skills) {
         $rootScope.showMessage('please let us know about your skills.'); 
-        $scope.directToEditPage = false;
-        $location.path('edit/'+ $rootScope.currentUser.id+"/");   
+        $location.path('edit/' + $rootScope.currentUser.id + '/');   
         $scope.$apply();
       }
     }
