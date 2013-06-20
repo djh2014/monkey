@@ -289,6 +289,7 @@ mainApp = angular.module('mainApp', ['firebase', '$strap.directives', 'ui.calend
         $rootScope.showMessage('please let us know about your skills.'); 
         $scope.directToEditPage = false;
         $location.path('edit/'+ $rootScope.currentUser.id+"/");   
+        $scope.$apply();
       }
     }
 
@@ -372,7 +373,7 @@ mainApp = angular.module('mainApp', ['firebase', '$strap.directives', 'ui.calend
     
     // navigate to users if login.
     $rootScope.$on("currentUserInit", function() {
-      if ($rootScope.currentUser) {
+      if ($rootScope.currentUser && $rootScope.currentUser.skills) {
         $location.path('users');
         $scope.$apply();
       }
