@@ -1,8 +1,27 @@
 <div class="row-fluid">
 <div class="span10">
-  <stream list="requests"></stream>
+	<div>
+	<form class="well">
+		<h2>Request anything</h2>
+		<!-- TODO(guti): it is sad but, I need to fix profile template. -->
+		<profile user="currentUser"/>
+		<input size="350" type="text" ng-model="newItem.text" style="width: 800px;"><br/><br/>
+		<input ng-click="addNew()" class="btn btn-primary" type="submit" value="post">
+	</form>
+	<!-- <ul ng-animate="'slide'"> -->
+		<div ng-animate="'slide'" ng-cloak ng-repeat="item in items">
+			<div class="row-fluid well">
+				<span class="row">
+				<profile user="item.user"/><h3>{{item.text}}</h3>
+				</span>
+				<span class="row">
+					<a class="btn-min btn btn-success" href="/#/detail/{{item.user.id}}">Lets Talk</a>
+				</span>
+			</div>
+		</div>
+	<!-- </ul> -->
+	</div>
 </div>
 <div class="span5">
-  <!-- <stream list="offers"></stream> -->
 </div>
 </div>

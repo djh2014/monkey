@@ -240,7 +240,49 @@ mainApp = angular.module('mainApp', ['firebase', '$strap.directives', 'ui.calend
     }
   }
 
-  function StreamCtrl($rootScope, $routeParams, $scope, $location) {
+  function StreamCtrl($rootScope, $routeParams, $scope, $location, utils, db) {
+    var LENGTH = 5;
+    var itemsRef = fbRef.child("requests");
+    $scope.items = []
+    $scope.hiddenItems = []
+
+    itemsRef.once('value', function(items) {
+       $scope.items = []
+       for(var key in items.val()) {
+          var item = items.val()[key];
+          if ($scope.items.length <= LENGTH) {
+            $scope.items.unshift(item);
+          } else {
+            $scope.hiddenItems.unshift(item);
+          }
+       };
+       $scope.$apply();
+    });
+
+    itemsRef.on('child_added', function(item) {
+       $scope.items.unshift(item.val());
+       $scope.hiddenItems.unshift($scope.items.pop());
+    });
+
+    $scope.min = 0;
+
+    var timer = setInterval(function() {
+      $scope.items.unshift($scope.hiddenItems.pop());
+      $scope.hiddenItems.unshift($scope.items.pop());
+      $scope.$apply();
+    }, 5000);
+
+    $scope.accept = function(item) {
+      $location.path('video/' + item.user.id + "/" + $rootScope.currentUser.id);
+      $scope.$apply();
+    }
+
+    $scope.newItem = {}
+    $scope.addNew = function() {
+      $scope.newItem.user = $rootScope.currentUser;
+      itemsRef.push($scope.newItem);
+      $scope.newItem = {}
+    }
   }
 
   function SearchCtrl($rootScope, $routeParams, $scope, $location) {
