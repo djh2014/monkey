@@ -2,9 +2,6 @@ var fbUrl = 'https://getbadgers.firebaseio.com';
 var fbRef = new Firebase(fbUrl);
 var fbUsersRef = new Firebase(fbUrl + '/users');
 
-//temp:
-doneFlag = true;
-
 mainApp = angular.module('mainApp', ['firebase', '$strap.directives', 'ui.calendar'])
   .config(function($routeProvider) {
     $routeProvider.
