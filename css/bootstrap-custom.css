@@ -1,7 +1,7 @@
 body {
     /*padding-top: 40px;
     padding-bottom: 40px;*/
-    background: whitesmoke;
+    background: white;
     color: #999999;
     font-family: 'Arimo', sans-serif;
 }
@@ -9,20 +9,17 @@ body {
 /**
  *  Override some bootstrap style
  **/
- .row-top-header {
-    margin-bottom: 0px;
- }
+#logo-left {
+    margin-left: 4%;
+}
  .top-header {
     background: white;
     border-bottom:2px solid #333;
     padding-top: 1%;
-    padding-bottom: 1%;
     padding-left: 2%;
     margin-bottom: 0px;
  }
- #no-margin {
-    margin-bottom: 0px;
- }
+
  .site-description {
     position: absolute;
     padding-top:10%;
@@ -882,3 +879,4 @@ footer div#copyright{
     margin-left:0px;
     margin-bottom:0px;
 }
+
