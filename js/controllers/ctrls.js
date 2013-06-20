@@ -364,8 +364,6 @@ function EventCtrl($rootScope, $scope, $location, utils, $cookies) {
       }
     });
 
-    
-
     $rootScope.checkRequireFields = function() {
       if (!$rootScope.currentUser.skills) {
         $rootScope.showMessage('please let us know about your skills.'); 
@@ -373,8 +371,6 @@ function EventCtrl($rootScope, $scope, $location, utils, $cookies) {
         $scope.$apply();
       }
     }
-
-    
 
     $scope.facebookLogin = function() {
       $scope.directToEditPage = true;
