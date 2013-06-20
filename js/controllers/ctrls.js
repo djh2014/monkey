@@ -352,17 +352,15 @@ mainApp = angular.module('mainApp', ['firebase', '$strap.directives', 'ui.calend
       }
 
       $scope.saveUser = function() {
-        if (userId) {
-          userFBRef.update($scope.user);
-        } else {
-          var listFBURL = 'https://getbadgers.firebaseio.com/users/';
-          var listFBRef = new Firebase(listFBURL);
-          var res = listFBRef.push($scope.user);
-          $location.path('/');
-        }
+        userFBRef.update($scope.user);
         $rootScope.checkRequireFields();
-        $location.path('detail/'+$scope.user.id);
-        $scope.$apply();
+        if ($scope.user.skills && $scope.user.skills != '') {
+          $rootScope.showMessage("Thanks, now, let us know how others can help you!");
+          $location.path('stream');
+          $scope.$apply();
+        } else {
+          $rootScope.showMessage("For people to be able to ask for your advice let us know what are your skills.");
+        }
       }
   }
 
