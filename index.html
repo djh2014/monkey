@@ -106,7 +106,7 @@ ga('send', 'pageview');
         <div class="row top-header" id="no-margin" style="margin-bottom: 10px">
                 <div class="span3"><a href='/'><img src="img/badgerlogo.png" alt="" /></a></div>
                 <div class="span9">
-                    <ul class="socialize pull-right">
+                    <ul>
                         <!-- <li>
                             <a href="#" class="flickr"><span>Flickr</span></a>
                         </li>
@@ -115,9 +115,15 @@ ga('send', 'pageview');
                         </li>
                         <li>
                             <a href="#" class="twitter"><span>Twitter</span></a>
-                        </li> -->
+                        </li> 
                         <li>
                             <a ng-click="facebookLogin()" class="facebook"><span>Facebook</span></a>
+                        </li>-->
+                        <li>
+                            <span ng-switch-default>
+                                <a class="btn btn-large btn-danger home-button" ng-click="facebookLogin()">Register</a>
+                                <a class="btn btn-large btn-success home-button" ng-click="facebookLogin()">Login</a>
+                            </span>
                         </li>
                     </ul>
                 </div>
