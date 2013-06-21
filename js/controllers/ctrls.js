@@ -357,14 +357,21 @@ function EventCtrl($rootScope, $scope, $location, utils, $cookies) {
 
   // the dialog is injected in the specified controller
   function SkillsDialogCtrl($rootScope, $scope, dialog) {
-    $scope.saveUser = function() {
-        if ($rootScope.currentUser.skills && $rootScope.currentUser.skills != '') { 
-          fbRef.child('users').child($rootScope.currentUser.id).update($rootScope.currentUser);
-          dialog.close();
-        } else {
-          $scope.showError = true;
-        }
+    $scope.dilaogMode = 'skills';
+    $scope.saveSkills = function() {
+      debugger;
+      if ($rootScope.currentUser.skills && $rootScope.currentUser.skills != '') { 
+        fbRef.child('users').child($rootScope.currentUser.id).update($rootScope.currentUser);
+        $scope.dilaogMode = 'calendar';
+        //dialog.close();
+      } else {
+        $scope.showError = true;
       }
+    }
+    $scope.saveCalendar = function() {
+        fbRef.child('users').child($rootScope.currentUser.id).update($rootScope.currentUser);
+        dialog.close();
+    }
   }
 
   function LoginCtrl($rootScope, $scope, $location, utils, $cookies, $dialog) {
@@ -408,7 +415,7 @@ function EventCtrl($rootScope, $scope, $location, utils, $cookies) {
     });
 
     $rootScope.checkRequireFields = function() {
-      if (!$rootScope.currentUser.skills) {
+      //if (!$rootScope.currentUser.skills) {
         // $rootScope.showMessage('please let us know about your skills.');
         // $location.path('detail/' + $rootScope.currentUser.id + '/'); 
         // $location.search('edit=true');
@@ -417,7 +424,7 @@ function EventCtrl($rootScope, $scope, $location, utils, $cookies) {
         d.open().then(function(result){});
         $location.path('stream/');
         $scope.$apply(); 
-      }
+      //}
     }
 
     $scope.facebookLogin = function() {
