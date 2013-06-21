@@ -151,7 +151,7 @@ mainApp = angular.module('mainApp', ['ngCookies', 'firebase', '$strap.directives
     var sessionAndToken = openTok.getSessionAndToken();
     
     //temp
-    $scope.streams = []
+    $scope.streams = [];
 
     TB.addEventListener("exception", exceptionHandler);
       var session = TB.initSession(sessionAndToken.session);
