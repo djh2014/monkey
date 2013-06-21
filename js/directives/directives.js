@@ -9,5 +9,49 @@ mainApp.directive('profile', function() {
         scope.height = iAttrs.height || 50;
       }
     };
-  });
+})
+.directive('calendar', function() {
+  return {
+       templateUrl: 'calendar.html',
+      replace: true,
+      restrict: 'E',
+      scope: false,
+      controller: 
+        function CalendarCtrl ($rootScope, $element, $attrs, $routeParams, $scope, $location, utils, db, $modal, $q) {
+          
+          var DEFAULT_FREE_TIMES = ['Mondays', 'Tuesdays', 'wednesdays', 'thursdays', 'Fridays', 'Saturdays', 'Sundays']
+          .map(function(day, index) {
+            return {day:day, isAvailable:true ,start:'06:00 PM', end:'10:00 PM'};
+          });
+
+          $scope.calendarRef = fbRef.child('freeTimes').child($scope.userId);
+          $scope.calendarRef.on('value', function(freeTimes) {
+            if (freeTimes.val()) {
+              $scope.freeTimes = freeTimes.val();
+            } else {
+              $scope.freeTimes = DEFAULT_FREE_TIMES;
+            }
+            
+            $scope.$apply();
+          });
+
+          if ($scope.onlyEditMode) {
+            $scope.editMode = true;
+          } else {
+            $scope.editMode = false;
+            $scope.editFreeTimes = function() {
+              $scope.editMode = true;
+            }
+          }
+
+          $scope.saveFreeTime = function() {
+              $scope.calendarRef.update(utils.removeHashKey($scope.freeTimes));
+              $scope.editMode = false;
+              $scope.$broadcast("calendar_saved");
+          }
+        },
+      link: function(scope, iElement, iAttrs, controller) {
+      }
+    };
+});
 console.log('hello world');

@@ -20,7 +20,7 @@
     <link rel="apple-touch-icon-precomposed" sizes="114x114" href="ico/apple-touch-icon-114-precomposed.png">
     <link rel="apple-touch-icon-precomposed" sizes="72x72" href="ico/apple-touch-icon-72-precomposed.png">
     <link rel="apple-touch-icon-precomposed" href="ico/apple-touch-icon-57-precomposed.png">
-    <!--    Slider-->
+    <!-- Slider-->
     <link rel="stylesheet" type="text/css" href="css/slider.css" />
     <!-- super fish menu -->
     <link rel="stylesheet" type="text/css" href="css/superfish.css" media="screen">
@@ -47,6 +47,8 @@
   <script src="components/angular-cookies/angular-cookies.js"></script>
 
   <!-- angular boostrap -->
+  <script src="components/angular-ui-bootstrap/src/transition/transition.js"></script>
+  <script src="components/angular-ui-bootstrap/src/dialog/dialog.js"></script>
   <script src="components/fullcalendar/fullcalendar.js"></script>
   <script src="components/fullcalendar/gcal.js"></script>
   <script src="components/angular-ui-calendar/src/calendar.js"></script>
@@ -107,36 +109,99 @@ ga('send', 'pageview');
   <body ng-app="mainApp"  ng-controller="EventCtrl" >
   <span ng-controller="LoginCtrl">
     <!--<section id="main" class="container">--> <!--Moved to after top header -->
-        <div class="row top-header" id="no-margin" style="margin-bottom: 10px">
-                <div class="span3" id="logo-left"><a href='/'><img src="img/badgerlogo.png" alt="" /></a></div>
-                <div class="span9">
-                    <ul>
-                        <!-- <li>
-                            <a href="#" class="flickr"><span>Flickr</span></a>
-                        </li>
-                        <li>
-                            <a href="#" class="rss"><span>Rss Feed</span></a>
-                        </li>
-                        <li>
-                            <a href="#" class="twitter"><span>Twitter</span></a>
-                        </li> 
-                        <li>
-                            <a ng-click="facebookLogin()" class="facebook"><span>Facebook</span></a>
-                        </li>-->
+
+
+                
+                         <span ng-switch on="currentUser != null" >
+                              <span ng-switch-when="true">
 <<<<<<< HEAD
-                        <!-- <li>
-                            <span ng-switch-default>
+                              <!-- Login -->
+                            <div class="row inner-nav" id="no-margin" style="margin-bottom: 10px">
+                                <div class="span12 nav-header">
+                                <table>
+                                    <thead>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td class="nav-left"><a href='/'><img src="img/badgertoolbar.png" alt=""/></a>
+                                            </td>
+                                            <td class="nav-left">
+                                                <form ng-controller="SearchCtrl" class="search-bar" id="nav-search" >
+                                                    <input type="text" ng-model="query.text" placeholder="Search Talent" class="search-query span6" id="innernav-search">
+                                                    <button ng-click="search()" class="btn btn-inverse" id="icon-box"><i class="icon-search icon-white"></i></button>
+                                                </form>
+                                            </td>
+                                            <td class="nav-right">
+                                                <a href="/#/stream" class="btn btn-large btn-success">News feed</a>
+                                            </td>
+                                            <td class="nav-right">
+                                                <a href="/#/users" class="btn btn-large btn-success">Find People</a>
+                                            </td>
+                                            <td class="nav-right">
+                                                <a href="/#/messages/{{currentUser.id}}" class="btn btn-large btn-success">Messages</a>
+                                            </td>
+                                            <td class="nav-right">
+                                                <profile user="currentUser"/></profile>
+                                                <a href="#/detail/{{currentUser.id}}" title="{{currentUser.name}}"></a><!--(<a ng-click="logOut()">logout</a>)-->
+                                            </td>   
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                            </span>    
 =======
-                        <li class="register">
-                            <span>
->>>>>>> 4b739d69ea6ca8c36a6d89148019464c6acf165b
-                                <a class="btn btn-large btn-danger home-button" ng-click="facebookLogin()">Register</a>
-                                <a class="btn btn-large btn-success home-button" ng-click="facebookLogin()">Login</a>
-                            </span>
-                        </li> -->
-                    </ul>
-                </div>
-            </div>
+                              <!-- i -->
+                                <div class="span3" id="logo-left"><a href='/'><img src="img/badgertoolbar.png" alt="" /></a></div>
+                                    <div class="span9">
+                                        <ul>
+                                            <li class="register">
+
+
+                                <span class="toolbar-left">
+                                    <img src="./img/bargertoolbar" id="badger">
+                                    <form class="search-bar" >
+                                        <input type="text" ng-model="query.text" placeholder="Search Talent" class="search-query span6" id="search-height">
+                                         <button ng-click="search()" class="btn btn-inverse" id="icon-box"><i class="icon-search icon-white"></i></button>
+                                    </form>
+                                </span>
+
+                                    <a href="/#/stream" class="btn btn-large btn-info">News feed</a>
+                                    <a href="/#/users" class="btn btn-large btn-info">Find People</a>
+                                    <a href="/#/messages/{{currentUser.id}}" class="btn btn-large btn-info">Messages</a>
+                                    <profile user="currentUser"/></profile>
+                                    <a href="#/detail/{{currentUser.id}}" title="{{currentUser.name}}"></a>(<a ng-click="logOut()">logout</a>)  
+
+                                        </li>
+
+                                        </ul>
+                                    </div>
+                                
+
+                              </span>
+>>>>>>> 3f5b9deb8606499271aa919602c0632e81648b4f
+                              <span ng-switch-default>
+                                 <!-- Not Login -->
+                            <div class="row top-header" id="no-margin" style="margin-bottom: 10px">
+                                    
+                                <div class="span3" id="logo-left"><a href='/'><img src="img/badgerlogo.png" alt="" /></a></div>
+                                        <div class="span9">
+                                            <ul>
+                                                <li class="register">
+
+
+                                      <a class="btn btn-danger home-button" ng-click="facebookLogin()">Register</a>
+                                      <a class="btn btn-success home-button" ng-click="facebookLogin()">Login</a>
+                                  
+                                                </li>
+
+                                            </ul>
+                                        </div>
+                                </div>
+
+                              </span>
+                          </span>
+                          
     <section id="main" class="container">
 
             <!--<div class="navbar">
@@ -151,10 +216,7 @@ ga('send', 'pageview');
 
                         <div class="nav-collapse">
 
-                            <form ng-controller="SearchCtrl" class="navbar-search pull-left" >
-                                <input type="text" ng-model="global.search" placeholder="Search" class="search-query span2">
-                                <a href="/#/users" class="btn btn-inverse"><i class="icon-search icon-white"></i></a>
-                            </form>
+                            
                           <ul class="nav pull-right">
                               
                                 <li class="divider-vertical"></li>
@@ -163,17 +225,7 @@ ga('send', 'pageview');
 
   <!-- <a href="/#/stream" class="btn btn-large btn-info" >Stream</a> -->
   
-    <div ng-switch on="currentUser != null" >
-        <span ng-switch-when="true">
-            <a href="/#/stream" class="btn btn-large btn-info">News feed</a>
-            <a href="/#/users" class="btn btn-large btn-info">Find People</a>
-            <a href="/#/messages/{{currentUser.id}}" class="btn btn-large btn-info">Messages</a>
-                <profile user="currentUser"/></profile>
-                <a href="#/detail/{{currentUser.id}}" title="{{currentUser.name}}"></a>(<a ng-click="logOut()">logout</a>)
-        </span>
-    </div>
-    </li>
-  </ul>
+
 
                         <!--</div>
                     </div>-->

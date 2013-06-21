@@ -1,6 +1,5 @@
-
-<div class="row">
-    <div class="span5">
+<div class="row-fluid">
+<div class="offset2 span3">
      <div class="thumbnail clearfix">
         <a href="/#/detail/{{user.id}}">
         <img src="http://i.embed.ly/1/image/crop?url={{user.img}}&amp;key=92b31102528511e1a2ec4040d3dc5c07&amp;width=200&amp;height=200" alt="?" class="pull-left span2 clearfix" style='margin-right:10px'></a>
@@ -8,37 +7,36 @@
           <h4>      
           <h3 href="/#/detail/{{user.id}}" >{{user.name}}</h3>
           </h4>
-          <p>{{user.skills}}</p>
+          
+          <p>Skills: 
+            <span ng-switch on="editSkillsMode">
+              <span ng-switch-when="true">
+                <textarea ng-model="user.skills" value="" rows="6" class="input-xlarge" placeholder="What skills do you have that you can teach, e.g programming, design, business, law, finance"></textarea>
+                <span>
+                  <button ng-click="saveSkills()" class="btn btn-primary">Save</button>
+                </span>
+              </span> 
+              <span ng-switch-default >
+                <blockquote>{{user.skills}}</blockquote>
+                <span ng-switch on="user.id == currentUser.id">
+                  <span ng-switch-when="true"><a ng-click="editSkills()" class="btn">Edit</a></span>
+                  <span ng-switch-default>
+                      <a role="button" ng-click="setRequest()" data-toggle="modal" class="btn btn-info"> Send Meeting Request</a>
+                  </span>
+                </span>
+              </span>
+            </span>
+          </p>
+
         </div>
-      </div>
     </div>
-    <div class="span5">
-      <span ng-switch on="user.id == currentUser.id">
-        <span ng-switch-when="true"><a href="#/edit/{{user.id}}" class="btn">Edit Your Skills</a></span>
-        <span ng-switch-default>
-            <a role="button" ng-click="setRequest()" data-toggle="modal" class="btn btn-info"> Send Meeting Request</a>
-        </span>
-      </span>
-      <a role="button" href="#/calendar/{{user.id}}" data-toggle="modal" class="btn btn-info"> Available Times</a>
-    </div>
-</div>
-      
-<div class="row">
-    <div class="span6" id="number_badgers">
+      <div id="number_badgers">
         <h4>Number of Badgers</h4>
         <img ng-repeat="badger in user.badgersArray" src="./img/numberbadgers.png">
-
-    </div>
+      </div> 
 </div>
-
-<!-- / main container -->
-
-
-
-
-
-
-
-
-
+<div class="span4">    
+  <calendar userId="userId" user="user"></calendar>
+</div>
+</div>
 
