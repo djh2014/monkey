@@ -4,16 +4,24 @@
 	<form class=" row-fluid alert alert-success">
 		<h2>Request anything</h2>
 		<h3><profile user="currentUser"/>
-		Request: <input  type="text" ng-model="newItem.text" autofocus="autofocus" style="width: 400px;">
+		Requests: <input  type="text" ng-model="newItem.text" autofocus="autofocus" style="width: 400px;">
 		<input ng-click="addNew()" class="btn btn-success" type="submit" value="post"></h3>
 	</form>
 	<!-- <ul ng-animate="'slide'"> -->
 	<div ng-cloak ng-repeat="item in items">
-		<div class="row-fluid alert alert-success">
+		<div class="row-fluid alert  {{!item.isSuggest && 'alert-success' || 'alert-info'}} ">
 			<span class="row">
-			<h3><profile user="item.user"/> Request:
-			{{item.text}}
-			<a class="btn-min btn btn-success" href="/#/detail/{{item.user.id}}">Lets Talk</a></h3>
+			<h3><profile user="item.user"/> 
+				<span ng-switch on="item.isSuggest" >
+	              <span ng-switch-when="true">
+	              	Suggests:
+	              </span>
+	              <span ng-switch-default>
+	              	Requests:
+	              </span>
+	            </span>
+			  {{item.text}}
+			<a class="btn-min btn {{!item.isSuggest && 'btn-success' || 'btn-info'}}" href="/#/detail/{{item.user.id}}">Lets Talk</a></h3>
 			</span>
 		</div>
 	</div>
