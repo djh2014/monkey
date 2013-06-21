@@ -38,35 +38,6 @@ mainApp = angular.module('mainApp', ['ngCookies', 'firebase', '$strap.directives
     })
   }
 
-  function CalendarCtrl ($rootScope, $routeParams, $scope, $location, utils, db, $modal, $q) {
-    var DEFAULT_FREE_TIMES = ['Mondays', 'Tuesdays', 'wednesdays', 'thursdays', 'Fridays', 'Saturdays', 'Sundays']
-    .map(function(day, index) {
-      return {day:day, isAvailable:true ,start:'6:00 PM', end:'10:00 PM'};
-    });
-    $scope.calendarRef = fbRef.child('freeTimes').child($routeParams.userId);
-    $scope.calendarRef.on('value', function(freeTimes) {
-      if (freeTimes.val()) {
-        $scope.freeTimes = freeTimes.val();
-      } else {
-        $scope.freeTimes = DEFAULT_FREE_TIMES;
-      }
-      
-      $scope.$apply();
-    });
-
-    db.get($scope, 'users/' + $routeParams.userId, 'user');
-
-    $scope.editMode = false;
-    $scope.editFreeTimes = function() {
-      $scope.editMode = true;
-    }
-
-    $scope.saveFreeTime = function() {
-      $scope.calendarRef.update(utils.removeHashKey($scope.freeTimes));
-      $scope.editMode = false;
-    }
-  }
-
   function TestCtrl ($rootScope, $routeParams, $scope, $location, utils, db, $modal, $q) {
     $scope.calendarConfig = {
         height: 450,
@@ -123,6 +94,8 @@ mainApp = angular.module('mainApp', ['ngCookies', 'firebase', '$strap.directives
   }
 
   function DetailCtrl($scope, $rootScope, $location, $routeParams, db, utils) {      
+    $scope.userId = $routeParams.userId;
+
     $scope.editSkillsMode = false;
     if($routeParams.edit) {
       $scope.editSkillsMode = true;
@@ -358,8 +331,13 @@ function EventCtrl($rootScope, $scope, $location, utils, $cookies) {
   // the dialog is injected in the specified controller
   function SkillsDialogCtrl($rootScope, $scope, dialog) {
     $scope.dilaogMode = 'skills';
+
+    // calendar stuff:
+    $scope.user = $rootScope.currentUser;
+    $scope.userId = $rootScope.currentUser.id;
+    $scope.onlyEditMode = true;
+
     $scope.saveSkills = function() {
-      debugger;
       if ($rootScope.currentUser.skills && $rootScope.currentUser.skills != '') { 
         fbRef.child('users').child($rootScope.currentUser.id).update($rootScope.currentUser);
         $scope.dilaogMode = 'calendar';

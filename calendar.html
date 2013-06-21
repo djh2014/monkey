@@ -1,0 +1,71 @@
+  <div>
+  <!-- Calendar -->
+  <div>
+    <h2> available times
+    <span ng-hide="currentUser.id != user.id" ng-switch on="editMode" >
+      <span ng-switch-when="true">
+        <button ng-click="saveFreeTime()" class="btn">Save</button>   
+      </span>
+      <span ng-switch-default>
+        <button ng-click="editFreeTimes()" class="btn">Edit</button>
+      </span>
+    </span>
+    </h2>
+      
+    <table class="table">
+      <tr ng-repeat="day in freeTimes">
+          <h3>
+          <td><h3>{{day.day}}:</h3></td>
+        <td ng-hide="editMode ==false">
+          <h4>Available: 
+          <span ng-switch on="editMode" >
+                <span ng-switch-when="true">
+                  <input ng-model="day.isAvailable" type="checkbox">
+                </span>
+                <span ng-switch-default>
+                  <span ng-switch on="day.isAvailable" >
+                    <span ng-switch-when="true">
+                      Yep!
+                    </span>
+                    <span ng-switch-default>
+                      Nop!
+                    </span>
+                  </span>
+                </span>
+              </span>
+          </h4>
+        </td>
+        <td><h4 ng-switch on="day.isAvailable">starts:
+              <span ng-switch-when="true">
+                <span ng-switch on="editMode">
+                  <span ng-switch-when="true">
+                    <input type="text" ng-model="day.start" bs-timepicker>
+                  <button type="button" class="btn" data-toggle="timepicker"><i class="icon-time"></i></button>
+                  </span>
+                  <span ng-switch-default>
+                    {{day.start}}?
+                  </span>
+                </span>
+              </span> 
+              <span ng-switch-default>
+                -    
+              </span>
+            </h4>  
+        </td>
+        <td><h4 ng-hide="!day.isAvailable">ends:
+          <span ng-switch on="editMode" >
+              <span ng-switch-when="true">
+                <input type="text" ng-model="day.end" bs-timepicker>
+              <button type="button" class="btn" data-toggle="timepicker"><i class="icon-time"></i></button>
+              </span>
+              <span ng-switch-default>
+                {{day.end}}
+              </span>
+           </span>
+
+        </h4>
+        </tr>
+    </table>
+  </div>
+
+  </div>
