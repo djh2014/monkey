@@ -54,4 +54,3 @@ mainApp.directive('profile', function() {
       }
     };
 });
-console.log('hello world');
