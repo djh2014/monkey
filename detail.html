@@ -10,7 +10,6 @@
           <p>Skills: {{user.skills}}</p>
         </div>
     </div>
-    
       <span ng-switch on="user.id == currentUser.id">
         <span ng-switch-when="true"><a href="#/edit/{{user.id}}" class="btn">Edit Your Skills</a></span>
         <span ng-switch-default>
