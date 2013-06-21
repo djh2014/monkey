@@ -15,14 +15,17 @@
     <table class="table table-condensed">
       <tr ng-repeat="day in freeTimes">
           <td>{{day.day}}: <input ng-hide="editMode ==false" ng-model="day.isAvailable" type="checkbox"></td>
-        <td><span ng-switch on="day.isAvailable">starts:
+
+        <td><span ng-switch on="day.isAvailable">
               <span ng-switch-when="true">
                 <span ng-switch on="editMode">
                   <span ng-switch-when="true">
                     <input type="text" ng-model="day.start" bs-timepicker style="width: 60px; height: 15px">
+                     -
+                     <input type="text" ng-model="day.end" bs-timepicker style="width: 60px; height: 15px">
                   </span>
                   <span ng-switch-default>
-                    {{day.start}}
+                    {{day.start}} - {{day.end}}
                   </span>
                 </span>
               </span> 
@@ -31,17 +34,6 @@
               </span>
             </span>  
         </td>
-        <td><span ng-hide="!day.isAvailable">ends:
-          <span ng-switch on="editMode" >
-              <span ng-switch-when="true">
-                <input type="text" ng-model="day.end" bs-timepicker style="width: 60px; height: 15px">
-              </span>
-              <span ng-switch-default>
-                {{day.end}}
-              </span>
-           </span>
-
-        </span>
         </tr>
     </table>
   </div>
