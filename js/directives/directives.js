@@ -12,14 +12,12 @@ mainApp.directive('profile', function() {
 })
 .directive('calendar', function() {
   return {
-      //template: 'hi',
        templateUrl: 'calendar.html',
       replace: true,
       restrict: 'E',
       scope: false,
       controller: 
         function CalendarCtrl ($rootScope, $element, $attrs, $routeParams, $scope, $location, utils, db, $modal, $q) {
-          debugger;
           
           var DEFAULT_FREE_TIMES = ['Mondays', 'Tuesdays', 'wednesdays', 'thursdays', 'Fridays', 'Saturdays', 'Sundays']
           .map(function(day, index) {

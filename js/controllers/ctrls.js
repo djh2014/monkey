@@ -116,6 +116,16 @@ mainApp = angular.module('mainApp', ['ngCookies', 'firebase', '$strap.directives
       $scope.$apply();
     });
 
+    $scope.saveSkills = function() {
+        fbRef.child("users").child($scope.user.id).update($scope.user);
+        $rootScope.checkRequireFields();
+        if ($scope.user.skills && $scope.user.skills != '') {
+          $scope.editSkillsMode = false;
+        } else {
+          $rootScope.showMessage("For people to be able to ask for your advice let us know what are your skills.");
+        }
+      }
+
     $scope.setRequest = function() {      
       if($rootScope.currentUser) {
         var key = utils.genKey($scope.user.id, $rootScope.currentUser.id);
@@ -307,8 +317,8 @@ function EventCtrl($rootScope, $scope, $location, utils, $cookies) {
     }
 
     $scope.$on("calendar_saved",function() {
-      debugger;
       dialog.close();
+      $rootScope.showMessage("Thanks, now, you can request help from others");
     });
   }
 
@@ -375,21 +385,6 @@ function EventCtrl($rootScope, $scope, $location, utils, $cookies) {
       $location.path('/');
       $scope.$apply();
     }
-  }
-
-  function EditProfileCtrl($rootScope, $scope, $routeParams, $location){
-      $scope.saveUser = function() {
-        fbRef.child("users").child($scope.user.id).update($scope.user);
-        $rootScope.checkRequireFields();
-        if ($scope.user.skills && $scope.user.skills != '') {
-          $rootScope.showMessage("Thanks, now, let us know how others can help you!");
-          $location.path('stream');
-          //$scope.editSkillsMode = false;
-          $scope.$apply();
-        } else {
-          $rootScope.showMessage("For people to be able to ask for your advice let us know what are your skills.");
-        }
-      }
   }
 
   function HomeCtrl($scope, $location, angularFireCollection, $rootScope) {
