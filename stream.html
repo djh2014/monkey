@@ -1,15 +1,15 @@
 <div class="row">
 <div class=" offset2 span7">
 	<div>
-	<form class=" row-fluid well">
+	<form class=" row-fluid alert alert-success">
 		<h2>Request anything</h2>
 		<h3><profile user="currentUser"/>
 		Request: <input  type="text" ng-model="newItem.text" autofocus="autofocus" style="width: 400px;">
-		<input ng-click="addNew()" class="btn btn-primary" type="submit" value="post"></h3>
+		<input ng-click="addNew()" class="btn btn-success" type="submit" value="post"></h3>
 	</form>
 	<!-- <ul ng-animate="'slide'"> -->
 	<div ng-cloak ng-repeat="item in items">
-		<div class="row-fluid well">
+		<div class="row-fluid alert alert-success">
 			<span class="row">
 			<h3><profile user="item.user"/> Request:
 			{{item.text}}
