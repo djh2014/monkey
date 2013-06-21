@@ -14,36 +14,15 @@
       
     <table class="table">
       <tr ng-repeat="day in freeTimes">
-          <h3>
-          <td><h3>{{day.day}}:</h3></td>
-        <td ng-hide="editMode ==false">
-          <h4>Available: 
-          <span ng-switch on="editMode" >
-                <span ng-switch-when="true">
-                  <input ng-model="day.isAvailable" type="checkbox">
-                </span>
-                <span ng-switch-default>
-                  <span ng-switch on="day.isAvailable" >
-                    <span ng-switch-when="true">
-                      Yep!
-                    </span>
-                    <span ng-switch-default>
-                      Nop!
-                    </span>
-                  </span>
-                </span>
-              </span>
-          </h4>
-        </td>
+          <td><h3>{{day.day}}: <input ng-hide="editMode ==false" ng-model="day.isAvailable" type="checkbox"></h3></td>
         <td><h4 ng-switch on="day.isAvailable">starts:
               <span ng-switch-when="true">
                 <span ng-switch on="editMode">
                   <span ng-switch-when="true">
-                    <input type="text" ng-model="day.start" bs-timepicker>
-                  <button type="button" class="btn" data-toggle="timepicker"><i class="icon-time"></i></button>
+                    <input type="text" ng-model="day.start" bs-timepicker style="width: 60px;">
                   </span>
                   <span ng-switch-default>
-                    {{day.start}}?
+                    {{day.start}}
                   </span>
                 </span>
               </span> 
@@ -55,8 +34,7 @@
         <td><h4 ng-hide="!day.isAvailable">ends:
           <span ng-switch on="editMode" >
               <span ng-switch-when="true">
-                <input type="text" ng-model="day.end" bs-timepicker>
-              <button type="button" class="btn" data-toggle="timepicker"><i class="icon-time"></i></button>
+                <input type="text" ng-model="day.end" bs-timepicker style="width: 60px;">
               </span>
               <span ng-switch-default>
                 {{day.end}}

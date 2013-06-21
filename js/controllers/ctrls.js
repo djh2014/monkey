@@ -312,21 +312,20 @@ function EventCtrl($rootScope, $scope, $location, utils, $cookies) {
       });
 
     $scope.openDialog = function(){
-      
     };
 
-  $scope.openMessageBox = function(){
-    var title = 'This is a message box';
-    var msg = 'This is the content of the message box';
-    var btns = [{result:'cancel', label: 'Cancel'}, {result:'ok', label: 'OK', cssClass: 'btn-primary'}];
+    $scope.openMessageBox = function(){
+      var title = 'This is a message box';
+      var msg = 'This is the content of the message box';
+      var btns = [{result:'cancel', label: 'Cancel'}, {result:'ok', label: 'OK', cssClass: 'btn-primary'}];
 
-    $dialog.messageBox(title, msg, btns)
-      .open()
-      .then(function(result){
-        alert('dialog closed with result: ' + result);
-    });
-  };
-}
+      $dialog.messageBox(title, msg, btns)
+        .open()
+        .then(function(result){
+          alert('dialog closed with result: ' + result);
+      });
+    };
+  }
 
   // the dialog is injected in the specified controller
   function SkillsDialogCtrl($rootScope, $scope, dialog) {
@@ -393,7 +392,7 @@ function EventCtrl($rootScope, $scope, $location, utils, $cookies) {
     });
 
     $rootScope.checkRequireFields = function() {
-      //if (!$rootScope.currentUser.skills) {
+      if (!$rootScope.currentUser.skills) {
         // $rootScope.showMessage('please let us know about your skills.');
         // $location.path('detail/' + $rootScope.currentUser.id + '/'); 
         // $location.search('edit=true');
@@ -402,7 +401,7 @@ function EventCtrl($rootScope, $scope, $location, utils, $cookies) {
         d.open().then(function(result){});
         $location.path('stream/');
         $scope.$apply(); 
-      //}
+      }
     }
 
     $scope.facebookLogin = function() {
