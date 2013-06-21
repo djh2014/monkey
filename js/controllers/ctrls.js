@@ -12,7 +12,6 @@ mainApp = angular.module('mainApp', ['ngCookies', 'firebase', '$strap.directives
       when('/messages/:userId', {controller: MessagesCtrl, templateUrl:'messages.html'}).
       when('/meeting/:userId1/:userId2', {controller:MeetingCtrl, templateUrl:'meeting.html'}).
       when('/detail/:userId', {controller:DetailCtrl, templateUrl:'detail.html'}).
-      when('/edit/:userId', {controller:EditProfileCtrl, templateUrl:'editProfile.html'}).
       when('/test', {controller:TestCtrl, templateUrl:'test.html'}).
       otherwise({redirectTo:'/'});
   }).run(["$rootScope", "$location", "$modal", "$q",
@@ -123,7 +122,16 @@ mainApp = angular.module('mainApp', ['ngCookies', 'firebase', '$strap.directives
     }
   }
 
-  function DetailCtrl($scope, $rootScope, $location, $routeParams,db, utils) {      
+  function DetailCtrl($scope, $rootScope, $location, $routeParams, db, utils) {      
+    debugger;
+    $scope.editSkillsMode = false;
+    if($routeParams.edit) {
+      $scope.editSkillsMode = true;
+    }
+    $scope.editSkills = function() {
+      $scope.editSkillsMode = true; 
+    }
+
     $scope.viewedUserRef = fbRef.child("users").child($routeParams.userId);
 
     $scope.viewedUserRef.on('value', function(viewedUser) { 
@@ -283,21 +291,6 @@ mainApp = angular.module('mainApp', ['ngCookies', 'firebase', '$strap.directives
     }
   }
 
-  function SearchCtrl($rootScope, $routeParams, $scope, $location) {
-    // TODO: see why not wroking.
-    $scope.query  = {};
-    $scope.$watch('query', function() {
-    
-    })
-    $scope.search = function() {
-      $scope.query.user = $rootScope.currentUser;
-      fbRef.child("serches").push({query:$scope.query});
-      $scope.query = {};
-      $location.path('/');
-      $scope.$apply();
-    }
-  }
-
 function EventCtrl($rootScope, $scope, $location, utils, $cookies) {
     $rootScope.$on("currentUserInit", function() {
       if ($rootScope.currentUser) {
@@ -365,7 +358,9 @@ function EventCtrl($rootScope, $scope, $location, utils, $cookies) {
     $rootScope.checkRequireFields = function() {
       if (!$rootScope.currentUser.skills) {
         $rootScope.showMessage('please let us know about your skills.'); 
-        $location.path('edit/' + $rootScope.currentUser.id + '/');   
+        debugger;
+        $location.path('detail/' + $rootScope.currentUser.id + '/'); 
+        $location.search('edit=true');
         $scope.$apply();
       }
     }
@@ -383,25 +378,13 @@ function EventCtrl($rootScope, $scope, $location, utils, $cookies) {
   }
 
   function EditProfileCtrl($rootScope, $scope, $routeParams, $location){
-      //TODO(guti): make it a service:
-      var userId = $routeParams.userId;
-      if (userId) {
-        var userFBURL = 'https://getbadgers.firebaseio.com/users/' + userId;
-        var userFBRef = new Firebase(userFBURL);
-
-        userFBRef.on('value', function(FBUser) {
-              $scope.user = FBUser.val();
-              $scope.currentEmail = $scope.user.email;
-              $scope.$apply();
-        });
-      }
-
       $scope.saveUser = function() {
-        userFBRef.update($scope.user);
+        fbRef.child("users").child($scope.user.id).update($scope.user);
         $rootScope.checkRequireFields();
         if ($scope.user.skills && $scope.user.skills != '') {
           $rootScope.showMessage("Thanks, now, let us know how others can help you!");
           $location.path('stream');
+          //$scope.editSkillsMode = false;
           $scope.$apply();
         } else {
           $rootScope.showMessage("For people to be able to ask for your advice let us know what are your skills.");

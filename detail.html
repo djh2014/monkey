@@ -7,15 +7,29 @@
           <h4>      
           <h3 href="/#/detail/{{user.id}}" >{{user.name}}</h3>
           </h4>
-          <p>Skills: {{user.skills}}</p>
+          
+          <p>Skills: 
+            <span ng-switch on="editSkillsMode">
+              <span ng-switch-when="true" ng-controller="EditProfileCtrl">
+                <textarea ng-model="user.skills" value="" rows="6" class="input-xlarge" placeholder="What skills do you have that you can teach, e.g programming, design, business, law, finance"></textarea>
+                <span>
+                  <button ng-click="saveUser()" class="btn btn-primary">Save</button>
+                </span>
+              </span> 
+              <span ng-switch-default >
+                {{user.skills}}
+                <span ng-switch on="user.id == currentUser.id">
+                  <span ng-switch-when="true"><a ng-click="editSkills()" class="btn">Edit Your Skills</a></span>
+                  <span ng-switch-default>
+                      <a role="button" ng-click="setRequest()" data-toggle="modal" class="btn btn-info"> Send Meeting Request</a>
+                  </span>
+                </span>
+              </span>
+            </span>
+          </p>
+
         </div>
     </div>
-      <span ng-switch on="user.id == currentUser.id">
-        <span ng-switch-when="true"><a href="#/edit/{{user.id}}" class="btn">Edit Your Skills</a></span>
-        <span ng-switch-default>
-            <a role="button" ng-click="setRequest()" data-toggle="modal" class="btn btn-info"> Send Meeting Request</a>
-        </span>
-      </span>
       <div id="number_badgers">
         <h4>Number of Badgers</h4>
         <img ng-repeat="badger in user.badgersArray" src="./img/numberbadgers.png">
