@@ -118,7 +118,6 @@ mainApp = angular.module('mainApp', ['ngCookies', 'firebase', '$strap.directives
 
     $scope.saveSkills = function() {
         fbRef.child("users").child($scope.user.id).update($scope.user);
-        $rootScope.checkRequireFields();
         if ($scope.user.skills && $scope.user.skills != '') {
           $scope.editSkillsMode = false;
         } else {
@@ -334,19 +333,18 @@ function EventCtrl($rootScope, $scope, $location, utils, $cookies) {
 
         var currentUserRef = fbRef.child("users").child(id);
         currentUserRef.on('value', function(FBUser) {
+            
             $rootScope.currentUser = jQuery.extend($rootScope.currentUser, FBUser.val());
             $cookies.currentUser = JSON.stringify($rootScope.currentUser);
             $rootScope.$broadcast("currentUserInit");
             
             // Handle new user: 
             if (!$rootScope.currentUser.facebook) {
+              debugger;
               currentUserRef.update({
                 user: facebookUser.username || "", name: facebookUser.name || "", id: id, email: facebookUser.email || "", facebook: facebookUser || "",
                 img: "http://graph.facebook.com/"+ facebookUser.id+"/picture?type=large" || ""});
-            }
-            // Direct to edit page if don't have require skills:
-            if ($location.path().indexOf('edit') == -1) {
-              $rootScope.checkRequireFields();
+              $scope.openDialog();
             }
 
             $scope.$apply();
@@ -362,17 +360,12 @@ function EventCtrl($rootScope, $scope, $location, utils, $cookies) {
       }
     });
 
-    $rootScope.checkRequireFields = function() {
-      if (!$rootScope.currentUser.skills) {
-        // $rootScope.showMessage('please let us know about your skills.');
-        // $location.path('detail/' + $rootScope.currentUser.id + '/'); 
-        // $location.search('edit=true');
-        var d = $dialog.dialog({templateUrl:  '/skills-dialog.html',controller: 'SkillsDialogCtrl',
-        backdrop: true, keyboard: false,backdropClick: false});
-        d.open().then(function(result){});
-        $location.path('stream/');
-        $scope.$apply(); 
-      }
+    $scope.openDialog = function() {
+      var d = $dialog.dialog({templateUrl:  '/skills-dialog.html',controller: 'SkillsDialogCtrl',
+      backdrop: true, keyboard: false,backdropClick: false});
+      d.open().then(function(result){});
+      $location.path('stream/');
+      $scope.$apply(); 
     }
 
     $scope.facebookLogin = function() {
