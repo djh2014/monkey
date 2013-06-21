@@ -19,19 +19,22 @@ body {
     padding-left: 2%;
     margin-bottom: 0px;
  }
- .pull-left {
-    display: inline-block;
+.inner-nav {
+    background: #333;
+    border-bottom:2px solid #333;
+    padding-top: 1%;
+    padding-left: 2%;
+    margin-bottom: 0px;
  }
- .pull-right {
-    display: inline-block;
+ #nav-search {
+    margin:0px;
  }
- .bar-left {
-    display: inline-block;
-    float:left;
+ .nav-left {
+    padding-left: 20px;
+    padding-right: 20px;
  }
- .bar-right {
-    display: inline-block;
-    float:left;
+.nav-right {
+
  }
 .inner-header {
     list-style-type: none;
@@ -43,6 +46,7 @@ body {
     padding-left: 15%;
     float:left;
  }
+
  #innernav-search {
     height:25px;
     width:300px;
@@ -77,6 +81,10 @@ body {
     list-style-type:none;
     vertical-align: middle;
     padding-top:35px;
+ }
+ .profile-pic {
+    background: red;
+    border:1px solid #333;
  }
 
 .first-orange {
