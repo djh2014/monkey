@@ -2,7 +2,7 @@ var fbUrl = 'https://getbadgers.firebaseio.com';
 var fbRef = new Firebase(fbUrl);
 var fbUsersRef = new Firebase(fbUrl + '/users');
 
-mainApp = angular.module('mainApp', ['ngCookies', 'firebase', '$strap.directives', 'ui.calendar'])
+mainApp = angular.module('mainApp', ['ngCookies', 'firebase', '$strap.directives', 'ui.calendar', 'ui.bootstrap.dialog'])
   .config(function($routeProvider) {
     $routeProvider.
       when('/', {controller:HomeCtrl, templateUrl:'home.html'}).
@@ -12,7 +12,7 @@ mainApp = angular.module('mainApp', ['ngCookies', 'firebase', '$strap.directives
       when('/messages/:userId', {controller: MessagesCtrl, templateUrl:'messages.html'}).
       when('/meeting/:userId1/:userId2', {controller:MeetingCtrl, templateUrl:'meeting.html'}).
       when('/detail/:userId', {controller:DetailCtrl, templateUrl:'detail.html'}).
-      when('/test', {controller:TestCtrl, templateUrl:'test.html'}).
+      when('/test', {templateUrl:'skills-dialog.html'}).
       otherwise({redirectTo:'/'});
   }).run(["$rootScope", "$location", "$modal", "$q",
      function ($rootScope, $location, $modal, $q) {
@@ -123,7 +123,6 @@ mainApp = angular.module('mainApp', ['ngCookies', 'firebase', '$strap.directives
   }
 
   function DetailCtrl($scope, $rootScope, $location, $routeParams, db, utils) {      
-    debugger;
     $scope.editSkillsMode = false;
     if($routeParams.edit) {
       $scope.editSkillsMode = true;
@@ -194,7 +193,6 @@ mainApp = angular.module('mainApp', ['ngCookies', 'firebase', '$strap.directives
         for (var i = 0; i < streams.length; i++) {
           var stream = streams[i];
           if (stream.connection.connectionId != session.connection.connectionId) {
-            debugger;
             if ($.inArray(stream.id, $scope.streams) == -1) {
               $scope.streams.push(stream.id);
               session.subscribe(stream, 'stream')
@@ -316,7 +314,60 @@ function EventCtrl($rootScope, $scope, $location, utils, $cookies) {
     }
   }
 
-  function LoginCtrl($rootScope, $scope, $location, utils, $cookies) {
+  function TestDialogController($scope, dialog){
+    $scope.close = function(result){
+      dialog.close(result);
+    };
+  }
+
+
+  function DialogDemoCtrl($scope, $dialog){
+    // $scope.opts = ;
+
+    var d = $dialog.dialog({
+      backdrop: true,
+      keyboard: false,
+      backdropClick: false,
+      templateUrl:  '/test.html', // OR: templateUrl: 'path/to/view.html',
+      controller: 'TestDialogController'
+    });
+      d.open().then(function(result){
+        if(result)
+        {
+          alert('dialog closed with result: ' + result);
+        }
+      });
+
+    $scope.openDialog = function(){
+      
+    };
+
+  $scope.openMessageBox = function(){
+    var title = 'This is a message box';
+    var msg = 'This is the content of the message box';
+    var btns = [{result:'cancel', label: 'Cancel'}, {result:'ok', label: 'OK', cssClass: 'btn-primary'}];
+
+    $dialog.messageBox(title, msg, btns)
+      .open()
+      .then(function(result){
+        alert('dialog closed with result: ' + result);
+    });
+  };
+}
+
+  // the dialog is injected in the specified controller
+  function SkillsDialogCtrl($rootScope, $scope, dialog) {
+    $scope.saveUser = function() {
+        if ($rootScope.currentUser.skills && $rootScope.currentUser.skills != '') { 
+          fbRef.child('users').child($rootScope.currentUser.id).update($rootScope.currentUser);
+          dialog.close();
+        } else {
+          $scope.showError = true;
+        }
+      }
+  }
+
+  function LoginCtrl($rootScope, $scope, $location, utils, $cookies, $dialog) {
     if ($cookies.currentUser) {
       $rootScope.currentUser = JSON.parse($cookies.currentUser);
       $rootScope.$broadcast("currentUserInit");
@@ -358,11 +409,14 @@ function EventCtrl($rootScope, $scope, $location, utils, $cookies) {
 
     $rootScope.checkRequireFields = function() {
       if (!$rootScope.currentUser.skills) {
-        $rootScope.showMessage('please let us know about your skills.'); 
-        debugger;
-        $location.path('detail/' + $rootScope.currentUser.id + '/'); 
-        $location.search('edit=true');
-        $scope.$apply();
+        // $rootScope.showMessage('please let us know about your skills.');
+        // $location.path('detail/' + $rootScope.currentUser.id + '/'); 
+        // $location.search('edit=true');
+        var d = $dialog.dialog({templateUrl:  '/skills-dialog.html',controller: 'SkillsDialogCtrl',
+        backdrop: true, keyboard: false,backdropClick: false});
+        d.open().then(function(result){});
+        $location.path('stream/');
+        $scope.$apply(); 
       }
     }
 
