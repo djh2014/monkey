@@ -287,46 +287,6 @@ function EventCtrl($rootScope, $scope, $location, utils, $cookies) {
     }
   }
 
-  function TestDialogController($scope, dialog){
-    $scope.close = function(result){
-      dialog.close(result);
-    };
-  }
-
-
-  function DialogDemoCtrl($scope, $dialog){
-    // $scope.opts = ;
-
-    var d = $dialog.dialog({
-      backdrop: true,
-      keyboard: false,
-      backdropClick: false,
-      templateUrl:  '/test.html', // OR: templateUrl: 'path/to/view.html',
-      controller: 'TestDialogController'
-    });
-      d.open().then(function(result){
-        if(result)
-        {
-          alert('dialog closed with result: ' + result);
-        }
-      });
-
-    $scope.openDialog = function(){
-    };
-
-    $scope.openMessageBox = function(){
-      var title = 'This is a message box';
-      var msg = 'This is the content of the message box';
-      var btns = [{result:'cancel', label: 'Cancel'}, {result:'ok', label: 'OK', cssClass: 'btn-primary'}];
-
-      $dialog.messageBox(title, msg, btns)
-        .open()
-        .then(function(result){
-          alert('dialog closed with result: ' + result);
-      });
-    };
-  }
-
   // the dialog is injected in the specified controller
   function SkillsDialogCtrl($rootScope, $scope, dialog) {
     $scope.dilaogMode = 'skills';
@@ -345,10 +305,11 @@ function EventCtrl($rootScope, $scope, $location, utils, $cookies) {
         $scope.showError = true;
       }
     }
-    $scope.saveCalendar = function() {
-        fbRef.child('users').child($rootScope.currentUser.id).update($rootScope.currentUser);
-        dialog.close();
-    }
+
+    $scope.$on("calendar_saved",function() {
+      debugger;
+      dialog.close();
+    });
   }
 
   function LoginCtrl($rootScope, $scope, $location, utils, $cookies, $dialog) {

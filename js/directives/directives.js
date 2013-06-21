@@ -23,7 +23,7 @@ mainApp.directive('profile', function() {
           
           var DEFAULT_FREE_TIMES = ['Mondays', 'Tuesdays', 'wednesdays', 'thursdays', 'Fridays', 'Saturdays', 'Sundays']
           .map(function(day, index) {
-            return {day:day, isAvailable:true ,start:'6:00 PM', end:'10:00 PM'};
+            return {day:day, isAvailable:true ,start:'06:00 PM', end:'10:00 PM'};
           });
 
           $scope.calendarRef = fbRef.child('freeTimes').child($scope.userId);
@@ -49,6 +49,7 @@ mainApp.directive('profile', function() {
           $scope.saveFreeTime = function() {
               $scope.calendarRef.update(utils.removeHashKey($scope.freeTimes));
               $scope.editMode = false;
+              $scope.$broadcast("calendar_saved");
           }
         },
       link: function(scope, iElement, iAttrs, controller) {

@@ -1,7 +1,8 @@
   <div>
   <!-- Calendar -->
   <div>
-    <h2> available times
+
+    <h2> <span ng-hide="onlyEditMode">available times</span>
     <span ng-hide="currentUser.id != user.id" ng-switch on="editMode" >
       <span ng-switch-when="true">
         <button ng-click="saveFreeTime()" class="btn">Save</button>   

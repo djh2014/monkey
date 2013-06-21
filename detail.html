@@ -1,5 +1,5 @@
 <div class="row-fluid">
-<div class="span6">
+<div class="span3">
      <div class="thumbnail clearfix">
         <a href="/#/detail/{{user.id}}">
         <img src="http://i.embed.ly/1/image/crop?url={{user.img}}&amp;key=92b31102528511e1a2ec4040d3dc5c07&amp;width=200&amp;height=200" alt="?" class="pull-left span2 clearfix" style='margin-right:10px'></a>
@@ -19,7 +19,7 @@
               <span ng-switch-default >
                 {{user.skills}}
                 <span ng-switch on="user.id == currentUser.id">
-                  <span ng-switch-when="true"><a ng-click="editSkills()" class="btn">Edit Your Skills</a></span>
+                  <span ng-switch-when="true"><a ng-click="editSkills()" class="btn">Edit</a></span>
                   <span ng-switch-default>
                       <a role="button" ng-click="setRequest()" data-toggle="modal" class="btn btn-info"> Send Meeting Request</a>
                   </span>
