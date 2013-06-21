@@ -19,12 +19,33 @@ body {
     padding-left: 2%;
     margin-bottom: 0px;
  }
-
+ .pull-left {
+    display: inline-block;
+ }
+ .pull-right {
+    display: inline-block;
+ }
+ .bar-left {
+    display: inline-block;
+    float:left;
+ }
+ .bar-right {
+    display: inline-block;
+    float:left;
+ }
+.inner-header {
+    list-style-type: none;
+    display: block;
+}
  .site-description {
     position: absolute;
     padding-top:10%;
     padding-left: 15%;
     float:left;
+ }
+ #innernav-search {
+    height:25px;
+    width:300px;
  }
  .money-text {
     display: inline-block;
@@ -32,6 +53,7 @@ body {
     color: white;
     font-size: 60px;
  }
+
  .money-description {
     display: inline-block;
     position: relative;

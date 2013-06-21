@@ -114,30 +114,36 @@ ga('send', 'pageview');
                          <span ng-switch on="currentUser != null" >
                               <span ng-switch-when="true">
                               <!-- Login -->
-                                <div class="span3" id="logo-left"><a href='/'><img src="img/badgertoolbar.png" alt="" /></a></div>
-                                    <div class="span9">
-                                        <ul>
-                                            <li class="register">
-
-
-                                <span class="toolbar-left">
-                                    <img src="./img/bargertoolbar" id="badger">
-                                    <form ng-controller="SearchCtrl" class="search-bar" >
-                                        <input type="text" ng-model="query.text" placeholder="Search Talent" class="search-query span6" id="search-height">
-                                         <button ng-click="search()" class="btn btn-inverse" id="icon-box"><i class="icon-search icon-white"></i></button>
-                                    </form>
-                                </span>
-
-                                    <a href="/#/stream" class="btn btn-large btn-info">News feed</a>
-                                    <a href="/#/users" class="btn btn-large btn-info">Find People</a>
-                                    <a href="/#/messages/{{currentUser.id}}" class="btn btn-large btn-info">Messages</a>
-                                    <profile user="currentUser"/></profile>
-                                    <a href="#/detail/{{currentUser.id}}" title="{{currentUser.name}}"></a>(<a ng-click="logOut()">logout</a>)  
-
-                                        </li>
-
-                                        </ul>
-                                    </div>
+                                <div class="span12">
+                                    <ul class="inner-header">
+                                        <span class="pull-left">
+                                            <li class="bar-left">
+                                                <a href='/'><img src="img/badgertoolbar.png" alt=""/></a>
+                                            </li>
+                                            <li class="bar-left">
+                                                <form ng-controller="SearchCtrl" class="search-bar" >
+                                                    <input type="text" ng-model="query.text" placeholder="Search Talent" class="search-query span6" id="innernav-search">
+                                                    <button ng-click="search()" class="btn btn-inverse" id="icon-box"><i class="icon-search icon-white"></i></button>
+                                                </form>
+                                            </li>
+                                        </span>
+                                        <span class="pull-right">
+                                            <li class="bar-right">
+                                                <a href="/#/stream" class="btn btn-large btn-info">News feed</a>
+                                            </li>
+                                            <li class="bar-right">
+                                                <a href="/#/users" class="btn btn-large btn-info">Find People</a>
+                                            </li>
+                                            <li class="bar-right">
+                                                <a href="/#/messages/{{currentUser.id}}" class="btn btn-large btn-info">Messages</a>
+                                            </li>
+                                            <li class="bar-right">
+                                                <profile user="currentUser"/></profile>
+                                                <a href="#/detail/{{currentUser.id}}" title="{{currentUser.name}}"></a>(<a ng-click="logOut()">logout</a>)  
+                                            </li>
+                                        </span>
+                                    </ul>
+                                </div>
                                 
 
                               </span>
