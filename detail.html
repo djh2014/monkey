@@ -19,19 +19,16 @@
             <a role="button" ng-click="setRequest()" data-toggle="modal" class="btn btn-info"> Send Meeting Request</a>
         </span>
       </span>
-    </div>
-</div>
-      
-<div class="row">
-    <div class="span6" id="number_badgers">
+      <div id="number_badgers">
         <h4>Number of Badgers</h4>
         <img ng-repeat="badger in user.badgersArray" src="./img/numberbadgers.png">
-
+      </div>
     </div>
 </div>
-
-
+    
 <hr/>
+
+<!-- Calendar -->
 <div ng-controller="CalendarCtrl">
 <h2><!-- <profile user="user"></profile> --> available times
 
@@ -45,7 +42,6 @@
 </span>
 
 </h2>
-<!-- TODO Time zone -->
 
 <table class="table">
   <tr ng-repeat="day in freeTimes">
