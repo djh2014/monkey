@@ -8,7 +8,7 @@
           <h4>      
           <h3 href="/#/detail/{{user.id}}" >{{user.name}}</h3>
           </h4>
-          <p>{{user.skills}}</p>
+          <p>Skills: {{user.skills}}</p>
         </div>
       </div>
     </div>
@@ -19,7 +19,6 @@
             <a role="button" ng-click="setRequest()" data-toggle="modal" class="btn btn-info"> Send Meeting Request</a>
         </span>
       </span>
-      <a role="button" href="#/calendar/{{user.id}}" data-toggle="modal" class="btn btn-info"> Available Times</a>
     </div>
 </div>
       
@@ -31,14 +30,74 @@
     </div>
 </div>
 
-<!-- / main container -->
 
+<hr/>
+<div ng-controller="CalendarCtrl">
+<h2><!-- <profile user="user"></profile> --> available times
 
+<span ng-hide="currentUser.id != user.id" ng-switch on="editMode" >
+  <span ng-switch-when="true">
+    <button ng-click="saveFreeTime()" class="btn">Save</button>   
+  </span>
+  <span ng-switch-default>
+    <button ng-click="editFreeTimes()" class="btn">Edit</button>
+  </span>
+</span>
 
+</h2>
+<!-- TODO Time zone -->
 
+<table class="table">
+  <tr ng-repeat="day in freeTimes">
+      <h3>
+      <td><h3>{{day.day}}:</h3></td>
+    <td>
+      <h4>Available: 
+      <span ng-switch on="editMode" >
+            <span ng-switch-when="true">
+              <input ng-model="day.isAvailable" type="checkbox">
+            </span>
+            <span ng-switch-default>
+              <span ng-switch on="day.isAvailable" >
+                <span ng-switch-when="true">
+                  Yep!
+                </span>
+                <span ng-switch-default>
+                  Nop!
+                </span>
+              </span>
+            </span>
+          </span>
 
+      </h4>
+    </td>
+    <td><h4 ng-hide="!day.isAvailable">starts:
 
+      <span ng-switch on="editMode" >
+          <span ng-switch-when="true">
+            <input type="text" ng-model="day.start" bs-timepicker>
+          <button type="button" class="btn" data-toggle="timepicker"><i class="icon-time"></i></button>
+          </span>
+          <span ng-switch-default>
+            {{day.start}}
+          </span>
+          </span>
 
+      
+     </h4>  
+    </td>
+    <td><h4 ng-hide="!day.isAvailable">ends:
+      <span ng-switch on="editMode" >
+          <span ng-switch-when="true">
+            <input type="text" ng-model="day.end" bs-timepicker>
+          <button type="button" class="btn" data-toggle="timepicker"><i class="icon-time"></i></button>
+          </span>
+          <span ng-switch-default>
+            {{day.end}}
+          </span>
+       </span>
 
-
-
+    </h4>
+    </tr>
+</table>
+</div>
