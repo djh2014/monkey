@@ -210,7 +210,6 @@ mainApp = angular.module('mainApp', ['ngCookies', 'firebase', '$strap.directives
     }
 
     // Messages: TODO(guti): make a directive:
-    
     $scope.listRef = fbRef.child("meeting_messages").child(listKey);
 
     $scope.listRef.on("value", function(messages) {
