@@ -2,14 +2,15 @@
   <div class="offset2 span6">
   <u><h3>Messages</h3></u>
 
-<div class="row-fluid well" ng-repeat="meeting in meetings">
+<a ng-repeat="meeting in meetings" href="/#/meeting/{{meeting.teacher.id}}/{{meeting.student.id}}">
+<div class="row-fluid well" >
 	<div class="span3">
 	<profile user="meeting.teacher"/>
 	<profile user="meeting.student"/>
 	</div>
 	<div class="span8">
 	<br/>
-	<p ng-show="meeting.text">{{meeting.speaker.name}} : {{meeting.text}}</p>
+	<h3>{{meeting.speaker.name}} :<blockquote ng-show="meeting.text"> {{meeting.text}}</blockquote></h3>
     <p ng-show="meeting.day">Date: {{meeting.day | date:'fullDate'}}</p>
     <p ng-show="meeting.time">Time: {{meeting.time}}</p>
 
@@ -26,11 +27,11 @@
         	   <button ng-click="approve(meeting.id)" >Click To Approve</button>
 				<button ng-click="reject(meeting.id)" >Click To REJECT</button>
         	  </span>
-        	  <span ng-switch-default> Not Apporved yet.</span>
+        	  <span ng-switch-default> Waiting for {{meeting.teacher.name}} to apporved.</span>
         	</span>
         </span>
     </span>
-    <p><a href="/#/meeting/{{meeting.teacher.id}}/{{meeting.student.id}}">See meeting page</a></p>
 	</div>
 </div>
+</a>
 </div>

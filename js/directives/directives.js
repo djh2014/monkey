@@ -1,4 +1,16 @@
-mainApp.directive('profile', function() {
+mainApp.directive('profileImg', function() {
+    return {
+      template: '<img src="https://i.embed.ly/1/display/resize?key=dc65793b3f1249bdb9952a491874d27e&url={{user.img}}&width={{width}}&height={{height}}&grow=true" title="{{user.name}}"/>',
+      replace: true,
+      restrict: 'E',
+      scope: { user: '=', currentUser: '='}, 
+      link:  function(scope, iElement, iAttrs, controller) {
+        scope.width = iAttrs.width || 50;
+        scope.height = iAttrs.height || 50;
+      }
+    };
+})
+.directive('profile', function() {
     return {
       template: '<a href="/#/detail/{{user.id}}"><img src="https://i.embed.ly/1/display/resize?key=dc65793b3f1249bdb9952a491874d27e&url={{user.img}}&width={{width}}&height={{height}}&grow=true" title="{{user.name}}"/></a>',
       replace: true,
@@ -20,13 +32,13 @@ mainApp.directive('profile', function() {
         function CalendarCtrl ($rootScope, $element, $attrs, $routeParams, $scope, $location, utils, db, $modal, $q) {
           
           var DEFAULT_FREE_TIMES = ['Mondays', 'Tuesdays', 'wednesdays', 'thursdays', 'Fridays', 'Saturdays', 'Sundays']
-          .map(function(day, index) {
-            var times = {day:day, isAvailable:false ,start:'06:00 PM', end:'10:00 PM'};
-            if(day == 'Mondays') {
-              times.isAvailable = true;
-            }
-            return times;
-          });
+            .map(function(day, index) {
+              var times = {day:day, isAvailable:false , start:'06:00 PM', end:'10:00 PM'};
+              if(day == 'Mondays') {
+                times.isAvailable = true;
+              }
+              return times;
+            });
 
           $scope.calendarRef = fbRef.child('freeTimes').child($scope.userId);
           $scope.calendarRef.on('value', function(freeTimes) {
