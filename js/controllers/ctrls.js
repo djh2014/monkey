@@ -76,7 +76,7 @@ mainApp = angular.module('mainApp', ['ngCookies', 'firebase', '$strap.directives
       // Send event(notifacation).
       
       fbRef.child('events').child(meeting.student.id).push(
-        {text: 'Your meeting request with ' + $rootScope.currentUser.name + ' was approve, we will send both of email reminder one hour, and one day before it the meeting',
+        {text: 'Your meeting request with ' + $rootScope.currentUser.name + ' was approve, we will send you both sn email reminder one hour, and one day before it the meeting',
          path: 'messages/' + meeting.student.id,
          alert: true});
       fbRef.child('events').child(meeting.teacher.id).push(
@@ -151,7 +151,7 @@ mainApp = angular.module('mainApp', ['ngCookies', 'firebase', '$strap.directives
 
   // the dialog is injected in the specified controller
   function MeetingRequestDialogCtrl($rootScope, $location, $scope, utils, dialog, user) {
-    $scope.day = new Date();
+    $scope.date = (new Date());
     $scope.message = "Hey let's have a video meeting.";
     $scope.time = "6:00 PM";
     $scope.sendMessage = function() {
@@ -316,10 +316,8 @@ function EventCtrl($rootScope, $scope, $location, utils, $cookies, $dialog) {
   // var modalPromise = $modal({template: 'message.html', show: false, scope: $rootScope});
   $scope.showMessage = function(text) {
     debugger;
-    var msgbox = $dialog.messageBox('New Message', text, [{label:'Cool', result: 'yes'},{label:'Thanks', result: 'no'}]);
+    var msgbox = $dialog.messageBox(text, '', [{label:'Cool', result: 'yes'}]);
     msgbox.open().then(function(result){});  
-
-
 
    // $rootScope.mainModalMessage = text;
    // $q.when(modalPromise).then(function(modalEl) {modalEl.modal('show');});
