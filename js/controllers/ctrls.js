@@ -327,7 +327,7 @@ function EventCtrl($rootScope, $scope, $location, utils, $cookies, $dialog) {
 
   // the dialog is injected in the specified controller
   function SkillsDialogCtrl($rootScope, $scope, dialog) {
-    $scope.dilaogMode = 'skills';
+    $scope.dialogMode = 'skills';
 
     // calendar stuff:
     $scope.user = $rootScope.currentUser;
@@ -337,10 +337,22 @@ function EventCtrl($rootScope, $scope, $location, utils, $cookies, $dialog) {
     $scope.saveSkills = function() {
       if ($rootScope.currentUser.skills && $rootScope.currentUser.skills != '') { 
         fbRef.child('users').child($rootScope.currentUser.id).update($rootScope.currentUser);
-        $scope.dilaogMode = 'calendar';
-        //dialog.close();
+        if ($rootScope.currentUser.email && $rootScope.currentUser.email != '') {
+          $scope.dialogMode = 'calendar';
+        } else {
+          $scope.dialogMode = 'email';
+        }
       } else {
         $scope.showError = true;
+      }
+    }
+
+    $scope.saveEmail = function() {
+      if ($rootScope.currentUser.email && $rootScope.currentUser.email != '') { 
+        fbRef.child('users').child($rootScope.currentUser.id).update($rootScope.currentUser);
+        $scope.dialogMode = 'calendar';
+      } else {
+        $scope.showEmailError = true;
       }
     }
 
