@@ -73,6 +73,7 @@ mainApp = angular.module('mainApp', ['ngCookies', 'firebase', '$strap.directives
     });
 
     $scope.approve = function(meeting) {
+      utils.log('approve meeting', meeting.id);
       fbRef.child("meetings").child(meeting.id).update({status:"APPROVED"});
 
       // Send event(notifacation).
@@ -90,6 +91,7 @@ mainApp = angular.module('mainApp', ['ngCookies', 'firebase', '$strap.directives
     }
 
     $scope.reject = function(meeting) {
+      utils.log('rejact meeting', meeting.id);
       fbRef.child("meetings").child(meeting.id).update({status:"REJECT"});
       $scope.$apply();
     }
@@ -103,6 +105,7 @@ mainApp = angular.module('mainApp', ['ngCookies', 'firebase', '$strap.directives
       $scope.editSkillsMode = true;
     }
     $scope.editSkills = function() {
+      utils.log('start edit skill in profile page');
       $scope.editSkillsMode = true; 
     }
 
@@ -119,6 +122,8 @@ mainApp = angular.module('mainApp', ['ngCookies', 'firebase', '$strap.directives
     });
 
     $scope.saveSkills = function() {
+        utils.log('save skills in profile page');
+
         fbRef.child("users").child($scope.user.id).update($scope.user);
         if ($scope.user.skills && $scope.user.skills != '') {
           $scope.editSkillsMode = false;
@@ -127,13 +132,14 @@ mainApp = angular.module('mainApp', ['ngCookies', 'firebase', '$strap.directives
         }
       }
 
-    $scope.setRequest = function() { 
+    $scope.setRequest = function() {
+      utils.log('open dialog meeting request', $scope.user.id);
       if($rootScope.currentUser) {
         var d = $dialog.dialog({templateUrl: '/request-dialog.html',controller: 'MeetingRequestDialogCtrl',
         resolve: {user: function(){ return $scope.user;}} });
         d.open().then(function(result){
           if (result == 'ok') {
-               
+              utils.log('send meeting request', user.id);
               // Send event(notifacation).
               fbRef.child('events').child($scope.user.id).push(
                 {text: $rootScope.currentUser.name + ' want to start the video session with you',
@@ -141,8 +147,8 @@ mainApp = angular.module('mainApp', ['ngCookies', 'firebase', '$strap.directives
                  alert:true});
               $scope.showMessage('we notify ' + $scope.user.name + '. copy his email and click the red button');
              $location.path('messages/' + $rootScope.currentUser.id);
-      
-
+          } else {
+            utils.log('close meeting request', user.id);
           }
         });
       } else {
@@ -287,6 +293,7 @@ mainApp = angular.module('mainApp', ['ngCookies', 'firebase', '$strap.directives
 
     $scope.newItem = {}
     $scope.addNew = function() {
+      utils.log('added new request');
       $scope.newItem.user = $rootScope.currentUser;
       itemsRef.push($scope.newItem);
       $scope.newItem = {}
@@ -317,6 +324,7 @@ function EventCtrl($rootScope, $scope, $location, utils, $cookies, $dialog) {
 
   // var modalPromise = $modal({template: 'message.html', show: false, scope: $rootScope});
   $scope.showMessage = function(text) {
+    utils.log('showed notification', text);
     var msgbox = $dialog.messageBox(text, '', [{label:'Cool', result: 'yes'}]);
     msgbox.open().then(function(result){});  
 
@@ -452,44 +460,12 @@ function EventCtrl($rootScope, $scope, $location, utils, $cookies, $dialog) {
   }
 
   function HomeCtrl($scope, $location, angularFireCollection, $rootScope) {
-    var fullUrl = 'https://getbadgers.firebaseio.com/users/';
-    var messageListRef = new Firebase(fullUrl);
-    $scope.usersToView = [];
-    
     // navigate to users if login.
     $rootScope.$on("currentUserInit", function() {
       if ($rootScope.currentUser && $rootScope.currentUser.skills) {
         $location.path('stream');
         $scope.$apply();
       }
-    });
-
-    // TODO(guti): probably remove this.
-    messageListRef.on('value', function(snapshot) {
-      // For index.html page:
-      var BIG_IMG = [600, 450, 6], MEDIUM_IMG = [260, 200, 3], SMALL_IMG = [225, 200, 3];
-      var IMG_SIZES = [[BIG_IMG, MEDIUM_IMG, MEDIUM_IMG], [MEDIUM_IMG, MEDIUM_IMG, BIG_IMG], [SMALL_IMG, SMALL_IMG, SMALL_IMG, SMALL_IMG]];
-      var usersObject = snapshot.val();
-      var ids = Object.keys(usersObject);
-      var userGroups = []
-      for (var i = 0; i < IMG_SIZES.length; i++) {
-        var userGroup = []
-        for (var j = 0; j < IMG_SIZES[i].length; j++) {
-          if(ids.length <= 0){
-            break;
-          }
-          var id = ids.pop();
-          var user = usersObject[id];
-          user.imgWidth = IMG_SIZES[i][j][0];
-          user.imgHeight = IMG_SIZES[i][j][1];
-          user.spanSize = IMG_SIZES[i][j][2];
-          user.id = id;
-          userGroup.push(user);
-        };
-        userGroups.push(userGroup);
-      };
-      $scope.userGroupsToView = userGroups;
-      $scope.$apply();
     });
   }
 
@@ -498,12 +474,6 @@ function EventCtrl($rootScope, $scope, $location, utils, $cookies, $dialog) {
       $scope.users = utils.listValues(users.val());
       $scope.$apply();
     });
-
-    $scope.newUser = {'img':''};
-    $scope.saveNewUser = function(newUser) {
-      $scope.users.add(newUser);
-      $scope.newUser = {'img':''};
-    }
   }
 
 
