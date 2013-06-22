@@ -93,7 +93,7 @@ mainApp = angular.module('mainApp', ['ngCookies', 'firebase', '$strap.directives
     }
   }
 
-  function DetailCtrl($scope, $rootScope, $location, $routeParams, db, utils) {      
+  function DetailCtrl($scope, $rootScope, $location, $routeParams, db, utils, $dialog) {      
     $scope.userId = $routeParams.userId;
 
     $scope.editSkillsMode = false;
@@ -125,27 +125,63 @@ mainApp = angular.module('mainApp', ['ngCookies', 'firebase', '$strap.directives
         }
       }
 
-    $scope.setRequest = function() {      
+    $scope.setRequest = function() { 
       if($rootScope.currentUser) {
-        var key = utils.genKey($scope.user.id, $rootScope.currentUser.id);
-        var meeting = {};
-        meeting[key] = {'teacher':$scope.user, 'student':$rootScope.currentUser, 'status':"NEW", 'id': key};
-        fbRef.child('meetings').update(meeting);
-        var meetingPath = 'meeting/' + $rootScope.currentUser.id + '/' + $scope.user.id 
+        var d = $dialog.dialog({templateUrl: '/request-dialog.html',controller: 'RequestDialogCtrl'});
+        d.open().then(function(result){
+          if(result) {
+            $location.path('messages/' + $rootScope.currentUser.id);
+            $scope.$apply();   
+          }
+        });
+        // var key = utils.genKey($scope.user.id, $rootScope.currentUser.id);
+        // var meeting = {};
+        // meeting[key] = {'teacher':$scope.user, 'student':$rootScope.currentUser, 'status':"NEW", 'id': key};
+        // fbRef.child('meetings').update(meeting);
+        // var meetingPath = 'meeting/' + $rootScope.currentUser.id + '/' + $scope.user.id 
         
-        // Send event
-        fbRef.child('events').child($scope.user.id).push(
-          {text: $rootScope.currentUser.name + ' want to start the video session with you',
-           path:meetingPath,
-           alert:true});
+        // // Send event
+        // fbRef.child('events').child($scope.user.id).push(
+        //   {text: $rootScope.currentUser.name + ' want to start the video session with you',
+        //    path:meetingPath,
+        //    alert:true});
 
-        $rootScope.showMessage('we notify ' + $scope.user.name + '. copy his email and click the red button');
-        $location.path(meetingPath);
+        // $rootScope.showMessage('we notify ' + $scope.user.name + '. copy his email and click the red button');
+        // $location.path(meetingPath);
+
       } else {
         $rootScope.showMessage("you need to sign in first");
       }
     }
   }
+
+
+  // the dialog is injected in the specified controller
+  function RequestDialogCtrl($rootScope, $scope, dialog) {
+    $scope.dilaogMode = 'skills';
+
+    // calendar stuff:
+    $scope.user = $rootScope.currentUser;
+    $scope.userId = $rootScope.currentUser.id;
+    $scope.onlyEditMode = true;
+
+    $scope.saveSkills = function() {
+      if ($rootScope.currentUser.skills && $rootScope.currentUser.skills != '') { 
+        fbRef.child('users').child($rootScope.currentUser.id).update($rootScope.currentUser);
+        $scope.dilaogMode = 'calendar';
+        //dialog.close();
+      } else {
+        $scope.showError = true;
+      }
+    }
+
+    $scope.$on("calendar_saved",function() {
+      dialog.close();
+      $rootScope.showMessage("Thanks, now, you can request help from others");
+    });
+  }
+
+  
 
   function VideoCtrl($rootScope, $routeParams, $scope, $location, utils, db, openTok) {
     var sessionAndToken = openTok.getSessionAndToken();
