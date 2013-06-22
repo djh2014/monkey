@@ -315,7 +315,6 @@ function EventCtrl($rootScope, $scope, $location, utils, $cookies, $dialog) {
 
   // var modalPromise = $modal({template: 'message.html', show: false, scope: $rootScope});
   $scope.showMessage = function(text) {
-    debugger;
     var msgbox = $dialog.messageBox(text, '', [{label:'Cool', result: 'yes'}]);
     msgbox.open().then(function(result){});  
 
@@ -336,7 +335,6 @@ function EventCtrl($rootScope, $scope, $location, utils, $cookies, $dialog) {
 
     // Step 1: Skills
     $scope.saveSkills = function() {
-      debugger;
       if ($rootScope.currentUser.skills && $rootScope.currentUser.skills != '') { 
         fbRef.child('users').child($rootScope.currentUser.id).update($rootScope.currentUser);
         $scope.dialogMode = 'requests';
@@ -347,7 +345,6 @@ function EventCtrl($rootScope, $scope, $location, utils, $cookies, $dialog) {
 
     // Step 2: Requests
     $scope.saveRequests = function() {
-      debugger;
       if ($scope.requestText && $scope.requestText != '') {
         var requestValue = {text: $scope.requestText, user: $rootScope.currentUser};
         var requestKey = utils.timeStamp($rootScope.currentUser.id);
@@ -383,6 +380,8 @@ function EventCtrl($rootScope, $scope, $location, utils, $cookies, $dialog) {
   }
 
   function LoginCtrl($rootScope, $scope, $location, utils, $cookies, $dialog) {
+
+
     if ($cookies.currentUser) {
       $rootScope.currentUser = JSON.parse($cookies.currentUser);
       $rootScope.$broadcast("currentUserInit");

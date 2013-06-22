@@ -60,12 +60,19 @@
   <script src="//cdnjs.cloudflare.com/ajax/libs/angular-strap/0.7.2/angular-strap.min.js"></script>
 
   <!-- More libs -->
-
   <script src="components/timezone-js/src/date.js"></script>
   <script>
     timezoneJS.timezone.zoneFileBasePath = '/tz';
     timezoneJS.timezone.init();
   </script>
+   <script type="application/javascript">
+      function getip(json) {
+        globalIp = json.ip; // alerts the ip address
+      }
+    </script>
+  <script type="application/javascript" src="http://jsonip.appspot.com/?callback=getip"> </script>
+    
+
   
 
   <!--Application-->

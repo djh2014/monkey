@@ -28,6 +28,15 @@ mainApp
 })
 .factory('utils', function() {
   return {
+  	log : function(user, event, text) {
+		var ip = globalIp;
+	// 	if(user) {
+	  	//   var logs = fbRef.child('logs/' +user.id);
+	  	// } else {
+	  	//   var logs = fbRef.child('logs/' +user.id);
+	  	// }
+  	},
+
   	timeStamp : function(extra) {
   	  return moment().format("YY:MM:DD_HH:mm:ss:ms") + '_' + extra;
   	},
