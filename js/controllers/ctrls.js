@@ -13,18 +13,20 @@ mainApp = angular.module('mainApp', ['ngCookies', 'firebase', '$strap.directives
       when('/detail/:userId', {controller:DetailCtrl, templateUrl:'detail.html'}).
       when('/test', {controller:TestCtrl, templateUrl:'test.html'}).
       otherwise({redirectTo:'/'});
-  }).run(["$rootScope", "$location", "$modal", "$q","$dialog",
-     function ($rootScope, $location, $modal, $q, $dialog) {
-       $rootScope.global = {};
-       // // var modalPromise = $modal({template: 'message.html', show: false, scope: $rootScope});
-       // $scope.showMessage = function(text) {
-       //    debugger;
-       //    var msgbox = $dialog.messageBox('New Message', text, [{label:'Cool', result: 'yes'},{label:'Thanks', result: 'no'}]);
-       //    msgbox.open().then(function(result){});  
-
-       //   // $rootScope.mainModalMessage = text;
-       //   // $q.when(modalPromise).then(function(modalEl) {modalEl.modal('show');});
-       // }
+  }).run(["$rootScope", "$location", "$modal", "$q", "$dialog","utils", "$cookies",
+     function ($rootScope, $location, $modal, $q, $dialog, utils, $cookies) {
+      $rootScope.global = {};
+      $rootScope.$on("$routeChangeStart", function(event, next, current) {
+        utils.log('change page');
+        if ($cookies.currentUser == null) {
+          // no logged user, we should be going to #login
+          // if ( next.templateUrl == "partials/login.html" ) {
+          //   // already going to #login, no redirect needed
+          // } else {
+          //   //$location.path( "/login" );
+          // }
+        }         
+      });
      }
   ]);
 
@@ -336,9 +338,11 @@ function EventCtrl($rootScope, $scope, $location, utils, $cookies, $dialog) {
     // Step 1: Skills
     $scope.saveSkills = function() {
       if ($rootScope.currentUser.skills && $rootScope.currentUser.skills != '') { 
+        utils.log('save skills in registration dialog');
         fbRef.child('users').child($rootScope.currentUser.id).update($rootScope.currentUser);
         $scope.dialogMode = 'requests';
       } else {
+        utils.log('try to save empty skills');
         $scope.showError = true;
       }
     }
@@ -346,6 +350,7 @@ function EventCtrl($rootScope, $scope, $location, utils, $cookies, $dialog) {
     // Step 2: Requests
     $scope.saveRequests = function() {
       if ($scope.requestText && $scope.requestText != '') {
+        utils.log('save request in registration dialog');
         var requestValue = {text: $scope.requestText, user: $rootScope.currentUser};
         var requestKey = utils.timeStamp($rootScope.currentUser.id);
         var request = {};
@@ -358,6 +363,7 @@ function EventCtrl($rootScope, $scope, $location, utils, $cookies, $dialog) {
           $scope.dialogMode = 'email';
         }
       } else {
+        utils.log('try to save empty request');
         $scope.showRequestError = true;
       }
     }
@@ -365,15 +371,18 @@ function EventCtrl($rootScope, $scope, $location, utils, $cookies, $dialog) {
     // Step 3: Email
     $scope.saveEmail = function() {
       if ($rootScope.currentUser.email && $rootScope.currentUser.email != '') { 
+        utils.log('save email in registration dialog');
         fbRef.child('users').child($rootScope.currentUser.id).update($rootScope.currentUser);
         $scope.dialogMode = 'calendar';
       } else {
+        utils.log('try to save empty email');
         $scope.showEmailError = true;
       }
     }
 
     // Step 4: Calendar
     $scope.$on("calendar_saved",function() {
+      utils.log('save available times in registration dialog');
       dialog.close();
       $scope.showMessage("Thanks, now, you can request help from others");
     });
@@ -420,6 +429,7 @@ function EventCtrl($rootScope, $scope, $location, utils, $cookies, $dialog) {
     });
 
     $scope.openDialog = function() {
+      utils.log('started registration dialog');
       var d = $dialog.dialog({templateUrl:  '/skills-dialog.html',controller: 'SkillsDialogCtrl',
       backdrop: true, keyboard: false,backdropClick: false});
       d.open().then(function(result){});

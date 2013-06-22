@@ -33,7 +33,6 @@ mainApp
 
   return {
   	log : function(event, extra) {
-  		debugger;
   		extra = extra? extra : '';
   		var page = locationService.path();
   		var user = JSON.parse(cookiesService.currentUser)
@@ -48,7 +47,6 @@ mainApp
 	  	var log = {};
 	  	log[logKey] = logValue;
 
-	  	debugger;
 		logsByUser.update(log);
 		logsByDate.update(log);
 		logsByEvent.update(log);
@@ -91,7 +89,7 @@ mainApp
 	},
 
 	genKey : function(string1, string2) {
-	  if(string1 < string2){
+	  if (string1 < string2) {
 	    return string1 + "_" + string2;
 	  } else {
 	    return string2 + "_" + string1;
