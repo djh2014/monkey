@@ -380,8 +380,6 @@ function EventCtrl($rootScope, $scope, $location, utils, $cookies, $dialog) {
   }
 
   function LoginCtrl($rootScope, $scope, $location, utils, $cookies, $dialog) {
-
-
     if ($cookies.currentUser) {
       $rootScope.currentUser = JSON.parse($cookies.currentUser);
       $rootScope.$broadcast("currentUserInit");

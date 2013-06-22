@@ -26,19 +26,36 @@ mainApp
 	}
   }
 })
-.factory('utils', function() {
+.factory('utils', function($rootScope, $location, $cookies) {
+  rootScopeService = $rootScope;
+  locationService = $location;
+  cookiesService = $cookies;
+
   return {
-  	log : function(user, event, text) {
-		var ip = globalIp;
-	// 	if(user) {
-	  	//   var logs = fbRef.child('logs/' +user.id);
-	  	// } else {
-	  	//   var logs = fbRef.child('logs/' +user.id);
-	  	// }
+  	log : function(event, extra) {
+  		debugger;
+  		extra = extra? extra : '';
+  		var page = locationService.path();
+  		var user = JSON.parse(cookiesService.currentUser)
+
+		var userKey = user ? user.id  : this.fbClean(globalIp);
+		var logsByUser = fbRef.child('logs/byUser/'+userKey);
+		var logsByDate = fbRef.child('logs/byDate');
+		var logsByEvent = fbRef.child('logs/byEvent/'+event);
+
+	  	var logKey = this.fbClean(this.timeStamp('(user:'+userKey+') (event:'+event+')'));
+	  	var logValue = this.fbClean('(page:'+page+') (extra:'+extra+')');
+	  	var log = {};
+	  	log[logKey] = logValue;
+
+	  	debugger;
+		logsByUser.update(log);
+		logsByDate.update(log);
+		logsByEvent.update(log);
   	},
 
   	timeStamp : function(extra) {
-  	  return moment().format("YY:MM:DD_HH:mm:ss:ms") + '_' + extra;
+  	  return moment().format("YY:MM:DD_HH:mm:ss") + ' ' + extra;
   	},
 
   	random : function(size) {
@@ -82,7 +99,7 @@ mainApp
 	},
 
 	fbClean : function(string) {
-	  return string.replace(/\./g,' ').replace(/\#/g,' ').replace(/\$/g,' ').replace(/\[/g,' ').replace(/\]/g,' ');
+	  return string.replace(/\./g,' ').replace(/\//g,' ').replace(/\#/g,' ').replace(/\$/g,' ').replace(/\[/g,' ').replace(/\]/g,' ');
 	},
 
     range: function(start, stop, step){
