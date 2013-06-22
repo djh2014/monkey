@@ -28,6 +28,15 @@ mainApp
 })
 .factory('utils', function() {
   return {
+  	convertTime : function(list, dateAttr) {
+  	  return list.map(function(e, i) {
+        if (e[dateAttr]) {
+          e[dateAttr] = new Date(e[dateAttr]).getTime();
+        }
+        return e;
+      })
+  	},
+
   	removeHashKey : function(dic) {
   		var newDic = {}
   		for( key  in dic) {

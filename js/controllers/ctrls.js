@@ -8,8 +8,7 @@ mainApp = angular.module('mainApp', ['ngCookies', 'firebase', '$strap.directives
       when('/', {controller:HomeCtrl, templateUrl:'home.html'}).
       when('/stream', {controller:StreamCtrl, templateUrl:'stream.html'}).
       when('/users', {controller:UsersCtrl, templateUrl:'users.html'}).
-      when('/meetings/:userId', {controller:MeetingsCtrl, templateUrl:'meetings.html'}).
-      when('/messages/:userId', {controller: MessagesCtrl, templateUrl:'messages.html'}).
+      when('/messages/:userId', {controller:MeetingsCtrl, templateUrl:'meetings.html'}).
       when('/meeting/:userId1/:userId2', {controller:MeetingCtrl, templateUrl:'meeting.html'}).
       when('/detail/:userId', {controller:DetailCtrl, templateUrl:'detail.html'}).
       when('/test', {controller:TestCtrl, templateUrl:'test.html'}).
@@ -25,6 +24,7 @@ mainApp = angular.module('mainApp', ['ngCookies', 'firebase', '$strap.directives
      }
   ]);
 
+  // Can be deletes 
   function MessagesCtrl($rootScope, $routeParams, $scope, $location, utils, db, $modal, $q) {
     var messagesRef = fbRef.child("messages").child($routeParams.userId);
     messagesRef.on('value', function(messages) {
@@ -36,6 +36,7 @@ mainApp = angular.module('mainApp', ['ngCookies', 'firebase', '$strap.directives
         }
         return e;
       })
+      // we can save this part maybe: 
       if ($scope.messages.length <= 0 ) {
         fbRef.child("users").child("bad-gerry").on('value', function(badgerryObject) {
           var badgerry = badgerryObject.val();
@@ -63,6 +64,7 @@ mainApp = angular.module('mainApp', ['ngCookies', 'firebase', '$strap.directives
       $scope.meetings = $scope.meetings.filter(function(e, i) {
         return e.teacher.id == $routeParams.userId || e.student.id == $routeParams.userId;
       });
+      $scope.meetings = utils.convertTime($scope.meetings, 'day');
       $scope.$apply();
     });
 
@@ -111,22 +113,8 @@ mainApp = angular.module('mainApp', ['ngCookies', 'firebase', '$strap.directives
 
     $scope.setRequest = function() { 
       if($rootScope.currentUser) {
-        // var key = utils.genKey($scope.user.id, $rootScope.currentUser.id);
-        // var meeting = {};
-        // meeting[key] = {'teacher':$scope.user, 'student':$rootScope.currentUser, 'status':"NEW", 'id': key};
-        // fbRef.child('meetings').update(meeting);
-        // var meetingPath = 'meeting/' + $rootScope.currentUser.id + '/' + $scope.user.id 
-        
-        // // Send event
-        // fbRef.child('events').child($scope.user.id).push(
-        //   {text: $rootScope.currentUser.name + ' want to start the video session with you',
-        //    path:meetingPath,
-        //    alert:true});
-
-        // $rootScope.showMessage('we notify ' + $scope.user.name + '. copy his email and click the red button');
-        // $location.path(meetingPath);
-        var d = $dialog.dialog({templateUrl: '/request-dialog.html',controller: 'RequestDialogCtrl',
-        resolve: {userId: function(){ return $scope.user.id;}} });
+        var d = $dialog.dialog({templateUrl: '/request-dialog.html',controller: 'MeetingRequestDialogCtrl',
+        resolve: {user: function(){ return $scope.user;}} });
         d.open().then(function(result){
           if (result) {
             $location.path('messages/' + $rootScope.currentUser.id);
@@ -140,13 +128,30 @@ mainApp = angular.module('mainApp', ['ngCookies', 'firebase', '$strap.directives
   }
 
   // the dialog is injected in the specified controller
-  function RequestDialogCtrl($rootScope, $scope, dialog, userId) {
+  function MeetingRequestDialogCtrl($rootScope, $location, $scope, utils, dialog, user) {
     $scope.day = new Date();
     $scope.message = "Hey let's have a video meeting.";
     $scope.time = "6:00 PM";
     $scope.sendMessage = function() {
-      fbRef.child("messages").child(userId).push(
-        {'user': $rootScope.currentUser, 'text': $scope.message, 'day':$scope.date.toString(), 'time':$scope.time});
+      debugger;
+      var meeting = {}
+      var meetingKey = utils.genKey(user.id, $rootScope.currentUser.id);
+      $scope.date = $scope.date ? $scope.date.toString() : '';
+      meeting[meetingKey] = {
+        'teacher': user, 'student': $rootScope.currentUser,
+        'status': "NEW", 'id': meetingKey, 'day':$scope.date.toString(), 'time':$scope.time,
+        'text': $scope.message, 'speaker': $rootScope.currentUser};
+      fbRef.child('meetings').update(meeting);
+
+      // Send event(notifacation).
+      fbRef.child('events').child(user.id).push(
+        {text: $rootScope.currentUser.name + ' want to start the video session with you',
+         path:'messages/' + user.id,
+         alert:true});
+
+      $rootScope.showMessage('we notify ' + user.name + '. copy his email and click the red button');
+      $location.path('messages/' + $rootScope.currentUser.id);
+      
       dialog.close();
     }
   }  
@@ -290,6 +295,7 @@ function EventCtrl($rootScope, $scope, $location, utils, $cookies) {
         $scope.$apply();
       }
     });
+    
     $rootScope.processEvent = function(newEvent) {
       $rootScope.myEventsRef.child(newEvent.id).update({alert:false});
       $rootScope.showMessage(newEvent.text);

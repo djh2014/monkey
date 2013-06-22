@@ -1,18 +1,18 @@
-<div class="row"> 
-  <div class="offset1 span5">
-  <u><h1>My Meetings</h1></u>
+<div class="row-fluid"> 
+  <div class="offset2 span6">
+  <u><h3>Messages</h3></u>
 
-
-<div class="row well" ng-repeat="meeting in meetings">
-	<div class="span2">
+<div class="row-fluid well" ng-repeat="meeting in meetings">
+	<div class="span3">
 	<profile user="meeting.teacher"/>
-	->
 	<profile user="meeting.student"/>
 	</div>
-	<div class="span2">
-	<a href="/#/meeting/{{meeting.teacher.id}}/{{meeting.student.id}}">See meeting page</a>
-	<br/>	
-	<!-- Status TODO(guti): make a directive out of it -->
+	<div class="span8">
+	<br/>
+	<p ng-show="meeting.text">{{meeting.speaker.name}} : {{meeting.text}}</p>
+    <p ng-show="meeting.day">Date: {{meeting.day | date:'fullDate'}}</p>
+    <p ng-show="meeting.time">Time: {{meeting.time}}</p>
+
 	status:
 	<span ng-switch on="meeting.status" >
     <span ng-switch-when="APPROVED">Approve!</span>
@@ -30,6 +30,7 @@
         	</span>
         </span>
     </span>
+    <p><a href="/#/meeting/{{meeting.teacher.id}}/{{meeting.student.id}}">See meeting page</a></p>
 	</div>
 </div>
 </div>

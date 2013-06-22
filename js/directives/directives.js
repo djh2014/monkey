@@ -21,7 +21,11 @@ mainApp.directive('profile', function() {
           
           var DEFAULT_FREE_TIMES = ['Mondays', 'Tuesdays', 'wednesdays', 'thursdays', 'Fridays', 'Saturdays', 'Sundays']
           .map(function(day, index) {
-            return {day:day, isAvailable:true ,start:'06:00 PM', end:'10:00 PM'};
+            var times = {day:day, isAvailable:false ,start:'06:00 PM', end:'10:00 PM'};
+            if(day == 'Mondays') {
+              times.isAvailable = true;
+            }
+            return times;
           });
 
           $scope.calendarRef = fbRef.child('freeTimes').child($scope.userId);
