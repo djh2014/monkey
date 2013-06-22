@@ -10,6 +10,8 @@
       <h4>      
       <h3 href="/#/detail/{{message.user.id}}" >{{message.user.name}}</h3>
       </h4>
+      <p>Date: {{message.day | date:'fullDate'}}</p>
+      <p>Time: {{message.time}}</p>
       <p>{{message.text}}</p>
     </div>
   </div>

@@ -29,6 +29,13 @@ mainApp = angular.module('mainApp', ['ngCookies', 'firebase', '$strap.directives
     var messagesRef = fbRef.child("messages").child($routeParams.userId);
     messagesRef.on('value', function(messages) {
       $scope.messages = utils.listValues(messages.val());
+      debugger;
+      $scope.messages = $scope.messages.map(function(e, i) {
+        if (e.day) {
+          e.day = new Date(e.day).getTime();
+        }
+        return e;
+      })
       if ($scope.messages.length <= 0 ) {
         fbRef.child("users").child("bad-gerry").on('value', function(badgerryObject) {
           var badgerry = badgerryObject.val();
