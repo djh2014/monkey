@@ -68,13 +68,26 @@ mainApp = angular.module('mainApp', ['ngCookies', 'firebase', '$strap.directives
       $scope.$apply();
     });
 
-    $scope.approve = function(meeting_id) {
-      fbRef.child("meetings").child(meeting_id).update({status:"APPROVED"});
+    $scope.approve = function(meeting) {
+      debugger;
+      fbRef.child("meetings").child(meeting.id).update({status:"APPROVED"});
+
+      // Send event(notifacation).
+      
+      fbRef.child('events').child(meeting.student.id).push(
+        {text: 'Your meeting request with ' + $rootScope.currentUser.name + ' was approve, we will send both of email reminder one hour, and one day before it the meeting',
+         path: 'messages/' + meeting.student.id,
+         alert: true});
+      fbRef.child('events').child(meeting.teacher.id).push(
+        {text: 'Cool! we will send you both an email reminder one hour, and one day before the video meeting',
+         path: 'messages/' + meeting.teacher.id,
+         alert: true});
+
       $scope.$apply();
     }
 
-    $scope.reject = function(meeting_id) {
-      fbRef.child("meetings").child(meeting_id).update({status:"REJECT"});
+    $scope.reject = function(meeting) {
+      fbRef.child("meetings").child(meeting.id).update({status:"REJECT"});
       $scope.$apply();
     }
   }
@@ -281,30 +294,27 @@ mainApp = angular.module('mainApp', ['ngCookies', 'firebase', '$strap.directives
   }
 
 function EventCtrl($rootScope, $scope, $location, utils, $cookies) {
-    $rootScope.$on("currentUserInit", function() {
-      if ($rootScope.currentUser) {
-        $rootScope.myEventsRef = fbRef.child('events').child($rootScope.currentUser.id);
-
-        $rootScope.myEventsRef.on('child_added', function(eventObject) {
-          var newEvent = eventObject.val();
-          newEvent.id = eventObject.name();
-          if(newEvent.alert == true) {
-            $rootScope.processEvent(newEvent);
-          }
-        });
-        $scope.$apply();
-      }
-    });
-    
-    $rootScope.processEvent = function(newEvent) {
-      $rootScope.myEventsRef.child(newEvent.id).update({alert:false});
-      $rootScope.showMessage(newEvent.text);
-      // TODO(guti).
-      //$location.path('meetings');
-       $location.path(newEvent.path);
+  $rootScope.$on("currentUserInit", function() {
+    if ($rootScope.currentUser) {
+      $rootScope.myEventsRef = fbRef.child('events').child($rootScope.currentUser.id);
+      $rootScope.myEventsRef.on('child_added', function(eventObject) {
+        var newEvent = eventObject.val();
+        newEvent.id = eventObject.name();
+        if(newEvent.alert == true) {
+          $rootScope.processEvent(newEvent);
+        }
+      });
       $scope.$apply();
     }
+  });
+
+  $rootScope.processEvent = function(newEvent) {
+    $rootScope.myEventsRef.child(newEvent.id).update({alert:false});
+    $rootScope.showMessage(newEvent.text);
+    $location.path(newEvent.path);
+    $scope.$apply();
   }
+}
 
   // the dialog is injected in the specified controller
   function SkillsDialogCtrl($rootScope, $scope, dialog) {

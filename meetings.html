@@ -24,8 +24,8 @@
         	<span ng-switch on="meeting.teacher.id == currentUser.id" >
         	  <span ng-switch-when="true">
         	  	<br/>
-        	   <button ng-click="approve(meeting.id)" >Click To Approve</button>
-				<button ng-click="reject(meeting.id)" >Click To REJECT</button>
+        	   <button ng-click="approve(meeting)" >Click To Approve</button>
+				<button ng-click="reject(meeting)" >Click To REJECT</button>
         	  </span>
         	  <span ng-switch-default> Waiting for {{meeting.teacher.name}} to apporved.</span>
         	</span>
