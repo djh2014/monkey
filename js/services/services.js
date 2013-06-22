@@ -28,6 +28,14 @@ mainApp
 })
 .factory('utils', function() {
   return {
+  	timeStamp : function(extra) {
+  	  return moment().format("YY:MM:DD_HH:mm:ss:ms") + '_' + extra;
+  	},
+
+  	random : function(size) {
+  	  return Math.ceil(Math.random()*Math.pow(10,size));
+  	},
+
   	convertTime : function(list, dateAttr) {
   	  return list.map(function(e, i) {
         if (e[dateAttr]) {

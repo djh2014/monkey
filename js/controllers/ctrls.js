@@ -326,7 +326,7 @@ function EventCtrl($rootScope, $scope, $location, utils, $cookies, $dialog) {
 }
 
   // the dialog is injected in the specified controller
-  function SkillsDialogCtrl($rootScope, $scope, dialog) {
+  function SkillsDialogCtrl($rootScope, $scope, utils, dialog) {
     $scope.dialogMode = 'skills';
 
     // calendar stuff:
@@ -334,19 +334,38 @@ function EventCtrl($rootScope, $scope, $location, utils, $cookies, $dialog) {
     $scope.userId = $rootScope.currentUser.id;
     $scope.onlyEditMode = true;
 
+    // Step 1: Skills
     $scope.saveSkills = function() {
+      debugger;
       if ($rootScope.currentUser.skills && $rootScope.currentUser.skills != '') { 
         fbRef.child('users').child($rootScope.currentUser.id).update($rootScope.currentUser);
+        $scope.dialogMode = 'requests';
+      } else {
+        $scope.showError = true;
+      }
+    }
+
+    // Step 2: Requests
+    $scope.saveRequests = function() {
+      debugger;
+      if ($scope.requestText && $scope.requestText != '') {
+        var requestValue = {text: $scope.requestText, user: $rootScope.currentUser};
+        var requestKey = utils.timeStamp($rootScope.currentUser.id);
+        var request = {};
+        request[requestKey] = requestValue;
+        fbRef.child('requests').update(request);
+
         if ($rootScope.currentUser.email && $rootScope.currentUser.email != '') {
           $scope.dialogMode = 'calendar';
         } else {
           $scope.dialogMode = 'email';
         }
       } else {
-        $scope.showError = true;
+        $scope.showRequestError = true;
       }
     }
 
+    // Step 3: Email
     $scope.saveEmail = function() {
       if ($rootScope.currentUser.email && $rootScope.currentUser.email != '') { 
         fbRef.child('users').child($rootScope.currentUser.id).update($rootScope.currentUser);
@@ -356,6 +375,7 @@ function EventCtrl($rootScope, $scope, $location, utils, $cookies, $dialog) {
       }
     }
 
+    // Step 4: Calendar
     $scope.$on("calendar_saved",function() {
       dialog.close();
       $scope.showMessage("Thanks, now, you can request help from others");

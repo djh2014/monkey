@@ -15,6 +15,19 @@
 				<button ng-click="saveSkills()" class="btn">Next</button>
 			</div>
 		</div>
+
+		<div ng-show="dialogMode == 'requests'">
+			<h3>What would you like to learn? How can others help you?
+				 <textarea ng-model="requestText" value="" rows="4" class="input-xlarge" placeholder="E.g programming, design, business, law, finance.."></textarea>
+				 <div class="alert alert-error" ng-show="showRequestError">
+				 	Please Let us know how others might help you!
+				 </div>
+			</h3>
+			<div class="modal-footer">
+				<button ng-click="saveRequests()" class="btn">Next</button>
+			</div>
+		</div>
+
 		<div ng-show="dialogMode == 'email'">
 			<h3>Email address:
 				 <input type="text" place-holder="Email" ng-model="currentUser.email">
