@@ -380,6 +380,7 @@ function EventCtrl($rootScope, $scope, $location, utils, $cookies, $dialog) {
   }
 
   function LoginCtrl($rootScope, $scope, $location, utils, $cookies, $dialog) {
+    utils.log('load_website');
     if ($cookies.currentUser) {
       $rootScope.currentUser = JSON.parse($cookies.currentUser);
       $rootScope.$broadcast("currentUserInit");
@@ -387,6 +388,7 @@ function EventCtrl($rootScope, $scope, $location, utils, $cookies, $dialog) {
     $scope.authClient = new FirebaseAuthClient(fbRef, function(error, facebookUser) {
       // If login:
       if (facebookUser) {
+        utils.log('auth_facebook_user', facebookUser.name);
         var id = utils.fbClean(facebookUser.username || facebookUser.id);
 
         var currentUserRef = fbRef.child("users").child(id);
@@ -426,11 +428,13 @@ function EventCtrl($rootScope, $scope, $location, utils, $cookies, $dialog) {
     }
 
     $scope.facebookLogin = function() {
+      utils.log('click facebook login');
       $scope.directToEditPage = true;
       $scope.authClient.login('facebook', {rememberMe: true});
     }
 
     $scope.logOut = function() {
+      utils.log('click logout');
       $scope.authClient.logout();
       $location.path('/');
       $scope.$apply();
