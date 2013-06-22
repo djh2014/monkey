@@ -1,15 +1,30 @@
 <div class="modal-body">
 <form>
-	<h2>Send {{user.name }} Video meeting request</h2>
+	<h2>Send {{user.name}} a request for a video meeting</h2>
 	Day:
-	<select name="" id="">
-		<option ng-reapt="days in freeTime" value="Monday">Monday</option>
-	</select><br/>
+	<input type="text" ng-model="date" data-date-format="dd/mm/yyyy" bs-datepicker>
+	<br/>
 	Time:
-	<select name="" id="">
-		<option value="12:00">12:00</option>
+	<select ng-model="time">
+		<option>6:00 PM</option>
+		<option>6:15 PM</option>
+		<option>6:30 PM</option>
+		<option>6:45 PM</option>
+		<option>7:00 PM</option>
+		<option>7:15 PM</option>
+		<option>7:30 PM</option>
+		<option>7:45 PM</option>
+		<option>8:00 PM</option>
+		<option>8:15 PM</option>
+		<option>8:30 PM</option>
+		<option>8:45 PM</option>
+		<option>9:00 PM</option>
+		<option>9:15 PM</option>
+		<option>9:30 PM</option>
+		<option>9:45 PM</option>
 	</select><br/>
 	 Message:
-	<input type="text" value="Hey let do a video meeting."/>
+	<input type="text" ng-model="message"/>
+	<button ng-click="sendMessage()">Send</button>
 </form>
 </div>

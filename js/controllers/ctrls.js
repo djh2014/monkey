@@ -12,7 +12,7 @@ mainApp = angular.module('mainApp', ['ngCookies', 'firebase', '$strap.directives
       when('/messages/:userId', {controller: MessagesCtrl, templateUrl:'messages.html'}).
       when('/meeting/:userId1/:userId2', {controller:MeetingCtrl, templateUrl:'meeting.html'}).
       when('/detail/:userId', {controller:DetailCtrl, templateUrl:'detail.html'}).
-      when('/test', {templateUrl:'skills-dialog.html'}).
+      when('/test', {controller:TestCtrl, templateUrl:'test.html'}).
       otherwise({redirectTo:'/'});
   }).run(["$rootScope", "$location", "$modal", "$q",
      function ($rootScope, $location, $modal, $q) {
@@ -39,37 +39,14 @@ mainApp = angular.module('mainApp', ['ngCookies', 'firebase', '$strap.directives
   }
 
   function TestCtrl ($rootScope, $routeParams, $scope, $location, utils, db, $modal, $q) {
-    $scope.calendarConfig = {
-        height: 450,
-        editiable: true,
-        dayClick: function(){
-            $scope.$apply($scope.alertEventOnClick);
-        }
-    };
-
-    ///
-    $scope.calendarConfig = {
-        height: 450,
-        editiable: true,
-        dayClick: function(){
-            $scope.$apply($scope.alertEventOnClick);
-        }
-    };
-
-    $scope.eventSources = [{
-      events: function(start, end, cb) {
-        $scope.calendarRef = fbRef.child("calendars").child($routeParams.userId);
-        $scope.calendarRef.on('value', function(calendar) {
-            cb( );
-        })
-      },
-      //color: 'yellow',   // an option!
-      //textColor: 'black' // an option!
-    }];
-    ///
-
+    $scope.time = "6:00 PM";
     $scope.click = function() {
-      $rootScope.showMessage("test?");
+      debugger;
+      $scope.time = $scope.time;
+      fbRef.child("tests").on("value", function(val) {
+        var dic = val.val();
+      })
+      fbRef.child("tests").push({"date":$scope.datepicker.date.toString(), name:"a"});
     };  
   }  
 
@@ -127,13 +104,6 @@ mainApp = angular.module('mainApp', ['ngCookies', 'firebase', '$strap.directives
 
     $scope.setRequest = function() { 
       if($rootScope.currentUser) {
-        var d = $dialog.dialog({templateUrl: '/request-dialog.html',controller: 'RequestDialogCtrl'});
-        d.open().then(function(result){
-          if(result) {
-            $location.path('messages/' + $rootScope.currentUser.id);
-            $scope.$apply();   
-          }
-        });
         // var key = utils.genKey($scope.user.id, $rootScope.currentUser.id);
         // var meeting = {};
         // meeting[key] = {'teacher':$scope.user, 'student':$rootScope.currentUser, 'status':"NEW", 'id': key};
@@ -148,40 +118,31 @@ mainApp = angular.module('mainApp', ['ngCookies', 'firebase', '$strap.directives
 
         // $rootScope.showMessage('we notify ' + $scope.user.name + '. copy his email and click the red button');
         // $location.path(meetingPath);
-
+        var d = $dialog.dialog({templateUrl: '/request-dialog.html',controller: 'RequestDialogCtrl',
+        resolve: {userId: function(){ return $scope.user.id;}} });
+        d.open().then(function(result){
+          if (result) {
+            $location.path('messages/' + $rootScope.currentUser.id);
+            $scope.$apply();   
+          }
+        });
       } else {
         $rootScope.showMessage("you need to sign in first");
       }
     }
   }
 
-
   // the dialog is injected in the specified controller
-  function RequestDialogCtrl($rootScope, $scope, dialog) {
-    $scope.dilaogMode = 'skills';
-
-    // calendar stuff:
-    $scope.user = $rootScope.currentUser;
-    $scope.userId = $rootScope.currentUser.id;
-    $scope.onlyEditMode = true;
-
-    $scope.saveSkills = function() {
-      if ($rootScope.currentUser.skills && $rootScope.currentUser.skills != '') { 
-        fbRef.child('users').child($rootScope.currentUser.id).update($rootScope.currentUser);
-        $scope.dilaogMode = 'calendar';
-        //dialog.close();
-      } else {
-        $scope.showError = true;
-      }
-    }
-
-    $scope.$on("calendar_saved",function() {
+  function RequestDialogCtrl($rootScope, $scope, dialog, userId) {
+    $scope.day = new Date();
+    $scope.message = "Hey let's have a video meeting.";
+    $scope.time = "6:00 PM";
+    $scope.sendMessage = function() {
+      fbRef.child("messages").child(userId).push(
+        {'user': $rootScope.currentUser, 'text': $scope.message, 'day':$scope.date.toString(), 'time':$scope.time});
       dialog.close();
-      $rootScope.showMessage("Thanks, now, you can request help from others");
-    });
-  }
-
-  
+    }
+  }  
 
   function VideoCtrl($rootScope, $routeParams, $scope, $location, utils, db, openTok) {
     var sessionAndToken = openTok.getSessionAndToken();
