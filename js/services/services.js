@@ -36,7 +36,7 @@ mainApp
 		{
 			debugger;
 			extra = extra? extra : '';
-			globalIp = (typeof globalIp === 'undefined') ? '-' : globalIp;
+			var ip = this.getIP(); 
 	  		var page = locationService.path();
 	  		Proxino.log("page: '" + page+"'");
 	  		if (cookiesService.currentUser) {
@@ -44,7 +44,7 @@ mainApp
 	  		} else {
 	  		  var user = rootScopeService.currentUser;
 	  		}
-			var userKey = user ? user.id  : this.fbClean(globalIp);
+			var userKey = user ? user.id  : this.fbClean(ip);
 			var logsByUser = fbRef.child('logs/byUser/'+userKey);
 			var logsByDate = fbRef.child('logs/byDayAndUser').child(this.dayStamp()).child(userKey);
 			var logsByEvent = fbRef.child('logs/byDayAndEvent').child(this.dayStamp()).child(event);
@@ -63,10 +63,10 @@ mainApp
 				mixpanel.people.set({
 				    "name": user.name,
 				    "$email": user.email,
-				    "ip":globalIp
+				    "ip":ip
 				});
 			} else {
-				mixpanel.people.set({"ip": globalIp});
+				mixpanel.people.set({"ip": ip});
 			}
 			mixpanel.track(event, {user:user, page:page, extra:extra});
 		}
@@ -77,6 +77,9 @@ mainApp
 	    	error[this.timeStamp] = err;
 	  		fbRef.child('errors').update(this.fbClean(error));
 	    }
+  	},
+  	getIP : function() {
+  	  return (typeof globalIp === 'undefined') ? '-' : globalIp;
   	},
 
   	dayStamp : function(extra) {
