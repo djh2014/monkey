@@ -1,7 +1,6 @@
 var fbUrl = 'https://getbadgers.firebaseio.com';
 var fbRef = new Firebase(fbUrl);
 
-
 mainApp
 .factory('openTok', function() {
   return {
@@ -33,38 +32,47 @@ mainApp
 
   return {
   	log : function(event, extra) {
-  		extra = extra? extra : '';
-  		var page = locationService.path();
-  		if (cookiesService.currentUser) {
-  		  var user = JSON.parse(cookiesService.currentUser);
-  		} else {
-  		  var user = rootScopeService.currentUser;
-  		}
-		var userKey = user ? user.id  : this.fbClean(globalIp);
-		var logsByUser = fbRef.child('logs/byUser/'+userKey);
-		var logsByDate = fbRef.child('logs/byDate');
-		var logsByEvent = fbRef.child('logs/byEvent/'+event);
+  		try
+		{
+			extra = extra? extra : '';
+	  		var page = locationService.path();
+	  		if (cookiesService.currentUser) {
+	  		  var user = JSON.parse(cookiesService.currentUser);
+	  		} else {
+	  		  var user = rootScopeService.currentUser;
+	  		}
+			var userKey = user ? user.id  : this.fbClean(globalIp);
+			var logsByUser = fbRef.child('logs/byUser/'+userKey);
+			var logsByDate = fbRef.child('logs/byDate');
+			var logsByEvent = fbRef.child('logs/byEvent/'+event);
 
-	  	var logKey = this.fbClean(this.timeStamp('(user:'+userKey+') (event:'+event+')'));
-	  	var logValue = this.fbClean('(page:'+page+') (extra:'+extra+')');
-	  	var log = {};
-	  	log[logKey] = logValue;
+		  	var logKey = this.fbClean(this.timeStamp('(user:'+userKey+') (event:'+event+')'));
+		  	var logValue = this.fbClean('(page:'+page+') (extra:'+extra+')');
+		  	var log = {};
+		  	log[logKey] = logValue;
 
-		logsByUser.update(log);
-		logsByDate.update(log);
-		logsByEvent.update(log);
+			logsByUser.update(log);
+			logsByDate.update(log);
+			logsByEvent.update(log);
 
-		mixpanel.identify(userKey);
-		if(user) {
-			mixpanel.people.set({
-			    "name": user.name,
-			    "$email": user.email,
-			    "ip":globalIp
-			});
-		} else {
-			mixpanel.people.set({"ip": globalIp});
+			mixpanel.identify(userKey);
+			if(user) {
+				mixpanel.people.set({
+				    "name": user.name,
+				    "$email": user.email,
+				    "ip":globalIp
+				});
+			} else {
+				mixpanel.people.set({"ip": globalIp});
+			}
+			mixpanel.track(event, {user:user, page:page, extra:extra});
 		}
-		mixpanel.track(event, {user:user, page:page, extra:extra});
+		catch(err)
+	    {
+	    	var error = {}
+	    	error[this.timeStamp] = err;
+	  		fbRef.child('errors').update(error);
+	    }
   	},
 
   	timeStamp : function(extra) {
