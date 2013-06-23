@@ -195,11 +195,6 @@ function MeetingCtrl($rootScope, $routeParams, $scope, $location, utils, db, ope
     // TODO(guti): I put it here just to sync, wonder how you sync correctly.
     db.get($scope, 'users/' + $routeParams.userId1, 'user1');
     db.get($scope, 'users/' + $routeParams.userId2, 'user2', function() {
-       // TODO: remove this, it's not nice to send message for others.
-       // if ($scope.items.length == 0) {
-       //    var item = {user:$scope.user2, text:'Hi, when can we start.'};  
-       //    $scope.listRef.push(item);
-       // }
     });  
   });
 
@@ -218,7 +213,7 @@ function MeetingCtrl($rootScope, $routeParams, $scope, $location, utils, db, ope
 }
 
 function StreamCtrl($rootScope, $routeParams, $scope, $location, utils, db) {
-  var LENGTH = 5;
+  var LENGTH = 20;
   var itemsRef = fbRef.child("requests");
   $scope.items = []
   $scope.hiddenItems = []
