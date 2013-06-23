@@ -10,7 +10,7 @@ mainApp = angular.module('mainApp', ['ngCookies', 'firebase', '$strap.directives
       when('/users', {controller:UsersCtrl, templateUrl:'users.html'}).
       when('/messages/:userId', {controller:MeetingsCtrl, templateUrl:'meetings.html'}).
       when('/meeting/:userId1/:userId2', {controller:MeetingCtrl, templateUrl:'meeting.html'}).
-      when('/detail/:userId', {controller:ProfileCtrl, templateUrl:'detail.html'}).
+      when('/profile/:userId', {controller:ProfileCtrl, templateUrl:'profile.html'}).
       otherwise({redirectTo:'/'});
   }).run(["$rootScope", "$location", "$modal", "$q", "$dialog","utils", "$cookies",
      function ($rootScope, $location, $modal, $q, $dialog, utils, $cookies) {
