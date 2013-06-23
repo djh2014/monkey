@@ -17,14 +17,6 @@ mainApp = angular.module('mainApp', ['ngCookies', 'firebase', '$strap.directives
       $rootScope.global = {};
       $rootScope.$on("$routeChangeStart", function(event, next, current) {
         utils.log('change page');
-        if ($cookies.currentUser == null) {
-          // no logged user, we should be going to #login
-          // if ( next.templateUrl == "partials/login.html" ) {
-          //   // already going to #login, no redirect needed
-          // } else {
-          //   //$location.path( "/login" );
-          // }
-        }         
       });
      }
   ]);
@@ -90,7 +82,6 @@ function LoginCtrl($rootScope, $scope, $location, utils, $cookies, $dialog) {
   }
 }
 
-
 function EventCtrl($rootScope, $scope, $location, utils, $cookies, $dialog) {
   $rootScope.$on("currentUserInit", function() {
     if ($rootScope.currentUser) {
@@ -121,8 +112,6 @@ function EventCtrl($rootScope, $scope, $location, utils, $cookies, $dialog) {
   }
 }
 
-
-
 function MeetingsCtrl ($rootScope, $routeParams, $scope, $location, utils, db) {
   db.get($scope, 'meetings', 'meetings', function() {
     $scope.meetings = utils.listValues($scope.meetings);
@@ -134,7 +123,6 @@ function MeetingsCtrl ($rootScope, $routeParams, $scope, $location, utils, db) {
   });
 
   $scope.approve = function(meeting) {
-    debugger;
     utils.log('approve meeting', meeting.id);
     fbRef.child("meetings").child(meeting.id).update({status:"APPROVED"});
 
@@ -405,7 +393,6 @@ function SkillsDialogCtrl($rootScope, $scope, utils, dialog) {
       $scope.showEmailError = true;
     }
   }
-
   // Step 4: Calendar
   $scope.$on("calendar_saved",function() {
     utils.log('save available times in registration dialog');
