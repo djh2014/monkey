@@ -35,8 +35,11 @@ mainApp
   	log : function(event, extra) {
   		extra = extra? extra : '';
   		var page = locationService.path();
-  		var user = JSON.parse(cookiesService.currentUser)
-
+  		if (cookiesService.currentUser) {
+  		  var user = JSON.parse(cookiesService.currentUser);
+  		} else {
+  		  var user = rootScopeService.currentUser;
+  		}
 		var userKey = user ? user.id  : this.fbClean(globalIp);
 		var logsByUser = fbRef.child('logs/byUser/'+userKey);
 		var logsByDate = fbRef.child('logs/byDate');
@@ -50,7 +53,6 @@ mainApp
 		logsByUser.update(log);
 		logsByDate.update(log);
 		logsByEvent.update(log);
-		debugger;
 
 		mixpanel.identify(userKey);
 		if(user) {

@@ -446,7 +446,7 @@ function EventCtrl($rootScope, $scope, $location, utils, $cookies, $dialog) {
     }
 
     $scope.facebookLogin = function() {
-      utils.log('click facebook login');
+      //utils.log('click facebook login');
       $scope.directToEditPage = true;
       $scope.authClient.login('facebook', {rememberMe: true});
     }
