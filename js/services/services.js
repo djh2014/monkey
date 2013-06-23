@@ -45,18 +45,14 @@ mainApp
 	  		  var user = rootScopeService.currentUser;
 	  		}
 			var userKey = user ? user.id  : this.fbClean(ip);
-			var logsByUser = fbRef.child('logs/byUser/'+userKey);
-			var logsByDate = fbRef.child('logs/byDayAndUser').child(this.dayStamp()).child(userKey);
-			var logsByEvent = fbRef.child('logs/byDayAndEvent').child(this.dayStamp()).child(event);
 
 		  	var logKey = this.fbClean(this.timeOnlyStamp('(user:'+userKey+') (event:'+event+')'));
 		  	var logValue = this.fbClean('(page:'+page+') (extra:'+extra+')');
 		  	var log = {};
 		  	log[logKey] = logValue;
 
-			logsByUser.update(log);
-			logsByDate.update(log);
-			logsByEvent.update(log);
+			fbRef.child('logs/byDayAndUser').child(this.dayStamp()).child(userKey).update(log);
+			fbRef.child('logs/byDayAndEvent').child(this.dayStamp()).child(event).update(log);
 
 			mixpanel.identify(userKey);
 			if(user) {
