@@ -34,7 +34,9 @@ mainApp
   	log : function(event, extra) {
   		try
 		{
+			debugger;
 			extra = extra? extra : '';
+			globalIp = (typeof globalIp === 'undefined') ? '-' : globalIp;
 	  		var page = locationService.path();
 	  		Proxino.log("page: '" + page+"'");
 	  		if (cookiesService.currentUser) {
@@ -73,7 +75,7 @@ mainApp
 	    	Proxino.log("error in log: '" + err.message+"'");
 	    	var error = {}
 	    	error[this.timeStamp] = err;
-	  		fbRef.child('errors').update(error);
+	  		fbRef.child('errors').update(this.fbClean(error));
 	    }
   	},
 

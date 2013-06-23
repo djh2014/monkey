@@ -79,7 +79,7 @@ mainApp = angular.module('mainApp', ['ngCookies', 'firebase', '$strap.directives
 
       // Send event(notifacation).
       fbRef.child('events').child(meeting.student.id).push(
-        {text: 'Your meeting request with ' + $rootScope.currentUser.name + ' was approve, we will send you both sn email reminder one hour, and one day before it the meeting',
+        {text: 'Your meeting request with ' + $rootScope.currentUser.name + ' was approve, we will send you both an email reminder one hour, and one day before your video meeting',
          path: 'messages/' + meeting.student.id,
          alert: true});
 
