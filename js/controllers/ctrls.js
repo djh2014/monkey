@@ -139,7 +139,7 @@ mainApp = angular.module('mainApp', ['ngCookies', 'firebase', '$strap.directives
         resolve: {user: function(){ return $scope.user;}} });
         d.open().then(function(result){
           if (result == 'ok') {
-              utils.log('send meeting request', user.id);
+              utils.log('send meeting request', $scope.user.id);
               // Send event(notifacation).
               fbRef.child('events').child($scope.user.id).push(
                 {text: $rootScope.currentUser.name + ' want to start the video session with you',
@@ -148,7 +148,7 @@ mainApp = angular.module('mainApp', ['ngCookies', 'firebase', '$strap.directives
               $scope.showMessage('we notify ' + $scope.user.name + '. copy his email and click the red button');
              $location.path('messages/' + $rootScope.currentUser.id);
           } else {
-            utils.log('close meeting request', user.id);
+            utils.log('close meeting request', $scope.user.id);
           }
         });
       } else {
