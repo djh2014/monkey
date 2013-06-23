@@ -29,6 +29,100 @@ mainApp = angular.module('mainApp', ['ngCookies', 'firebase', '$strap.directives
      }
   ]);
 
+function LoginCtrl($rootScope, $scope, $location, utils, $cookies, $dialog) {
+  utils.log('load_website');
+  if ($cookies.currentUser) {
+    $rootScope.currentUser = JSON.parse($cookies.currentUser);
+    $rootScope.$broadcast("currentUserInit");
+  }
+  $scope.authClient = new FirebaseAuthClient(fbRef, function(error, facebookUser) {
+    // If login:
+    if (facebookUser) {
+      utils.log('auth_facebook_user', facebookUser.name);
+      var id = utils.fbClean(facebookUser.username || facebookUser.id);
+
+      var currentUserRef = fbRef.child("users").child(id);
+      currentUserRef.on('value', function(FBUser) {
+          
+          $rootScope.currentUser = jQuery.extend($rootScope.currentUser, FBUser.val());
+          $cookies.currentUser = JSON.stringify($rootScope.currentUser);
+          $rootScope.$broadcast("currentUserInit");
+          
+          // Handle new user: 
+          if (!$rootScope.currentUser.facebook) {
+            currentUserRef.update({
+              user: facebookUser.username || "", name: facebookUser.name || "", id: id, email: facebookUser.email || "", facebook: facebookUser || "",
+              img: "http://graph.facebook.com/"+ facebookUser.id+"/picture?type=large" || ""});
+            $scope.openDialog();
+          }
+
+          $scope.$apply();
+      }); 
+    // Not login:
+    } else {
+      $rootScope.currentUser = null;
+      delete $cookies.currentUser
+      $rootScope.$broadcast("currentUserInit");
+      // not login user should go home.
+      $location.path('/');
+      $scope.$apply();
+    }
+  });
+
+  $scope.openDialog = function() {
+    utils.log('started registration dialog');
+    var d = $dialog.dialog({templateUrl:  '/skills-dialog.html',controller: 'SkillsDialogCtrl',
+    backdrop: true, keyboard: false,backdropClick: false});
+    d.open().then(function(result){});
+    $location.path('stream/');
+    $scope.$apply(); 
+  }
+
+  $scope.facebookLogin = function() {
+    utils.log('click facebook login');
+    $scope.authClient.login('facebook', {rememberMe: true});
+  }
+
+  $scope.logOut = function() {
+    utils.log('click logout');
+    $scope.authClient.logout();
+    $location.path('/');
+  }
+}
+
+
+function EventCtrl($rootScope, $scope, $location, utils, $cookies, $dialog) {
+  $rootScope.$on("currentUserInit", function() {
+    if ($rootScope.currentUser) {
+      $rootScope.myEventsRef = fbRef.child('events').child($rootScope.currentUser.id);
+      $rootScope.myEventsRef.on('child_added', function(eventObject) {
+        var newEvent = eventObject.val();
+        newEvent.id = eventObject.name();
+        if(newEvent.alert == true) {
+          $rootScope.processEvent(newEvent);
+        }
+      });
+      $scope.$apply();
+    }
+  });
+
+  $rootScope.processEvent = function(newEvent) {
+    $rootScope.myEventsRef.child(newEvent.id).update({alert:false});
+    $scope.showMessage(newEvent.text);
+    $location.path(newEvent.path);
+    $scope.$apply();
+  }
+
+  // var modalPromise = $modal({template: 'message.html', show: false, scope: $rootScope});
+  $scope.showMessage = function(text) {
+    utils.log('showed notification', text);
+    var msgbox = $dialog.messageBox(text, '', [{label:'Cool', result: 'yes'}]);
+    msgbox.open().then(function(result){});  
+  }
+}
+
+
+
 function MeetingsCtrl ($rootScope, $routeParams, $scope, $location, utils, db) {
   db.get($scope, 'meetings', 'meetings', function() {
     $scope.meetings = utils.listValues($scope.meetings);
@@ -258,40 +352,6 @@ function StreamCtrl($rootScope, $routeParams, $scope, $location, utils, db) {
   }
 }
 
-function EventCtrl($rootScope, $scope, $location, utils, $cookies, $dialog) {
-$rootScope.$on("currentUserInit", function() {
-  if ($rootScope.currentUser) {
-    $rootScope.myEventsRef = fbRef.child('events').child($rootScope.currentUser.id);
-    $rootScope.myEventsRef.on('child_added', function(eventObject) {
-      var newEvent = eventObject.val();
-      newEvent.id = eventObject.name();
-      if(newEvent.alert == true) {
-        $rootScope.processEvent(newEvent);
-      }
-    });
-    $scope.$apply();
-  }
-});
-
-$rootScope.processEvent = function(newEvent) {
-  $rootScope.myEventsRef.child(newEvent.id).update({alert:false});
-  $scope.showMessage(newEvent.text);
-  $location.path(newEvent.path);
-  $scope.$apply();
-}
-
-// var modalPromise = $modal({template: 'message.html', show: false, scope: $rootScope});
-$scope.showMessage = function(text) {
-  utils.log('showed notification', text);
-  var msgbox = $dialog.messageBox(text, '', [{label:'Cool', result: 'yes'}]);
-  msgbox.open().then(function(result){});  
-
- // $rootScope.mainModalMessage = text;
- // $q.when(modalPromise).then(function(modalEl) {modalEl.modal('show');});
-}
-
-}
-
 // the dialog is injected in the specified controller
 function SkillsDialogCtrl($rootScope, $scope, utils, dialog) {
   $scope.dialogMode = 'skills';
@@ -352,69 +412,6 @@ function SkillsDialogCtrl($rootScope, $scope, utils, dialog) {
     dialog.close();
     $scope.showMessage("Thanks, now, you can request help from others");
   });
-}
-
-function LoginCtrl($rootScope, $scope, $location, utils, $cookies, $dialog) {
-  utils.log('load_website');
-  if ($cookies.currentUser) {
-    $rootScope.currentUser = JSON.parse($cookies.currentUser);
-    $rootScope.$broadcast("currentUserInit");
-  }
-  $scope.authClient = new FirebaseAuthClient(fbRef, function(error, facebookUser) {
-    // If login:
-    if (facebookUser) {
-      utils.log('auth_facebook_user', facebookUser.name);
-      var id = utils.fbClean(facebookUser.username || facebookUser.id);
-
-      var currentUserRef = fbRef.child("users").child(id);
-      currentUserRef.on('value', function(FBUser) {
-          
-          $rootScope.currentUser = jQuery.extend($rootScope.currentUser, FBUser.val());
-          $cookies.currentUser = JSON.stringify($rootScope.currentUser);
-          $rootScope.$broadcast("currentUserInit");
-          
-          // Handle new user: 
-          if (!$rootScope.currentUser.facebook) {
-            currentUserRef.update({
-              user: facebookUser.username || "", name: facebookUser.name || "", id: id, email: facebookUser.email || "", facebook: facebookUser || "",
-              img: "http://graph.facebook.com/"+ facebookUser.id+"/picture?type=large" || ""});
-            $scope.openDialog();
-          }
-
-          $scope.$apply();
-      }); 
-    // Not login:
-    } else {
-      $rootScope.currentUser = null;
-      delete $cookies.currentUser
-      $rootScope.$broadcast("currentUserInit");
-      // not login user should go home.
-      $location.path('/');
-      $scope.$apply();
-    }
-  });
-
-  $scope.openDialog = function() {
-    utils.log('started registration dialog');
-    var d = $dialog.dialog({templateUrl:  '/skills-dialog.html',controller: 'SkillsDialogCtrl',
-    backdrop: true, keyboard: false,backdropClick: false});
-    d.open().then(function(result){});
-    $location.path('stream/');
-    $scope.$apply(); 
-  }
-
-  $scope.facebookLogin = function() {
-    utils.log('click facebook login');
-    $scope.directToEditPage = true;
-    $scope.authClient.login('facebook', {rememberMe: true});
-  }
-
-  $scope.logOut = function() {
-    utils.log('click logout');
-    $scope.authClient.logout();
-    $location.path('/');
-    $scope.$apply();
-  }
 }
 
 function HomeCtrl($scope, $location, angularFireCollection, $rootScope) {
