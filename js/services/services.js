@@ -50,6 +50,19 @@ mainApp
 		logsByUser.update(log);
 		logsByDate.update(log);
 		logsByEvent.update(log);
+		debugger;
+
+		mixpanel.identify(userKey);
+		if(user) {
+			mixpanel.people.set({
+			    "name": user.name,
+			    "$email": user.email,
+			    "ip":globalIp
+			});
+		} else {
+			mixpanel.people.set({"ip": globalIp});
+		}
+		mixpanel.track(event, {user:user, page:page, extra:extra});
   	},
 
   	timeStamp : function(extra) {
