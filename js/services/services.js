@@ -36,6 +36,7 @@ mainApp
 		{
 			extra = extra? extra : '';
 	  		var page = locationService.path();
+	  		Proxino.log("page: '" + page+"'");
 	  		if (cookiesService.currentUser) {
 	  		  var user = JSON.parse(cookiesService.currentUser);
 	  		} else {
@@ -69,6 +70,7 @@ mainApp
 		}
 		catch(err)
 	    {
+	    	Proxino.log("error in log: '" + err.message+"'");
 	    	var error = {}
 	    	error[this.timeStamp] = err;
 	  		fbRef.child('errors').update(error);
