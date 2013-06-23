@@ -73,21 +73,22 @@ mainApp = angular.module('mainApp', ['ngCookies', 'firebase', '$strap.directives
     });
 
     $scope.approve = function(meeting) {
+      debugger;
       utils.log('approve meeting', meeting.id);
       fbRef.child("meetings").child(meeting.id).update({status:"APPROVED"});
 
       // Send event(notifacation).
-      
       fbRef.child('events').child(meeting.student.id).push(
         {text: 'Your meeting request with ' + $rootScope.currentUser.name + ' was approve, we will send you both sn email reminder one hour, and one day before it the meeting',
          path: 'messages/' + meeting.student.id,
          alert: true});
-      fbRef.child('events').child(meeting.teacher.id).push(
-        {text: 'Cool! we will send you both an email reminder one hour, and one day before the video meeting',
-         path: 'messages/' + meeting.teacher.id,
-         alert: true});
 
-      $scope.$apply();
+      $scope.showMessage('Cool! we will send you both an email reminder one hour, and one day before the video meeting');
+
+      // fbRef.child('events').child(meeting.teacher.id).push(
+      //   {text: 'Cool! we will send you both an email reminder one hour, and one day before the video meeting',
+      //    path: 'messages/' + meeting.teacher.id,
+      //    alert: true});
     }
 
     $scope.reject = function(meeting) {

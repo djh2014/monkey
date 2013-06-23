@@ -2,8 +2,8 @@
   <div class="offset2 span6">
   <u><h3>Messages</h3></u>
 
-<a ng-repeat="meeting in meetings" href="/#/meeting/{{meeting.teacher.id}}/{{meeting.student.id}}">
-<div class="row-fluid well" >
+<!-- <a  href="/#/meeting/{{meeting.teacher.id}}/{{meeting.student.id}}"> -->
+<div ng-repeat="meeting in meetings" class="row-fluid well" >
 	<div class="span3">
 	<profile user="meeting.teacher"/>
 	<profile user="meeting.student"/>
@@ -33,5 +33,5 @@
     </span>
 	</div>
 </div>
-</a>
+<!-- </a> -->
 </div>

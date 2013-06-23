@@ -44,10 +44,10 @@ mainApp
 	  		}
 			var userKey = user ? user.id  : this.fbClean(globalIp);
 			var logsByUser = fbRef.child('logs/byUser/'+userKey);
-			var logsByDate = fbRef.child('logs/byDate');
-			var logsByEvent = fbRef.child('logs/byEvent/'+event);
+			var logsByDate = fbRef.child('logs/byDayAndUser').child(this.dayStamp()).child(userKey);
+			var logsByEvent = fbRef.child('logs/byDayAndEvent').child(this.dayStamp()).child(event);
 
-		  	var logKey = this.fbClean(this.timeStamp('(user:'+userKey+') (event:'+event+')'));
+		  	var logKey = this.fbClean(this.timeOnlyStamp('(user:'+userKey+') (event:'+event+')'));
 		  	var logValue = this.fbClean('(page:'+page+') (extra:'+extra+')');
 		  	var log = {};
 		  	log[logKey] = logValue;
@@ -77,8 +77,16 @@ mainApp
 	    }
   	},
 
+  	dayStamp : function(extra) {
+  	  return moment().format("YY:MM:DD") + ' ' + (extra || '');
+  	},
+
+  	timeOnlyStamp : function(extra) {
+  	  return moment().format("HH:mm:ss:ms") + ' ' + (extra || '');
+  	},
+
   	timeStamp : function(extra) {
-  	  return moment().format("YY:MM:DD_HH:mm:ss") + ' ' + extra;
+  	  return moment().format("YY:MM:DD_HH:mm:ss") + ' ' + (extra || '');
   	},
 
   	random : function(size) {
