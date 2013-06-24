@@ -22,11 +22,20 @@ mainApp = angular.module('mainApp', ['ngCookies', 'firebase', '$strap.directives
      }
   ]);
 
-function TestCtrl($rootScope, $scope, $location, utils, $cookies, $dialog, $http, email) {
+function TestCtrl($rootScope, $scope, $location, utils, $cookies, $dialog, $http, notify) {
    debugger;
-    email.send({text:'hi', subject:'test',email:'abgutman1@gmail.com',name:'Rob'})
+   var user = JSON.parse($cookies.currentUser);
+    // notify.email({user:user, html:'hi?', subject:'test?'})
+    //   .done(function(res,r,s,t) { debugger; })
+    //   .fail(function(res,r,s,t) { debugger; });
+
+    notify.send({
+      text: 'Your meeting request with ' + user.name + ' was approve, we will send you both an email reminder one hour, and one day before your video meeting',
+      user: user,
+      path: 'messages/' + user.id,
+    })
       .done(function(res,r,s,t) { debugger; })
-      .fail(function(res,r,s,t) { debugger; });
+      .fail(function(res,r,s,t) { debugger; });    
 }
 
 function LoginCtrl($rootScope, $scope, $location, utils, $cookies, $dialog) {
@@ -120,7 +129,7 @@ function EventCtrl($rootScope, $scope, $location, utils, $cookies, $dialog) {
   }
 }
 
-function MeetingsCtrl ($rootScope, $routeParams, $scope, $location, utils, db) {
+function MeetingsCtrl ($rootScope, $routeParams, $scope, $location, utils, db, notify) {
   db.get($scope, 'meetings', 'meetings', function() {
     $scope.meetings = utils.listValues($scope.meetings);
     $scope.meetings = $scope.meetings.filter(function(e, i) {
@@ -134,12 +143,15 @@ function MeetingsCtrl ($rootScope, $routeParams, $scope, $location, utils, db) {
     utils.log('approve meeting', meeting.id);
     fbRef.child("meetings").child(meeting.id).update({status:"APPROVED"});
 
-    // Send event(notifacation).
-    fbRef.child('events').child(meeting.student.id).push(
-      {text: 'Your meeting request with ' + $rootScope.currentUser.name + ' was approve, we will send you both an email reminder one hour, and one day before your video meeting',
-       path: 'messages/' + meeting.student.id,
-       alert: true});
-    // Notify current User:
+    debugger;
+
+    notify.send({
+      text: 'Your meeting request with ' + $rootScope.currentUser.name + ' was approved, we will send you both an email reminder one hour, and one day before your video meeting',
+      user: meeting.student,
+      path: 'messages/' + meeting.student.id,
+    })
+    .done(function(res,r,s,t) { debugger; })
+      .fail(function(res,r,s,t) { debugger; });
     $scope.showMessage('Cool! we will send you both an email reminder one hour, and one day before the video meeting');
   }
 

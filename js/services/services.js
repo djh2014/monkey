@@ -2,27 +2,43 @@ var fbUrl = 'https://getbadgers.firebaseio.com';
 var fbRef = new Firebase(fbUrl);
 
 mainApp
-.factory('email', function(utils) {
+.factory('notify', function(utils) {
   utilsService = utils;
 
   return {
-	send : function (input) {
-		if(input.email == null || input.email == ''){
+  	send : function(input) {
+  	  debugger;
+  	  this.event(input);
+  	  
+  	  var emailInput = input;
+  	  emailInput.html = input.text + "<br/><a href='http://getbadgers.com/#/"+input.path+"'>Click here to view meeting</a>";
+  	  emailInput.subject = "You got a new message in GetBadgers!";
+  	  return this.email(emailInput);
+
+  	},
+  	event : function(input) {
+  	  fbRef.child('events').child(input.user.id).push(
+      {text: input.text,
+       path: input.path,
+       alert: true});
+  	},
+	email : function (input) {
+		if (input.user.email == null || input.user.email == '') {
 			utilsService.log('missing email');
 		}
 
 		var data = {
 		    key: "hMLd5dgD9OjanIN0xgONww",
 		    message: {
-		      text: input.text,
+		      html: input.html,
 		      subject: input.subject,
-		      from_email: "robgordon2012@gmail.com",
-		      from_name: "Rob Gordon (getbadgers.com)",
-		      to: [{email: input.email, name: input.name}],
-		      bcc: [{email: 'dannyjhaber@gmail.com', name: 'Habi Haber'},
-		            {email: 'abgutman1@gmail.com', name: 'Guti Gutman'}]
+		      from_email: "danny@getbadgers.com",
+		      from_name: "Danny (getbadgers.com)",
+		      to: [{email: input.user.email, name: input.user.name}],
+		      //bcc_address: 'dannyjhaber@gmail.com'
+		      bcc_address: 'abgutman1@gmail.com'
 		    }
-		   }
+		}
 
 	   return $.ajax({
 	      type: 'POST',
