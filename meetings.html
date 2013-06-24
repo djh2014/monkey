@@ -2,7 +2,6 @@
   <div class="offset2 span6">
   <u><h3>Messages</h3></u>
 
-<!-- <a  href="/#/meeting/{{meeting.teacher.id}}/{{meeting.student.id}}"> -->
 <div ng-repeat="meeting in meetings" class="row-fluid well {{(meeting.activeForUserId == currentUser.id) && 'alert-error' || ''}}" >
 
 	<div class="span3">
@@ -14,7 +13,8 @@
 	<h3>{{meeting.speaker.name}} :<blockquote ng-show="meeting.text"> {{meeting.text}}</blockquote></h3>
     <p ng-show="meeting.day">Date: {{meeting.day | date:'fullDate'}}</p>
     <p ng-show="meeting.time">Time: {{meeting.time}}</p>
-	status:
+	
+    status:
 	<span ng-switch on="meeting.status" >
     <span ng-switch-when="APPROVED">Approve!</span>
         <span ng-switch-when="REJECT">Rejected</span>
@@ -31,7 +31,8 @@
         	</span>
         </span>
     </span>
+    <br/>
+    <a href="/#/meeting/{{meeting.teacher.id}}/{{meeting.student.id}}">Go To Video Meeting Page(Chorme only)</a>
 	</div>
 </div>
-<!-- </a> -->
 </div>
