@@ -133,7 +133,10 @@
                                                     <a href="/#/users" class="btn btn-large btn-success">Find People</a>
                                                 </td>
                                                 <td class="nav-right">
-                                                    <a href="/#/messages/{{currentUser.id}}" class="btn btn-large btn-success">Notifications</a>
+  <a href="/#/messages/{{currentUser.id}}"
+   class="btn btn-large btn-err {{(activeNotification.length > 0) && 'btn-danger' || 'btn-success'}}">Notifications 
+    <span ng-show="activeNotification.length > 0">({{activeNotification.length}})</span>
+  </a>
                                                 </td>
                                                 <td class="nav-right">
                                                     <profile user="currentUser"/>

@@ -84,7 +84,7 @@ function LoginCtrl($rootScope, $scope, $location, utils, $cookies, $dialog) {
 function EventCtrl($rootScope, $scope, $location, utils, $cookies, $dialog, notify) {
   $rootScope.activeNotification = [];
   $rootScope.$on("currentUserInit", function() {
-    if ($rootScope.currentUser) {
+    if($rootScope.currentUser) {
       $rootScope.myEventsRef = fbRef.child('events').child($rootScope.currentUser.id);
       debugger;
       $rootScope.myEventsRef.on('child_added', function(eventObject) {
