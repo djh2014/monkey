@@ -110,6 +110,38 @@
                               <!-- Login -->
                             <div class="row inner-nav" id="no-margin" style="margin-bottom: 10px">
                                 <div class="span12 nav-header">
+<<<<<<< HEAD
+                                    <table>
+                                        <thead>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td class="nav-left"><a href='/'><img src="img/badgertoolbar.png" alt=""/></a>
+                                                </td>
+                                                <td class="nav-left">
+                                                    <form ng-controller="SearchCtrl" class="search-bar" id="nav-search" >
+                                                        <input type="text" ng-model="query.text" placeholder="Search Skills" class="search-query span6" id="innernav-search">
+                                                        <button ng-click="search()" class="btn btn-inverse" id="icon-box"><i class="icon-search icon-white"></i></button>
+                                                    </form>
+                                                </td>
+                                                <td class="nav-right">
+                                                    <a href="/#/stream" class="btn btn-large btn-success">News feed</a>
+                                                </td>
+                                                <td class="nav-right">
+                                                    <a href="/#/users" class="btn btn-large btn-success">Find People</a>
+                                                </td>
+                                                <td class="nav-right">
+                                                    <a href="/#/messages/{{currentUser.id}}" class="btn btn-large btn-success">Notifcations</a>
+                                                </td>
+                                                <td class="nav-right">
+                                                    <profile user="currentUser"/></profile>
+                                                    <a href="#/detail/{{currentUser.id}}" title="{{currentUser.name}}"></a>(<a ng-click="logOut()">logout</a>)
+                                                </td>   
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+=======
                                 <table>
                                     <thead>
                                     </thead>
@@ -139,6 +171,7 @@
                                         </tr>
                                     </tbody>
                                 </table>
+>>>>>>> 97e4bec8484e0d94a8001d5bae5d902ecbe696db
                             </div>
                         </div>
                             </span>    
