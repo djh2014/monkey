@@ -11,7 +11,7 @@ mainApp
   	  this.event(input);
   	  
   	  var emailInput = input;
-  	  emailInput.html = input.text + "<br/><a href='http://getbadgers.com/#/"+input.path+"'>Click here to view meeting</a>";
+  	  emailInput.html = "<p>"+input.text+"<br/><a href='http://getbadgers.com/#/"+input.path+"'>Click here to view meeting</a></p>";
   	  emailInput.subject = "You got a new message in GetBadgers!";
   	  return this.email(emailInput);
 

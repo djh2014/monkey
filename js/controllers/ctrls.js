@@ -99,7 +99,7 @@ function LoginCtrl($rootScope, $scope, $location, utils, $cookies, $dialog) {
   }
 }
 
-function EventCtrl($rootScope, $scope, $location, utils, $cookies, $dialog) {
+function EventCtrl($rootScope, $scope, $location, utils, $cookies, $dialog, notify) {
   $rootScope.$on("currentUserInit", function() {
     if ($rootScope.currentUser) {
       $rootScope.myEventsRef = fbRef.child('events').child($rootScope.currentUser.id);
@@ -143,26 +143,30 @@ function MeetingsCtrl ($rootScope, $routeParams, $scope, $location, utils, db, n
     utils.log('approve meeting', meeting.id);
     fbRef.child("meetings").child(meeting.id).update({status:"APPROVED"});
 
-    debugger;
-
     notify.send({
-      text: 'Your meeting request with ' + $rootScope.currentUser.name + ' was approved, we will send you both an email reminder one hour, and one day before your video meeting',
       user: meeting.student,
+      text: 'Your meeting request with ' + $rootScope.currentUser.name + ' was approved, we will send you both an email reminder one hour, and one day before your video meeting',
       path: 'messages/' + meeting.student.id,
-    })
-    .done(function(res,r,s,t) { debugger; })
-      .fail(function(res,r,s,t) { debugger; });
+    });
+
     $scope.showMessage('Cool! we will send you both an email reminder one hour, and one day before the video meeting');
   }
 
   $scope.reject = function(meeting) {
     utils.log('rejact meeting', meeting.id);
     fbRef.child("meetings").child(meeting.id).update({status:"REJECT"});
-    $scope.$apply();
+    
+    notify.send({
+      user: meeting.student,
+      text: 'Your meeting request with ' + $rootScope.currentUser.name + " was rejected, no worries, I'm sure another user would be able to help you",
+      path: 'messages/' + meeting.student.id,
+    });
+
+    $scope.showMessage('Oh well, next time.');
   }
 }
 
-function ProfileCtrl($scope, $rootScope, $location, $routeParams, db, utils, $dialog) {
+function ProfileCtrl($scope, $rootScope, $location, $routeParams, db, utils, $dialog, notify) {
   $scope.userId = $routeParams.userId;
 
   $scope.editSkillsMode = false;
@@ -206,11 +210,12 @@ function ProfileCtrl($scope, $rootScope, $location, $routeParams, db, utils, $di
         if (result == 'ok') {
             utils.log('send meeting request', $scope.user.id);
             // Send event(notifacation).
-            fbRef.child('events').child($scope.user.id).push(
-              {text: $rootScope.currentUser.name + ' want to start the video session with you',
+            notify.send({
+               user: $scope.user,
+               text: $rootScope.currentUser.name + ' wants to have a video session with you',
                path:'messages/' + $scope.user.id,
-               alert:true});
-            $scope.showMessage('we notify ' + $scope.user.name + '. copy his email and click the red button');
+            });
+           $scope.showMessage('We notify ' + $scope.user.name + ". And we'll notify you via email once he approve.");
            $location.path('messages/' + $rootScope.currentUser.id);
         } else {
           utils.log('close meeting request', $scope.user.id);
