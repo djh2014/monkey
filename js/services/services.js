@@ -2,6 +2,44 @@ var fbUrl = 'https://getbadgers.firebaseio.com';
 var fbRef = new Firebase(fbUrl);
 
 mainApp
+.factory('email', function(utils) {
+  utilsService = utils;
+
+  return {
+	send : function (input) {
+		if(input.email == null || input.email == ''){
+			utilsService.log('missing email');
+		}
+
+		var data = {
+		    key: "hMLd5dgD9OjanIN0xgONww",
+		    message: {
+		      text: input.text,
+		      subject: input.subject,
+		      from_email: "robgordon2012@gmail.com",
+		      from_name: "Rob Gordon (getbadgers.com)",
+		      to: [{email: input.email, name: input.name}],
+		      bcc: [{email: 'dannyjhaber@gmail.com', name: 'Habi Haber'},
+		            {email: 'abgutman1@gmail.com', name: 'Guti Gutman'}]
+		    }
+		   }
+
+	   return $.ajax({
+	      type: 'POST',
+	      url: 'https://mandrillapp.com/api/1.0/messages/send.json',
+	      crossDomain: true,
+	      data: data,
+	      dataType: 'json',
+	      success: function(a,b,c) {
+	      	utilsService.log('email_sent',c.responseText);
+	      },
+	      error: function(a,b,c) {
+	      	utilsService.log('email_fail',c.responseText);
+	      }
+	    });
+	}
+  }
+})
 .factory('openTok', function() {
   return {
 	getSessionAndToken : function () {
@@ -34,7 +72,6 @@ mainApp
   	log : function(event, extra) {
   		try
 		{
-			debugger;
 			extra = extra? extra : '';
 			var ip = this.getIP(); 
 	  		var page = locationService.path();

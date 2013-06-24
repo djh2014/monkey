@@ -11,6 +11,7 @@ mainApp = angular.module('mainApp', ['ngCookies', 'firebase', '$strap.directives
       when('/messages/:userId', {controller:MeetingsCtrl, templateUrl:'meetings.html'}).
       when('/meeting/:userId1/:userId2', {controller:MeetingCtrl, templateUrl:'meeting.html'}).
       when('/profile/:userId', {controller:ProfileCtrl, templateUrl:'profile.html'}).
+      when('/test', {controller:TestCtrl, templateUrl:'test.html'}).
       otherwise({redirectTo:'/'});
   }).run(["$rootScope", "$location", "$modal", "$q", "$dialog","utils", "$cookies",
      function ($rootScope, $location, $modal, $q, $dialog, utils, $cookies) {
@@ -20,6 +21,13 @@ mainApp = angular.module('mainApp', ['ngCookies', 'firebase', '$strap.directives
       });
      }
   ]);
+
+function TestCtrl($rootScope, $scope, $location, utils, $cookies, $dialog, $http, email) {
+   debugger;
+    email.send({text:'hi', subject:'test',email:'abgutman1@gmail.com',name:'Rob'})
+      .done(function(res,r,s,t) { debugger; })
+      .fail(function(res,r,s,t) { debugger; });
+}
 
 function LoginCtrl($rootScope, $scope, $location, utils, $cookies, $dialog) {
   utils.log('load_website');
