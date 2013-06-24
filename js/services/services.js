@@ -26,8 +26,64 @@ mainApp
 	}
   }
 })
-.factory('utils', function() {
+.factory('utils', function($rootScope, $location, $cookies) {
+  rootScopeService = $rootScope;
+  locationService = $location;
+  cookiesService = $cookies;
+
   return {
+  	log : function(event, extra) {
+  		extra = extra? extra : '';
+  		var page = locationService.path();
+  		if (cookiesService.currentUser) {
+  		  var user = JSON.parse(cookiesService.currentUser);
+  		} else {
+  		  var user = rootScopeService.currentUser;
+  		}
+		var userKey = user ? user.id  : this.fbClean(globalIp);
+		var logsByUser = fbRef.child('logs/byUser/'+userKey);
+		var logsByDate = fbRef.child('logs/byDate');
+		var logsByEvent = fbRef.child('logs/byEvent/'+event);
+
+	  	var logKey = this.fbClean(this.timeStamp('(user:'+userKey+') (event:'+event+')'));
+	  	var logValue = this.fbClean('(page:'+page+') (extra:'+extra+')');
+	  	var log = {};
+	  	log[logKey] = logValue;
+
+		logsByUser.update(log);
+		logsByDate.update(log);
+		logsByEvent.update(log);
+
+		mixpanel.identify(userKey);
+		if(user) {
+			mixpanel.people.set({
+			    "name": user.name,
+			    "$email": user.email,
+			    "ip":globalIp
+			});
+		} else {
+			mixpanel.people.set({"ip": globalIp});
+		}
+		mixpanel.track(event, {user:user, page:page, extra:extra});
+  	},
+
+  	timeStamp : function(extra) {
+  	  return moment().format("YY:MM:DD_HH:mm:ss") + ' ' + extra;
+  	},
+
+  	random : function(size) {
+  	  return Math.ceil(Math.random()*Math.pow(10,size));
+  	},
+
+  	convertTime : function(list, dateAttr) {
+  	  return list.map(function(e, i) {
+        if (e[dateAttr]) {
+          e[dateAttr] = new Date(e[dateAttr]).getTime();
+        }
+        return e;
+      })
+  	},
+
   	removeHashKey : function(dic) {
   		var newDic = {}
   		for( key  in dic) {
@@ -48,7 +104,7 @@ mainApp
 	},
 
 	genKey : function(string1, string2) {
-	  if(string1 < string2){
+	  if (string1 < string2) {
 	    return string1 + "_" + string2;
 	  } else {
 	    return string2 + "_" + string1;
@@ -56,7 +112,7 @@ mainApp
 	},
 
 	fbClean : function(string) {
-	  return string.replace(/\./g,' ').replace(/\#/g,' ').replace(/\$/g,' ').replace(/\[/g,' ').replace(/\]/g,' ');
+	  return string.replace(/\./g,' ').replace(/\//g,' ').replace(/\#/g,' ').replace(/\$/g,' ').replace(/\[/g,' ').replace(/\]/g,' ');
 	},
 
     range: function(start, stop, step){

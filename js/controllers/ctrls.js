@@ -8,27 +8,40 @@ mainApp = angular.module('mainApp', ['ngCookies', 'firebase', '$strap.directives
       when('/', {controller:HomeCtrl, templateUrl:'home.html'}).
       when('/stream', {controller:StreamCtrl, templateUrl:'stream.html'}).
       when('/users', {controller:UsersCtrl, templateUrl:'users.html'}).
-      when('/meetings/:userId', {controller:MeetingsCtrl, templateUrl:'meetings.html'}).
-      when('/messages/:userId', {controller: MessagesCtrl, templateUrl:'messages.html'}).
+      when('/messages/:userId', {controller:MeetingsCtrl, templateUrl:'meetings.html'}).
       when('/meeting/:userId1/:userId2', {controller:MeetingCtrl, templateUrl:'meeting.html'}).
       when('/detail/:userId', {controller:DetailCtrl, templateUrl:'detail.html'}).
-      when('/test', {templateUrl:'skills-dialog.html'}).
+      when('/test', {controller:TestCtrl, templateUrl:'test.html'}).
       otherwise({redirectTo:'/'});
-  }).run(["$rootScope", "$location", "$modal", "$q",
-     function ($rootScope, $location, $modal, $q) {
-       $rootScope.global = {};
-       var modalPromise = $modal({template: 'message.html', show: false, scope: $rootScope});
-       $rootScope.showMessage = function(text) {
-         $rootScope.mainModalMessage = text;
-         $q.when(modalPromise).then(function(modalEl) {modalEl.modal('show');});
-       }
+  }).run(["$rootScope", "$location", "$modal", "$q", "$dialog","utils", "$cookies",
+     function ($rootScope, $location, $modal, $q, $dialog, utils, $cookies) {
+      $rootScope.global = {};
+      $rootScope.$on("$routeChangeStart", function(event, next, current) {
+        utils.log('change page');
+        if ($cookies.currentUser == null) {
+          // no logged user, we should be going to #login
+          // if ( next.templateUrl == "partials/login.html" ) {
+          //   // already going to #login, no redirect needed
+          // } else {
+          //   //$location.path( "/login" );
+          // }
+        }         
+      });
      }
   ]);
 
+  // Can be deletes 
   function MessagesCtrl($rootScope, $routeParams, $scope, $location, utils, db, $modal, $q) {
     var messagesRef = fbRef.child("messages").child($routeParams.userId);
     messagesRef.on('value', function(messages) {
       $scope.messages = utils.listValues(messages.val());
+      $scope.messages = $scope.messages.map(function(e, i) {
+        if (e.day) {
+          e.day = new Date(e.day).getTime();
+        }
+        return e;
+      })
+      // we can save this part maybe: 
       if ($scope.messages.length <= 0 ) {
         fbRef.child("users").child("bad-gerry").on('value', function(badgerryObject) {
           var badgerry = badgerryObject.val();
@@ -39,37 +52,13 @@ mainApp = angular.module('mainApp', ['ngCookies', 'firebase', '$strap.directives
   }
 
   function TestCtrl ($rootScope, $routeParams, $scope, $location, utils, db, $modal, $q) {
-    $scope.calendarConfig = {
-        height: 450,
-        editiable: true,
-        dayClick: function(){
-            $scope.$apply($scope.alertEventOnClick);
-        }
-    };
-
-    ///
-    $scope.calendarConfig = {
-        height: 450,
-        editiable: true,
-        dayClick: function(){
-            $scope.$apply($scope.alertEventOnClick);
-        }
-    };
-
-    $scope.eventSources = [{
-      events: function(start, end, cb) {
-        $scope.calendarRef = fbRef.child("calendars").child($routeParams.userId);
-        $scope.calendarRef.on('value', function(calendar) {
-            cb( );
-        })
-      },
-      //color: 'yellow',   // an option!
-      //textColor: 'black' // an option!
-    }];
-    ///
-
+    $scope.time = "6:00 PM";
     $scope.click = function() {
-      $rootScope.showMessage("test?");
+      $scope.time = $scope.time;
+      fbRef.child("tests").on("value", function(val) {
+        var dic = val.val();
+      })
+      fbRef.child("tests").push({"date":$scope.datepicker.date.toString(), name:"a"});
     };  
   }  
 
@@ -79,21 +68,36 @@ mainApp = angular.module('mainApp', ['ngCookies', 'firebase', '$strap.directives
       $scope.meetings = $scope.meetings.filter(function(e, i) {
         return e.teacher.id == $routeParams.userId || e.student.id == $routeParams.userId;
       });
+      $scope.meetings = utils.convertTime($scope.meetings, 'day');
       $scope.$apply();
     });
 
-    $scope.approve = function(meeting_id) {
-      fbRef.child("meetings").child(meeting_id).update({status:"APPROVED"});
+    $scope.approve = function(meeting) {
+      utils.log('approve meeting', meeting.id);
+      fbRef.child("meetings").child(meeting.id).update({status:"APPROVED"});
+
+      // Send event(notifacation).
+      
+      fbRef.child('events').child(meeting.student.id).push(
+        {text: 'Your meeting request with ' + $rootScope.currentUser.name + ' was approve, we will send you both sn email reminder one hour, and one day before it the meeting',
+         path: 'messages/' + meeting.student.id,
+         alert: true});
+      fbRef.child('events').child(meeting.teacher.id).push(
+        {text: 'Cool! we will send you both an email reminder one hour, and one day before the video meeting',
+         path: 'messages/' + meeting.teacher.id,
+         alert: true});
+
       $scope.$apply();
     }
 
-    $scope.reject = function(meeting_id) {
-      fbRef.child("meetings").child(meeting_id).update({status:"REJECT"});
+    $scope.reject = function(meeting) {
+      utils.log('rejact meeting', meeting.id);
+      fbRef.child("meetings").child(meeting.id).update({status:"REJECT"});
       $scope.$apply();
     }
   }
 
-  function DetailCtrl($scope, $rootScope, $location, $routeParams, db, utils) {      
+  function DetailCtrl($scope, $rootScope, $location, $routeParams, db, utils, $dialog) {      
     $scope.userId = $routeParams.userId;
 
     $scope.editSkillsMode = false;
@@ -101,6 +105,7 @@ mainApp = angular.module('mainApp', ['ngCookies', 'firebase', '$strap.directives
       $scope.editSkillsMode = true;
     }
     $scope.editSkills = function() {
+      utils.log('start edit skill in profile page');
       $scope.editSkillsMode = true; 
     }
 
@@ -117,42 +122,64 @@ mainApp = angular.module('mainApp', ['ngCookies', 'firebase', '$strap.directives
     });
 
     $scope.saveSkills = function() {
+        utils.log('save skills in profile page');
+
         fbRef.child("users").child($scope.user.id).update($scope.user);
-        $rootScope.checkRequireFields();
         if ($scope.user.skills && $scope.user.skills != '') {
           $scope.editSkillsMode = false;
         } else {
-          $rootScope.showMessage("For people to be able to ask for your advice let us know what are your skills.");
+          $scope.showMessage("For people to be able to ask for your advice let us know what are your skills.");
         }
       }
 
-    $scope.setRequest = function() {      
+    $scope.setRequest = function() {
+      utils.log('open dialog meeting request', $scope.user.id);
       if($rootScope.currentUser) {
-        var key = utils.genKey($scope.user.id, $rootScope.currentUser.id);
-        var meeting = {};
-        meeting[key] = {'teacher':$scope.user, 'student':$rootScope.currentUser, 'status':"NEW", 'id': key};
-        fbRef.child('meetings').update(meeting);
-        var meetingPath = 'meeting/' + $rootScope.currentUser.id + '/' + $scope.user.id 
-        
-        // Send event
-        fbRef.child('events').child($scope.user.id).push(
-          {text: $rootScope.currentUser.name + ' want to start the video session with you',
-           path:meetingPath,
-           alert:true});
-
-        $rootScope.showMessage('we notify ' + $scope.user.name + '. copy his email and click the red button');
-        $location.path(meetingPath);
+        var d = $dialog.dialog({templateUrl: '/request-dialog.html',controller: 'MeetingRequestDialogCtrl',
+        resolve: {user: function(){ return $scope.user;}} });
+        d.open().then(function(result){
+          if (result == 'ok') {
+              utils.log('send meeting request', $scope.user.id);
+              // Send event(notifacation).
+              fbRef.child('events').child($scope.user.id).push(
+                {text: $rootScope.currentUser.name + ' want to start the video session with you',
+                 path:'messages/' + $scope.user.id,
+                 alert:true});
+              $scope.showMessage('we notify ' + $scope.user.name + '. copy his email and click the red button');
+             $location.path('messages/' + $rootScope.currentUser.id);
+          } else {
+            utils.log('close meeting request', $scope.user.id);
+          }
+        });
       } else {
-        $rootScope.showMessage("you need to sign in first");
+        $scope.showMessage("you need to sign in first");
       }
     }
   }
+
+  // the dialog is injected in the specified controller
+  function MeetingRequestDialogCtrl($rootScope, $location, $scope, utils, dialog, user) {
+    $scope.date = (new Date());
+    $scope.message = "Hey let's have a video meeting.";
+    $scope.time = "6:00 PM";
+    $scope.sendMessage = function() {
+      var meeting = {}
+      var meetingKey = utils.genKey(user.id, $rootScope.currentUser.id);
+      $scope.date = $scope.date ? $scope.date.toString() : '';
+      meeting[meetingKey] = {
+        'teacher': user, 'student': $rootScope.currentUser,
+        'status': "NEW", 'id': meetingKey, 'day':$scope.date.toString(), 'time':$scope.time,
+        'text': $scope.message, 'speaker': $rootScope.currentUser};
+      fbRef.child('meetings').update(meeting);
+      dialog.close('ok');
+    }
+  } 
 
   function VideoCtrl($rootScope, $routeParams, $scope, $location, utils, db, openTok) {
     var sessionAndToken = openTok.getSessionAndToken();
     
     //temp
-    $scope.streams = []
+    $scope.streams = [];
 
     TB.addEventListener("exception", exceptionHandler);
       var session = TB.initSession(sessionAndToken.session);
@@ -222,7 +249,7 @@ mainApp = angular.module('mainApp', ['ngCookies', 'firebase', '$strap.directives
         $scope.listRef.push($scope.newItem);
         $scope.newItem = {};      
       } else {
-        $rootScope.showMessage('sorry you are not a user');
+        $scope.showMessage('sorry you are not a user');
       }
     }
   }
@@ -266,63 +293,111 @@ mainApp = angular.module('mainApp', ['ngCookies', 'firebase', '$strap.directives
 
     $scope.newItem = {}
     $scope.addNew = function() {
+      utils.log('added new request');
       $scope.newItem.user = $rootScope.currentUser;
       itemsRef.push($scope.newItem);
       $scope.newItem = {}
     }
   }
 
-function EventCtrl($rootScope, $scope, $location, utils, $cookies) {
-    $rootScope.$on("currentUserInit", function() {
-      if ($rootScope.currentUser) {
-        $rootScope.myEventsRef = fbRef.child('events').child($rootScope.currentUser.id);
-
-        $rootScope.myEventsRef.on('child_added', function(eventObject) {
-          var newEvent = eventObject.val();
-          newEvent.id = eventObject.name();
-          if(newEvent.alert == true) {
-            $rootScope.processEvent(newEvent);
-          }
-        });
-        $scope.$apply();
-      }
-    });
-    $rootScope.processEvent = function(newEvent) {
-      $rootScope.myEventsRef.child(newEvent.id).update({alert:false});
-      $rootScope.showMessage(newEvent.text);
-      // TODO(guti).
-      //$location.path('meetings');
-       $location.path(newEvent.path);
+function EventCtrl($rootScope, $scope, $location, utils, $cookies, $dialog) {
+  $rootScope.$on("currentUserInit", function() {
+    if ($rootScope.currentUser) {
+      $rootScope.myEventsRef = fbRef.child('events').child($rootScope.currentUser.id);
+      $rootScope.myEventsRef.on('child_added', function(eventObject) {
+        var newEvent = eventObject.val();
+        newEvent.id = eventObject.name();
+        if(newEvent.alert == true) {
+          $rootScope.processEvent(newEvent);
+        }
+      });
       $scope.$apply();
     }
+  });
+
+  $rootScope.processEvent = function(newEvent) {
+    $rootScope.myEventsRef.child(newEvent.id).update({alert:false});
+    $scope.showMessage(newEvent.text);
+    $location.path(newEvent.path);
+    $scope.$apply();
   }
 
+  // var modalPromise = $modal({template: 'message.html', show: false, scope: $rootScope});
+  $scope.showMessage = function(text) {
+    utils.log('showed notification', text);
+    var msgbox = $dialog.messageBox(text, '', [{label:'Cool', result: 'yes'}]);
+    msgbox.open().then(function(result){});  
+
+   // $rootScope.mainModalMessage = text;
+   // $q.when(modalPromise).then(function(modalEl) {modalEl.modal('show');});
+  }
+
+}
+
   // the dialog is injected in the specified controller
-  function SkillsDialogCtrl($rootScope, $scope, dialog) {
-    $scope.dilaogMode = 'skills';
+  function SkillsDialogCtrl($rootScope, $scope, utils, dialog) {
+    $scope.dialogMode = 'skills';
 
     // calendar stuff:
     $scope.user = $rootScope.currentUser;
     $scope.userId = $rootScope.currentUser.id;
     $scope.onlyEditMode = true;
 
+    // Step 1: Skills
     $scope.saveSkills = function() {
       if ($rootScope.currentUser.skills && $rootScope.currentUser.skills != '') { 
+        utils.log('save skills in registration dialog');
         fbRef.child('users').child($rootScope.currentUser.id).update($rootScope.currentUser);
-        $scope.dilaogMode = 'calendar';
-        //dialog.close();
+        $scope.dialogMode = 'requests';
       } else {
+        utils.log('try to save empty skills');
         $scope.showError = true;
       }
     }
 
+    // Step 2: Requests
+    $scope.saveRequests = function() {
+      if ($scope.requestText && $scope.requestText != '') {
+        utils.log('save request in registration dialog');
+        var requestValue = {text: $scope.requestText, user: $rootScope.currentUser};
+        var requestKey = utils.timeStamp($rootScope.currentUser.id);
+        var request = {};
+        request[requestKey] = requestValue;
+        fbRef.child('requests').update(request);
+
+        if ($rootScope.currentUser.email && $rootScope.currentUser.email != '') {
+          $scope.dialogMode = 'calendar';
+        } else {
+          $scope.dialogMode = 'email';
+        }
+      } else {
+        utils.log('try to save empty request');
+        $scope.showRequestError = true;
+      }
+    }
+
+    // Step 3: Email
+    $scope.saveEmail = function() {
+      if ($rootScope.currentUser.email && $rootScope.currentUser.email != '') { 
+        utils.log('save email in registration dialog');
+        fbRef.child('users').child($rootScope.currentUser.id).update($rootScope.currentUser);
+        $scope.dialogMode = 'calendar';
+      } else {
+        utils.log('try to save empty email');
+        $scope.showEmailError = true;
+      }
+    }
+
+    // Step 4: Calendar
     $scope.$on("calendar_saved",function() {
+      utils.log('save available times in registration dialog');
       dialog.close();
-      $rootScope.showMessage("Thanks, now, you can request help from others");
+      $scope.showMessage("Thanks, now, you can request help from others");
     });
   }
 
   function LoginCtrl($rootScope, $scope, $location, utils, $cookies, $dialog) {
+    utils.log('load_website');
     if ($cookies.currentUser) {
       $rootScope.currentUser = JSON.parse($cookies.currentUser);
       $rootScope.$broadcast("currentUserInit");
@@ -330,10 +405,12 @@ function EventCtrl($rootScope, $scope, $location, utils, $cookies) {
     $scope.authClient = new FirebaseAuthClient(fbRef, function(error, facebookUser) {
       // If login:
       if (facebookUser) {
+        utils.log('auth_facebook_user', facebookUser.name);
         var id = utils.fbClean(facebookUser.username || facebookUser.id);
 
         var currentUserRef = fbRef.child("users").child(id);
         currentUserRef.on('value', function(FBUser) {
+            
             $rootScope.currentUser = jQuery.extend($rootScope.currentUser, FBUser.val());
             $cookies.currentUser = JSON.stringify($rootScope.currentUser);
             $rootScope.$broadcast("currentUserInit");
@@ -343,10 +420,7 @@ function EventCtrl($rootScope, $scope, $location, utils, $cookies) {
               currentUserRef.update({
                 user: facebookUser.username || "", name: facebookUser.name || "", id: id, email: facebookUser.email || "", facebook: facebookUser || "",
                 img: "http://graph.facebook.com/"+ facebookUser.id+"/picture?type=large" || ""});
-            }
-            // Direct to edit page if don't have require skills:
-            if ($location.path().indexOf('edit') == -1) {
-              $rootScope.checkRequireFields();
+              $scope.openDialog();
             }
 
             $scope.$apply();
@@ -362,25 +436,23 @@ function EventCtrl($rootScope, $scope, $location, utils, $cookies) {
       }
     });
 
-    $rootScope.checkRequireFields = function() {
-      if (!$rootScope.currentUser.skills) {
-        // $rootScope.showMessage('please let us know about your skills.');
-        // $location.path('detail/' + $rootScope.currentUser.id + '/'); 
-        // $location.search('edit=true');
-        var d = $dialog.dialog({templateUrl:  '/skills-dialog.html',controller: 'SkillsDialogCtrl',
-        backdrop: true, keyboard: false,backdropClick: false});
-        d.open().then(function(result){});
-        $location.path('stream/');
-        $scope.$apply(); 
-      }
+    $scope.openDialog = function() {
+      utils.log('started registration dialog');
+      var d = $dialog.dialog({templateUrl:  '/skills-dialog.html',controller: 'SkillsDialogCtrl',
+      backdrop: true, keyboard: false,backdropClick: false});
+      d.open().then(function(result){});
+      $location.path('stream/');
+      $scope.$apply(); 
     }
 
     $scope.facebookLogin = function() {
+      //utils.log('click facebook login');
       $scope.directToEditPage = true;
       $scope.authClient.login('facebook', {rememberMe: true});
     }
 
     $scope.logOut = function() {
+      utils.log('click logout');
       $scope.authClient.logout();
       $location.path('/');
       $scope.$apply();
@@ -388,44 +460,12 @@ function EventCtrl($rootScope, $scope, $location, utils, $cookies) {
   }
 
   function HomeCtrl($scope, $location, angularFireCollection, $rootScope) {
-    var fullUrl = 'https://getbadgers.firebaseio.com/users/';
-    var messageListRef = new Firebase(fullUrl);
-    $scope.usersToView = [];
-    
     // navigate to users if login.
     $rootScope.$on("currentUserInit", function() {
       if ($rootScope.currentUser && $rootScope.currentUser.skills) {
         $location.path('stream');
         $scope.$apply();
       }
-    });
-
-    // TODO(guti): probably remove this.
-    messageListRef.on('value', function(snapshot) {
-      // For index.html page:
-      var BIG_IMG = [600, 450, 6], MEDIUM_IMG = [260, 200, 3], SMALL_IMG = [225, 200, 3];
-      var IMG_SIZES = [[BIG_IMG, MEDIUM_IMG, MEDIUM_IMG], [MEDIUM_IMG, MEDIUM_IMG, BIG_IMG], [SMALL_IMG, SMALL_IMG, SMALL_IMG, SMALL_IMG]];
-      var usersObject = snapshot.val();
-      var ids = Object.keys(usersObject);
-      var userGroups = []
-      for (var i = 0; i < IMG_SIZES.length; i++) {
-        var userGroup = []
-        for (var j = 0; j < IMG_SIZES[i].length; j++) {
-          if(ids.length <= 0){
-            break;
-          }
-          var id = ids.pop();
-          var user = usersObject[id];
-          user.imgWidth = IMG_SIZES[i][j][0];
-          user.imgHeight = IMG_SIZES[i][j][1];
-          user.spanSize = IMG_SIZES[i][j][2];
-          user.id = id;
-          userGroup.push(user);
-        };
-        userGroups.push(userGroup);
-      };
-      $scope.userGroupsToView = userGroups;
-      $scope.$apply();
     });
   }
 
@@ -434,12 +474,6 @@ function EventCtrl($rootScope, $scope, $location, utils, $cookies) {
       $scope.users = utils.listValues(users.val());
       $scope.$apply();
     });
-
-    $scope.newUser = {'img':''};
-    $scope.saveNewUser = function(newUser) {
-      $scope.users.add(newUser);
-      $scope.newUser = {'img':''};
-    }
   }
 
 

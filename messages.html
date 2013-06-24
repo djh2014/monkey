@@ -1,3 +1,4 @@
+<!-- TO DELETE. -->
 <h3>Messages</h3>
 <li class="span6 clearfix" ng-repeat="message in messages">
   <div class="thumbnail clearfix">
@@ -10,6 +11,8 @@
       <h4>      
       <h3 href="/#/detail/{{message.user.id}}" >{{message.user.name}}</h3>
       </h4>
+      <p ng-show="message.day">Date: {{message.day | date:'fullDate'}}</p>
+      <p ng-show="message.time">Time: {{message.time}}</p>
       <p>{{message.text}}</p>
     </div>
   </div>

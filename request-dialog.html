@@ -1,6 +1,11 @@
-<input type="text" ng-model="datepicker.date" data-date-format="dd/mm/yyyy" bs-datepicker>
-<a ng-click="click()">C</a>
-<select ng-model="time">
+<div class="modal-body">
+<form>
+	<h2>Send {{user.name}} a request for a video meeting</h2>
+	Day:
+	<input type="text" ng-model="date" data-date-format="dd/mm/yyyy" bs-datepicker>
+	<br/>
+	Time:
+	<select ng-model="time">
 		<option>6:00 PM</option>
 		<option>6:15 PM</option>
 		<option>6:30 PM</option>
@@ -18,3 +23,8 @@
 		<option>9:30 PM</option>
 		<option>9:45 PM</option>
 	</select><br/>
+	 Message:
+	<input type="text" ng-model="message"/>
+	<button ng-click="sendMessage()">Send</button>
+</form>
+</div>

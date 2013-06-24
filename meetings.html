@@ -1,18 +1,19 @@
-<div class="row"> 
-  <div class="offset1 span5">
-  <u><h1>My Meetings</h1></u>
+<div class="row-fluid"> 
+  <div class="offset2 span6">
+  <u><h3>Messages</h3></u>
 
-
-<div class="row well" ng-repeat="meeting in meetings">
-	<div class="span2">
+<a ng-repeat="meeting in meetings" href="/#/meeting/{{meeting.teacher.id}}/{{meeting.student.id}}">
+<div class="row-fluid well" >
+	<div class="span3">
 	<profile user="meeting.teacher"/>
-	->
 	<profile user="meeting.student"/>
 	</div>
-	<div class="span2">
-	<a href="/#/meeting/{{meeting.teacher.id}}/{{meeting.student.id}}">See meeting page</a>
-	<br/>	
-	<!-- Status TODO(guti): make a directive out of it -->
+	<div class="span8">
+	<br/>
+	<h3>{{meeting.speaker.name}} :<blockquote ng-show="meeting.text"> {{meeting.text}}</blockquote></h3>
+    <p ng-show="meeting.day">Date: {{meeting.day | date:'fullDate'}}</p>
+    <p ng-show="meeting.time">Time: {{meeting.time}}</p>
+
 	status:
 	<span ng-switch on="meeting.status" >
     <span ng-switch-when="APPROVED">Approve!</span>
@@ -23,13 +24,14 @@
         	<span ng-switch on="meeting.teacher.id == currentUser.id" >
         	  <span ng-switch-when="true">
         	  	<br/>
-        	   <button ng-click="approve(meeting.id)" >Click To Approve</button>
-				<button ng-click="reject(meeting.id)" >Click To REJECT</button>
+        	   <button ng-click="approve(meeting)" >Click To Approve</button>
+				<button ng-click="reject(meeting)" >Click To REJECT</button>
         	  </span>
-        	  <span ng-switch-default> Not Apporved yet.</span>
+        	  <span ng-switch-default> Waiting for {{meeting.teacher.name}} to apporved.</span>
         	</span>
         </span>
     </span>
 	</div>
 </div>
+</a>
 </div>

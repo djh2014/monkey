@@ -16,7 +16,7 @@
     <table class="table table-condensed">
       <tr ng-repeat="day in freeTimes">
           <td>{{day.day}}: <input ng-hide="editMode ==false" ng-model="day.isAvailable" type="checkbox"></td>
-
+        
         <td><span ng-switch on="day.isAvailable">
               <span ng-switch-when="true">
                 <span ng-switch on="editMode">
@@ -26,7 +26,9 @@
                      <input type="text" ng-model="day.end" bs-timepicker style="width: 60px; height: 15px">
                   </span>
                   <span ng-switch-default>
+                    <a role="button" ng-click="setRequest()" data-toggle="modal">
                     {{day.start}} - {{day.end}}
+                    </a>
                   </span>
                 </span>
               </span> 
