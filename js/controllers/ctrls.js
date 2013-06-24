@@ -86,7 +86,6 @@ function EventCtrl($rootScope, $scope, $location, utils, $cookies, $dialog, noti
   $rootScope.$on("currentUserInit", function() {
     if($rootScope.currentUser) {
       $rootScope.myEventsRef = fbRef.child('events').child($rootScope.currentUser.id);
-      debugger;
       $rootScope.myEventsRef.on('child_added', function(eventObject) {
         var newEvent = eventObject.val();
         newEvent.id = eventObject.name();
@@ -98,8 +97,12 @@ function EventCtrl($rootScope, $scope, $location, utils, $cookies, $dialog, noti
     }
   });
 
-  $rootScope.processEvent = function(newEvent) {
+  $rootScope.resetActiveNotifications = function() {
     debugger;
+    $rootScope.activeNotification = [];
+  }
+
+  $rootScope.processEvent = function(newEvent) {
     $rootScope.activeNotification.push(newEvent.notificationId);
     $rootScope.myEventsRef.child(newEvent.id).update({alert:false});
     notify.me(newEvent.text);
@@ -115,7 +118,6 @@ function MeetingsCtrl ($rootScope, $routeParams, $scope, $location, utils, db, n
       return e.teacher.id == $routeParams.userId || e.student.id == $routeParams.userId;
     });
     $scope.meetings = utils.convertTime($scope.meetings, 'day');
-    debugger;
     // Show active notification: (can be delete)
     $scope.meetings = $scope.meetings.map(function(m ,i) {
       if (m.id in $scope.activeNotification) {
@@ -131,7 +133,8 @@ function MeetingsCtrl ($rootScope, $routeParams, $scope, $location, utils, db, n
 
   $scope.approve = function(meeting) {
     utils.log('approve meeting', meeting.id);
-    fbRef.child("meetings").child(meeting.id).update({status:"APPROVED"});
+    fbRef.child("meetings").child(meeting.id).update(
+      {status:"APPROVED", activeForUserId:meeting.student.id});
 
     notify.send({
       user: meeting.student,
@@ -143,9 +146,10 @@ function MeetingsCtrl ($rootScope, $routeParams, $scope, $location, utils, db, n
     notify.me('Cool! we will send you both an email reminder one hour, and one day before the video meeting');
   }
 
-  $scope.reject = function(meeting) {
+  $scope.reject = function(meeting, status) {
     utils.log('rejact meeting', meeting.id);
-    fbRef.child("meetings").child(meeting.id).update({status:"REJECT"});
+    fbRef.child("meetings").child(meeting.id).update(
+      {status:"REJECT", activeForUserId:meeting.student.id});
     
     notify.send({
       user: meeting.student,
@@ -225,9 +229,8 @@ function MeetingRequestDialogCtrl($rootScope, $location, $scope, utils, dialog, 
       'active':true,
       'teacher': user, 'student': $rootScope.currentUser,
       'status': "NEW", 'id': meetingKey, 'day':$scope.date.toString(), 'time':$scope.time,
-      'text': $scope.message, 'speaker': $rootScope.currentUser};
+      'text': $scope.message, 'speaker': $rootScope.currentUser, 'activeForUserId':user.id};
     fbRef.child('meetings').update(meeting);
-    debugger;
     notify.send({
        user: user,
        text: $rootScope.currentUser.name + ' wants to have a video session with you',

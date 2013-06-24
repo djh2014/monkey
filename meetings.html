@@ -3,7 +3,7 @@
   <u><h3>Messages</h3></u>
 
 <!-- <a  href="/#/meeting/{{meeting.teacher.id}}/{{meeting.student.id}}"> -->
-<div ng-repeat="meeting in meetings" class="row-fluid well {{meeting.active && 'alert-error' || ''}}" >
+<div ng-repeat="meeting in meetings" class="row-fluid well {{(meeting.activeForUserId == currentUser.id) && 'alert-error' || ''}}" >
 
 	<div class="span3">
 	<profile user="meeting.teacher"/>

@@ -14,7 +14,6 @@ mainApp
   	},
 
   	send : function(input) {
-  	  debugger;
   	  this.event(input);
   	  
   	  var emailInput = input;
