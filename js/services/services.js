@@ -2,10 +2,17 @@ var fbUrl = 'https://getbadgers.firebaseio.com';
 var fbRef = new Firebase(fbUrl);
 
 mainApp
-.factory('notify', function(utils) {
+.factory('notify', function(utils, $dialog) {
   utilsService = utils;
-
+  dialogService = $dialog;
+  this.$dialog = $dialog;
   return {
+  	me : function(text) {
+		utilsService.log('showed notification', text);
+	    var msgbox = dialogService.messageBox(text, '', [{label:'Cool', result: 'yes'}]);
+	    msgbox.open().then(function(result){});
+  	},
+
   	send : function(input) {
   	  debugger;
   	  this.event(input);

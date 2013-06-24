@@ -23,19 +23,6 @@ mainApp = angular.module('mainApp', ['ngCookies', 'firebase', '$strap.directives
   ]);
 
 function TestCtrl($rootScope, $scope, $location, utils, $cookies, $dialog, $http, notify) {
-   debugger;
-   var user = JSON.parse($cookies.currentUser);
-    // notify.email({user:user, html:'hi?', subject:'test?'})
-    //   .done(function(res,r,s,t) { debugger; })
-    //   .fail(function(res,r,s,t) { debugger; });
-
-    notify.send({
-      text: 'Your meeting request with ' + user.name + ' was approve, we will send you both an email reminder one hour, and one day before your video meeting',
-      user: user,
-      path: 'messages/' + user.id,
-    })
-      .done(function(res,r,s,t) { debugger; })
-      .fail(function(res,r,s,t) { debugger; });    
 }
 
 function LoginCtrl($rootScope, $scope, $location, utils, $cookies, $dialog) {
@@ -116,16 +103,9 @@ function EventCtrl($rootScope, $scope, $location, utils, $cookies, $dialog, noti
 
   $rootScope.processEvent = function(newEvent) {
     $rootScope.myEventsRef.child(newEvent.id).update({alert:false});
-    $scope.showMessage(newEvent.text);
+    notify.me(newEvent.text);
     $location.path(newEvent.path);
     $scope.$apply();
-  }
-
-  // var modalPromise = $modal({template: 'message.html', show: false, scope: $rootScope});
-  $scope.showMessage = function(text) {
-    utils.log('showed notification', text);
-    var msgbox = $dialog.messageBox(text, '', [{label:'Cool', result: 'yes'}]);
-    msgbox.open().then(function(result){});  
   }
 }
 
@@ -149,7 +129,7 @@ function MeetingsCtrl ($rootScope, $routeParams, $scope, $location, utils, db, n
       path: 'messages/' + meeting.student.id,
     });
 
-    $scope.showMessage('Cool! we will send you both an email reminder one hour, and one day before the video meeting');
+    notify.me('Cool! we will send you both an email reminder one hour, and one day before the video meeting');
   }
 
   $scope.reject = function(meeting) {
@@ -162,7 +142,7 @@ function MeetingsCtrl ($rootScope, $routeParams, $scope, $location, utils, db, n
       path: 'messages/' + meeting.student.id,
     });
 
-    $scope.showMessage('Oh well, next time.');
+    notify.me('Oh well, next time.');
   }
 }
 
@@ -197,7 +177,7 @@ function ProfileCtrl($scope, $rootScope, $location, $routeParams, db, utils, $di
       if ($scope.user.skills && $scope.user.skills != '') {
         $scope.editSkillsMode = false;
       } else {
-        $scope.showMessage("For people to be able to ask for your advice let us know what are your skills.");
+        notify.me("For people to be able to ask for your advice let us know what are your skills.");
       }
     }
 
@@ -210,25 +190,18 @@ function ProfileCtrl($scope, $rootScope, $location, $routeParams, db, utils, $di
         if (result == 'ok') {
             utils.log('send meeting request', $scope.user.id);
             // Send event(notifacation).
-            notify.send({
-               user: $scope.user,
-               text: $rootScope.currentUser.name + ' wants to have a video session with you',
-               path:'messages/' + $scope.user.id,
-            });
-           $scope.showMessage('We notify ' + $scope.user.name + ". And we'll notify you via email once he approve.");
-           $location.path('messages/' + $rootScope.currentUser.id);
         } else {
           utils.log('close meeting request', $scope.user.id);
         }
       });
     } else {
-      $scope.showMessage("you need to sign in first");
+      notify.me("you need to sign in first");
     }
   }
 }
 
 // the dialog is injected in the specified controller
-function MeetingRequestDialogCtrl($rootScope, $location, $scope, utils, dialog, user) {
+function MeetingRequestDialogCtrl($rootScope, $location, $scope, utils, dialog, user, notify) {
   $scope.date = (new Date());
   $scope.message = "Hey let's have a video meeting.";
   $scope.time = "6:00 PM";
@@ -241,6 +214,16 @@ function MeetingRequestDialogCtrl($rootScope, $location, $scope, utils, dialog, 
       'status': "NEW", 'id': meetingKey, 'day':$scope.date.toString(), 'time':$scope.time,
       'text': $scope.message, 'speaker': $rootScope.currentUser};
     fbRef.child('meetings').update(meeting);
+
+    notify.send({
+       user: user,
+       text: $rootScope.currentUser.name + ' wants to have a video session with you',
+       path:'messages/' + user.id,
+    });
+    debugger;
+    notify.me('We notify ' + user.name + ". And we'll notify you via email once he approve.");
+    $location.path('messages/' + $rootScope.currentUser.id);
+
     dialog.close('ok');
   }
 } 
@@ -286,7 +269,7 @@ function VideoCtrl($rootScope, $routeParams, $scope, $location, utils, db, openT
     }
 }
 
-function MeetingCtrl($rootScope, $routeParams, $scope, $location, utils, db, openTok) {
+function MeetingCtrl($rootScope, $routeParams, $scope, $location, utils, db, openTok, notify) {
   var listKey = utils.genKey($routeParams.userId1, $routeParams.userId2);
   
   $scope.showVideo = false;
@@ -314,7 +297,7 @@ function MeetingCtrl($rootScope, $routeParams, $scope, $location, utils, db, ope
       $scope.listRef.push($scope.newItem);
       $scope.newItem = {};      
     } else {
-      $scope.showMessage('sorry you are not a user');
+      notify.me('sorry you are not a user');
     }
   }
 }
@@ -366,7 +349,7 @@ function StreamCtrl($rootScope, $routeParams, $scope, $location, utils, db) {
 }
 
 // the dialog is injected in the specified controller
-function SkillsDialogCtrl($rootScope, $scope, utils, dialog) {
+function SkillsDialogCtrl($rootScope, $scope, utils, dialog, notify) {
   $scope.dialogMode = 'skills';
 
   // calendar stuff:
@@ -422,7 +405,7 @@ function SkillsDialogCtrl($rootScope, $scope, utils, dialog) {
   $scope.$on("calendar_saved",function() {
     utils.log('save available times in registration dialog');
     dialog.close();
-    $scope.showMessage("Thanks, now, you can request help from others");
+    notify.me("Thanks, now, you can request help from others");
   });
 }
 
