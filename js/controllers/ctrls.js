@@ -66,7 +66,7 @@ function LoginCtrl($rootScope, $scope, $location, utils, $cookies, $dialog) {
     backdrop: true, keyboard: false,backdropClick: false});
     d.open().then(function(result){});
     $location.path('stream/');
-    $scope.$apply(); 
+    $scope.$apply();
   }
 
   $scope.facebookLogin = function() {
