@@ -82,9 +82,11 @@ function LoginCtrl($rootScope, $scope, $location, utils, $cookies, $dialog) {
 }
 
 function EventCtrl($rootScope, $scope, $location, utils, $cookies, $dialog, notify) {
+  $rootScope.activeNotification = [];
   $rootScope.$on("currentUserInit", function() {
     if ($rootScope.currentUser) {
       $rootScope.myEventsRef = fbRef.child('events').child($rootScope.currentUser.id);
+      debugger;
       $rootScope.myEventsRef.on('child_added', function(eventObject) {
         var newEvent = eventObject.val();
         newEvent.id = eventObject.name();
@@ -97,6 +99,8 @@ function EventCtrl($rootScope, $scope, $location, utils, $cookies, $dialog, noti
   });
 
   $rootScope.processEvent = function(newEvent) {
+    debugger;
+    $rootScope.activeNotification.push(newEvent.notificationId);
     $rootScope.myEventsRef.child(newEvent.id).update({alert:false});
     notify.me(newEvent.text);
     $location.path(newEvent.path);
@@ -111,6 +115,17 @@ function MeetingsCtrl ($rootScope, $routeParams, $scope, $location, utils, db, n
       return e.teacher.id == $routeParams.userId || e.student.id == $routeParams.userId;
     });
     $scope.meetings = utils.convertTime($scope.meetings, 'day');
+    debugger;
+    // Show active notification: (can be delete)
+    $scope.meetings = $scope.meetings.map(function(m ,i) {
+      if (m.id in $scope.activeNotification) {
+        m.active = true;
+      }
+      return m;
+    });
+    // empty active notification:
+    $scope.activeNotification = []
+
     $scope.$apply();
   });
 
@@ -122,6 +137,7 @@ function MeetingsCtrl ($rootScope, $routeParams, $scope, $location, utils, db, n
       user: meeting.student,
       text: 'Your meeting request with ' + $rootScope.currentUser.name + ' was approved, we will send you both an email reminder one hour, and one day before your video meeting',
       path: 'messages/' + meeting.student.id,
+      notificationId: meeting.id,
     });
 
     notify.me('Cool! we will send you both an email reminder one hour, and one day before the video meeting');
@@ -135,6 +151,7 @@ function MeetingsCtrl ($rootScope, $routeParams, $scope, $location, utils, db, n
       user: meeting.student,
       text: 'Your meeting request with ' + $rootScope.currentUser.name + " was rejected, no worries, I'm sure another user would be able to help you",
       path: 'messages/' + meeting.student.id,
+      notificationId: meeting.id,
     });
 
     notify.me('Oh well, next time.');
@@ -205,17 +222,18 @@ function MeetingRequestDialogCtrl($rootScope, $location, $scope, utils, dialog, 
     var meetingKey = utils.genKey(user.id, $rootScope.currentUser.id);
     $scope.date = $scope.date ? $scope.date.toString() : '';
     meeting[meetingKey] = {
+      'active':true,
       'teacher': user, 'student': $rootScope.currentUser,
       'status': "NEW", 'id': meetingKey, 'day':$scope.date.toString(), 'time':$scope.time,
       'text': $scope.message, 'speaker': $rootScope.currentUser};
     fbRef.child('meetings').update(meeting);
-
+    debugger;
     notify.send({
        user: user,
        text: $rootScope.currentUser.name + ' wants to have a video session with you',
        path:'messages/' + user.id,
+       notificationId: meetingKey,
     });
-    debugger;
     notify.me('We notify ' + user.name + ". And we'll notify you via email once he approve.");
     $location.path('messages/' + $rootScope.currentUser.id);
 

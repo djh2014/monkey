@@ -27,6 +27,7 @@ mainApp
   	  fbRef.child('events').child(input.user.id).push(
       {text: input.text,
        path: input.path,
+       notificationId: input.notificationId,
        alert: true});
   	},
 	email : function (input) {
@@ -46,7 +47,7 @@ mainApp
 		      bcc_address: 'abgutman1@gmail.com'
 		    }
 		}
-		
+
 	   return $.ajax({
 	      type: 'POST',
 	      url: 'https://mandrillapp.com/api/1.0/messages/send.json',

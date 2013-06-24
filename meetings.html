@@ -3,7 +3,8 @@
   <u><h3>Messages</h3></u>
 
 <!-- <a  href="/#/meeting/{{meeting.teacher.id}}/{{meeting.student.id}}"> -->
-<div ng-repeat="meeting in meetings" class="row-fluid well" >
+<div ng-repeat="meeting in meetings" class="row-fluid well {{meeting.active && 'alert-error' || ''}}" >
+
 	<div class="span3">
 	<profile user="meeting.teacher"/>
 	<profile user="meeting.student"/>
@@ -13,7 +14,6 @@
 	<h3>{{meeting.speaker.name}} :<blockquote ng-show="meeting.text"> {{meeting.text}}</blockquote></h3>
     <p ng-show="meeting.day">Date: {{meeting.day | date:'fullDate'}}</p>
     <p ng-show="meeting.time">Time: {{meeting.time}}</p>
-
 	status:
 	<span ng-switch on="meeting.status" >
     <span ng-switch-when="APPROVED">Approve!</span>
