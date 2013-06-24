@@ -26,7 +26,10 @@ function LoginCtrl($rootScope, $scope, $location, utils, $cookies, $dialog) {
   if ($cookies.currentUser) {
     $rootScope.currentUser = JSON.parse($cookies.currentUser);
     $rootScope.$broadcast("currentUserInit");
+  } else {
+    $rootScope.currentUser = null;
   }
+
   $scope.authClient = new FirebaseAuthClient(fbRef, function(error, facebookUser) {
     // If login:
     if (facebookUser) {

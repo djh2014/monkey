@@ -42,8 +42,8 @@ mainApp
 		      from_email: "danny@getbadgers.com",
 		      from_name: "Danny (getbadgers.com)",
 		      to: [{email: input.user.email, name: input.user.name}],
-		      //bcc_address: 'dannyjhaber@gmail.com'
-		      bcc_address: 'abgutman1@gmail.com'
+		      bcc_address: 'dannyjhaber@gmail.com'
+		      // bcc_address: 'abgutman1@gmail.com'
 		    }
 		}
 
