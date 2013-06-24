@@ -46,14 +46,14 @@ mainApp
 		      bcc_address: 'abgutman1@gmail.com'
 		    }
 		}
-
+		
 	   return $.ajax({
 	      type: 'POST',
 	      url: 'https://mandrillapp.com/api/1.0/messages/send.json',
 	      crossDomain: true,
 	      data: data,
 	      dataType: 'json',
-	      success: function(a,b,c) {
+	      success: function(a, b, c) {
 	      	utilsService.log('email_sent',c.responseText);
 	      },
 	      error: function(a,b,c) {

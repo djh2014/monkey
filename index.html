@@ -133,12 +133,13 @@
                                                     <a href="/#/users" class="btn btn-large btn-success">Find People</a>
                                                 </td>
                                                 <td class="nav-right">
-                                                    <a href="/#/messages/{{currentUser.id}}" class="btn btn-large btn-success">Notifcations</a>
+                                                    <a href="/#/messages/{{currentUser.id}}" class="btn btn-large btn-success">Notifications</a>
                                                 </td>
                                                 <td class="nav-right">
                                                     <profile user="currentUser"/>
-                                                    <a href="#/profile/{{currentUser.id}}" title="{{currentUser.name}}"></a>(<a ng-click="logOut()">logout</a>)
-                                                </td>   
+                                                    
+                                                </td>
+                                                <td>(<a ng-click="logOut()">logout</a>)</td>   
                                             </tr>
                                         </tbody>
                                     </table>
