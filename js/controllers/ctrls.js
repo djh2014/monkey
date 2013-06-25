@@ -86,13 +86,17 @@ function LoginCtrl($rootScope, $scope, $location, utils, $cookies, $dialog) {
 
 function EventCtrl($rootScope, $scope, $location, utils, $cookies, $dialog, notify) {
   $rootScope.activeNotification = [];
+  $scope.eventAlreadyNotified = [];
+
   $rootScope.$on("currentUserInit", function() {
     if($rootScope.currentUser) {
       $rootScope.myEventsRef = fbRef.child('events').child($rootScope.currentUser.id);
       $rootScope.myEventsRef.on('child_added', function(eventObject) {
         var newEvent = eventObject.val();
         newEvent.id = eventObject.name();
-        if(newEvent.alert == true) {
+
+        if ((newEvent.alert == true) &&
+            ($.inArray(newEvent.id, $scope.eventAlreadyNotified) == -1)) {
           $rootScope.processEvent(newEvent);
         }
       });
@@ -106,6 +110,7 @@ function EventCtrl($rootScope, $scope, $location, utils, $cookies, $dialog, noti
   }
 
   $rootScope.processEvent = function(newEvent) {
+    $scope.eventAlreadyNotified.push(newEvent.id);
     $rootScope.activeNotification.push(newEvent.notificationId);
     $rootScope.myEventsRef.child(newEvent.id).update({alert:false});
     notify.me(newEvent.text);
