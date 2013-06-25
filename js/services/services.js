@@ -7,6 +7,25 @@ mainApp
   dialogService = $dialog;
   this.$dialog = $dialog;
   return {
+  	reminder : function(data) {
+  		var meeting_time = moment(moment(data.date).format("YYYY-MM-DD") + " " + data.time, "YYYY-MM-DD HH:mm a"); 
+	    var send_at_day_before = moment(meeting_time).subtract('day', 1).format("YYYY-MM-DD HH:mm:ss");
+	    var send_at_hour_before = moment(meeting_time).subtract('hour', 1).format("YYYY-MM-DD HH:mm:ss");
+	    
+	    var notify = this;
+	    [{send_at:send_at_day_before, string:'Tomorrow at this time'}, {send_at:send_at_hour_before, string:'In one hour.'}]
+	        .forEach(function(time) {
+	            notify.email({
+	              user: data.user,
+	              subject: 'Video Meeting reminder',
+	              html: time.string + ', ' + data.message,
+	              path: data.path,
+	              send_at: time.send_at
+	            });
+	        });         
+  	},
+
+
   	me : function(text) {
 		utilsService.log('showed notification', text);
 	    var msgbox = dialogService.messageBox(text, '', [{label:'Cool', result: 'yes'}]);
@@ -30,21 +49,23 @@ mainApp
        alert: true});
   	},
 	email : function (input) {
+		debugger;
 		if (input.user.email == null || input.user.email == '') {
 			utilsService.log('missing email');
 		}
-
+		
 		var data = {
-		    key: "hMLd5dgD9OjanIN0xgONww",
+		    key: "EegAh79J9OmLAfvQ66NqZA",
 		    message: {
 		      html: input.html,
 		      subject: input.subject,
 		      from_email: "danny@getbadgers.com",
 		      from_name: "Danny (getbadgers.com)",
 		      to: [{email: input.user.email, name: input.user.name}],
-		      bcc_address: 'dannyjhaber@gmail.com'
-		      // bcc_address: 'abgutman1@gmail.com'
-		    }
+		      // bcc_address: 'dannyjhaber@gmail.com'
+		       bcc_address: 'abgutman1@gmail.com'
+		    },
+		    send_at: (input.send_at || '')
 		}
 
 	   return $.ajax({
@@ -55,9 +76,11 @@ mainApp
 	      dataType: 'json',
 	      success: function(a, b, c) {
 	      	utilsService.log('email_sent',c.responseText);
+	      	debugger;
 	      },
 	      error: function(a,b,c) {
 	      	utilsService.log('email_fail',c.responseText);
+	      	debugger;
 	      }
 	    });
 	}
@@ -98,7 +121,6 @@ mainApp
 			extra = extra? extra : '';
 			var ip = this.getIP(); 
 	  		var page = locationService.path();
-	  		Proxino.log("page: '" + page+"'");
 	  		if (cookiesService.currentUser) {
 	  		  var user = JSON.parse(cookiesService.currentUser);
 	  		} else {
@@ -128,7 +150,6 @@ mainApp
 		}
 		catch(err)
 	    {
-	    	Proxino.log("error in log: '" + err.message+"'");
 	    	var error = {}
 	    	error[this.timeStamp] = err;
 	  		fbRef.child('errors').update(this.fbClean(error));

@@ -12,11 +12,22 @@ mainApp = angular.module('mainApp', ['ngCookies', 'firebase', '$strap.directives
       when('/meeting/:userId1/:userId2', {controller:MeetingCtrl, templateUrl:'meeting.html'}).
       when('/profile/:userId', {controller:ProfileCtrl, templateUrl:'profile.html'}).
       otherwise({redirectTo:'/'});
-  }).run(["$rootScope", "$location", "$modal", "$q", "$dialog","utils", "$cookies",
-     function ($rootScope, $location, $modal, $q, $dialog, utils, $cookies) {
+  }).run(["$rootScope", "$location", "$modal", "$q", "$dialog","utils", "$cookies", "notify",
+     function ($rootScope, $location, $modal, $q, $dialog, utils, $cookies, notify) {
       $rootScope.global = {};
+      // TEMP:
+      // var data = 
+      //   {
+      //     date: "Tue Jun 29 2013 12:50:38 GMT-0700 (PDT)",
+      //     time: "06:00 PM",
+      //     user: {email:'abgutman1@gmail.com', name: 'Guti'},
+      //     path: 'meeting/guti6/guti6',
+      //     message: 'Later dude.'
+      //   };
+      // notify.reminder(data);
+
       $rootScope.$on("$routeChangeStart", function(event, next, current) {
-        utils.log('change page');
+        utils.log('change page');        
       });
      }
   ]);
@@ -105,7 +116,6 @@ function EventCtrl($rootScope, $scope, $location, utils, $cookies, $dialog, noti
   });
 
   $rootScope.resetActiveNotifications = function() {
-    debugger;
     $rootScope.activeNotification = [];
   }
 
@@ -128,16 +138,16 @@ function MeetingsCtrl ($rootScope, $routeParams, $scope, $location, utils, db, n
     $scope.meetings = utils.convertTime($scope.meetings, 'day');
     // Show active notification: (can be delete)
     $scope.meetings = $scope.meetings.map(function(m ,i) {
-      if (m.id in $scope.activeNotification) {
-        m.active = true;
-      }
-      return m;
-    });
-    // empty active notification:
-    $scope.activeNotification = []
-
-    $scope.$apply();
+    if (m.id in $scope.activeNotification) {
+      m.active = true;
+    }
+    return m;
   });
+  // empty active notification:
+  $scope.activeNotification = []
+
+  $scope.$apply();
+});
 
   $scope.approve = function(meeting) {
     utils.log('approve meeting', meeting.id);
@@ -152,6 +162,20 @@ function MeetingsCtrl ($rootScope, $routeParams, $scope, $location, utils, db, n
     });
 
     notify.me('Cool! we will send you both an email reminder one hour, and one day before the video meeting');
+
+    // Send reminders:
+    debugger;
+    var data = 
+      {
+        date: meeting.day,
+        time: meeting.time,
+        user: meeting.student,
+        path: 'meeting/' + meeting.student.id +'/' + meeting.teacher.id,
+        message: 'you have a video meeting, we hope you are pump, and ready.'
+      };
+    notify.reminder(data);
+    data.user = meeting.teacher;
+    notify.reminder(data);
   }
 
   $scope.reject = function(meeting, status) {
