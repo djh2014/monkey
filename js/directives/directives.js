@@ -24,17 +24,17 @@ mainApp.directive('profileImg', function() {
 })
 .directive('calendar', function() {
   return {
-       templateUrl: 'calendar.html',
+      templateUrl: 'calendar.html',
       replace: true,
       restrict: 'E',
       scope: false,
       controller: 
-        function CalendarCtrl ($rootScope, $element, $attrs, $routeParams, $scope, $location, utils, db, $modal, $q) {
-          
+        function CalendarCtrl ($rootScope, $element, $attrs, $routeParams, $scope, $location, utils, db, $modal, $q) {    
+          // Create the default times:
           var DEFAULT_FREE_TIMES = ['Mondays', 'Tuesdays', 'wednesdays', 'thursdays', 'Fridays', 'Saturdays', 'Sundays']
             .map(function(day, index) {
               var times = {day:day, isAvailable:false , start:'06:00 PM', end:'10:00 PM'};
-              if(day == 'Mondays') {
+              if (day == 'Sundays') {
                 times.isAvailable = true;
               }
               return times;
@@ -47,7 +47,6 @@ mainApp.directive('profileImg', function() {
             } else {
               $scope.freeTimes = DEFAULT_FREE_TIMES;
             }
-            
             $scope.$apply();
           });
 
