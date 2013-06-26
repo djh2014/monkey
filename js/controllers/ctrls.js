@@ -87,6 +87,9 @@ function LoginCtrl($rootScope, $scope, $location, utils, $cookies, $dialog, $rou
   $rootScope.facebookLogin = function() {
     utils.log('click facebook login');
     $scope.authClient.login('facebook', {rememberMe: true});
+    if ($location.path() == '/') {
+      $location.path('stream/');
+    }
   }
 
   $rootScope.logOut = function() {
