@@ -406,10 +406,7 @@ function MeetingCtrl($rootScope, $routeParams, $scope, $location, utils, db, ope
 
     var mybadgers = ($rootScope.currentUser.badgers || 0) - badgersToPay;
     fbRef.child("users").child($rootScope.currentUser.id).update({badgers:mybadgers});
-    
   }
-
-
 
   if (BrowserDetect.browser == "Chrome" && Number(BrowserDetect.version) >= 23) {
     $scope.supportWebRTC = true;
