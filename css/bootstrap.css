@@ -367,7 +367,7 @@ a:hover {
   *width: 82.92553191489361%;
 }
 
-.row-fluid .span9 {
+ -fluid .span9 {
   width: 74.46808510638297%;
   *width: 74.41489361702126%;
 }
@@ -1438,7 +1438,7 @@ select:focus:required:invalid:focus {
 
 .help-block {
   display: block;
-  margin-bottom: 10px;
+  /*margin-bottom: 10px; */
 }
 
 .help-inline {
