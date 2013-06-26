@@ -24,7 +24,7 @@ function TestCtrl($rootScope, $scope, $location, utils, $cookies, $dialog) {
   watch('test');
 }
 
-function LoginCtrl($rootScope, $scope, $location, utils, $cookies, $dialog) {
+function LoginCtrl($rootScope, $scope, $location, utils, $cookies, $dialog, $route) {
   if ($cookies.currentUser) {
     $rootScope.currentUser = JSON.parse($cookies.currentUser);
     $rootScope.$broadcast("currentUserInit");
@@ -58,28 +58,28 @@ function LoginCtrl($rootScope, $scope, $location, utils, $cookies, $dialog) {
       $rootScope.currentUser = null;
       delete $cookies.currentUser
       $rootScope.$broadcast("currentUserInit");
-      // not login user should go home.
-      $location.path('/');
       utils.apply($scope);;
     }
   });
 
+  $rootScope.openLoginDialog = function() {
+    var d = $dialog.dialog({templateUrl: '/login-dialog.html',controller: 'LoginDialogCtrl',
+        backdrop: true, keyboard: false,backdropClick: false});
+        d.open().then(function(result){});
+  }
   $rootScope.$on("$routeChangeStart", function(event, next, current) {
     utils.log('change page');
     if ((next.templateUrl != 'home.html') &&
         (!$rootScope.currentUser || $rootScope.currentUser==null)) {
-        var d = $dialog.dialog({templateUrl: '/login-dialog.html',controller: 'LoginDialogCtrl',
-        backdrop: true, keyboard: false,backdropClick: false});
-        d.open().then(function(result){});
+      $rootScope.openLoginDialog();
     }
-  });
+  });  
 
   $scope.openDialog = function() {
     utils.log('started registration dialog');
     var d = $dialog.dialog({templateUrl:  '/skills-dialog.html',controller: 'SkillsDialogCtrl',
       backdrop: true, keyboard: false,backdropClick: false});
     d.open().then(function(result){});
-    debugger;
     $location.path('stream/');
     utils.apply($scope);;
   }
@@ -97,6 +97,7 @@ function LoginCtrl($rootScope, $scope, $location, utils, $cookies, $dialog) {
 }
 
 function LoginDialogCtrl($rootScope, $scope, utils, dialog) {
+  debugger;
   $scope.loginAndClose = function() {
     $rootScope.facebookLogin();
     dialog.close();
@@ -139,7 +140,6 @@ function EventCtrl($rootScope, $scope, $location, utils, $cookies, $dialog, noti
 
 function MeetingsCtrl ($rootScope, $routeParams, $scope, $location, utils, db, notify) {
   fbRef.child('meetings').on('value', function(meetingsObj) {
-    debugger;
     var meetings = utils.listValues(meetingsObj.val());
     meetings = meetings.filter(function(e, i) {
       return e.teacher.id == $routeParams.userId || e.student.id == $routeParams.userId;
@@ -149,10 +149,6 @@ function MeetingsCtrl ($rootScope, $routeParams, $scope, $location, utils, db, n
     // empty active notification:
     $scope.activeNotification = []
     utils.apply($scope);;
-  });
-
-  $scope.$watch('meetings', function(a,b,c) {
-    debugger;
   });
 
   $scope.activeFirst = function(meeting) {
