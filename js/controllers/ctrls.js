@@ -181,24 +181,23 @@ function EventCtrl($rootScope, $scope, $location, utils, $cookies, $dialog, noti
 }
 
 function MeetingsCtrl ($rootScope, $routeParams, $scope, $location, utils, db, notify) {
-  db.get($scope, 'meetings', 'meetings', function() {
-    $scope.meetings = utils.listValues($scope.meetings);
-    $scope.meetings = $scope.meetings.filter(function(e, i) {
-      return e.teacher.id == $routeParams.userId || e.student.id == $routeParams.userId;
-    });
-    $scope.meetings = utils.convertTime($scope.meetings, 'day');
-    // Show active notification: (can be delete)
-    $scope.meetings = $scope.meetings.map(function(m ,i) {
-    if (m.id in $scope.activeNotification) {
-      m.active = true;
-    }
-    return m;
-  });
-  // empty active notification:
-  $scope.activeNotification = []
+  fbRef.child('meetings').on('value', function(meetingsObj) {
+    $scope.$apply(function() {
+      var meetings = utils.listValues(meetingsObj.val());
+      meetings = meetings.filter(function(e, i) {
+        return e.teacher.id == $routeParams.userId || e.student.id == $routeParams.userId;
+      });
+      meetings = utils.convertTime(meetings, 'day');
+      $scope.meetings = meetings;
 
-  $scope.$apply();
-});
+      // empty active notification:
+      $scope.activeNotification = []
+    });
+  });
+
+  $scope.activeFirst = function(meeting) {
+    return (meeting.activeForUserId == $rootScope.currentUser.id)? 'a':'b';
+  }
 
   $scope.approve = function(meeting) {
     utils.log('approve meeting', meeting.id);
