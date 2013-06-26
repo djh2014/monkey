@@ -111,8 +111,7 @@ function LoginCtrl($rootScope, $scope, $location, utils, $cookies, $dialog) {
               img: "http://graph.facebook.com/"+ facebookUser.id+"/picture?type=large" || ""});
             $scope.openDialog();
           }
-
-          $scope.$apply();
+          utils.apply($scope);
       }); 
     // Not login:
     } else {
@@ -121,7 +120,7 @@ function LoginCtrl($rootScope, $scope, $location, utils, $cookies, $dialog) {
       $rootScope.$broadcast("currentUserInit");
       // not login user should go home.
       $location.path('/');
-      $scope.$apply();
+      utils.apply($scope);;
     }
   });
 
@@ -131,7 +130,7 @@ function LoginCtrl($rootScope, $scope, $location, utils, $cookies, $dialog) {
     backdrop: true, keyboard: false,backdropClick: false});
     d.open().then(function(result){});
     $location.path('stream/');
-    $scope.$apply();
+    utils.apply($scope);;
   }
 
   $scope.facebookLogin = function() {
@@ -162,7 +161,7 @@ function EventCtrl($rootScope, $scope, $location, utils, $cookies, $dialog, noti
           $rootScope.processEvent(newEvent);
         }
       });
-      $scope.$apply();
+      utils.apply($scope);;
     }
   });
 
@@ -176,7 +175,7 @@ function EventCtrl($rootScope, $scope, $location, utils, $cookies, $dialog, noti
     $rootScope.myEventsRef.child(newEvent.id).update({alert:false});
     notify.me(newEvent.text);
     $location.path(newEvent.path);
-    $scope.$apply();
+    utils.apply($scope);;
   }
 }
 
@@ -191,7 +190,7 @@ function MeetingsCtrl ($rootScope, $routeParams, $scope, $location, utils, db, n
     $scope.meetings = meetings;
     // empty active notification:
     $scope.activeNotification = []
-    $scope.$apply();
+    utils.apply($scope);;
   });
 
   $scope.$watch('meetings', function(a,b,c) {
@@ -266,7 +265,7 @@ function ProfileCtrl($scope, $rootScope, $location, $routeParams, db, utils, $di
     if($scope.user.requests) {
       $scope.user.requests = Object.keys($scope.user.requests);
     }
-    $scope.$apply();
+    utils.apply($scope);;
   });
 
   $scope.saveSkills = function() {
@@ -358,7 +357,7 @@ function VideoCtrl($rootScope, $routeParams, $scope, $location, utils, db, openT
         if ($.inArray(stream.id, $scope.streams) == -1) {
           $scope.streams.push(stream.id);
           session.subscribe(stream, 'stream')
-          //$scope.$apply();
+          //utils.apply($scope);;
         }
       }
     }
@@ -462,7 +461,7 @@ function StreamCtrl($rootScope, $routeParams, $scope, $location, utils, db) {
           $scope.hiddenItems.unshift(item);
         }
      };
-     $scope.$apply();
+     utils.apply($scope);;
   });
 
   itemsRef.on('child_added', function(item) {
@@ -475,12 +474,12 @@ function StreamCtrl($rootScope, $routeParams, $scope, $location, utils, db) {
   var timer = setInterval(function() {
     $scope.items.unshift($scope.hiddenItems.pop());
     $scope.hiddenItems.unshift($scope.items.pop());
-    $scope.$apply();
+    utils.apply($scope);;
   }, 5000);
 
   $scope.accept = function(item) {
     $location.path('video/' + item.user.id + "/" + $rootScope.currentUser.id);
-    $scope.$apply();
+    utils.apply($scope);;
   }
 
   $scope.newItem = {}
@@ -558,7 +557,7 @@ function HomeCtrl($scope, $location, angularFireCollection, $rootScope) {
   $rootScope.$on("currentUserInit", function() {
     if ($rootScope.currentUser && $rootScope.currentUser.skills) {
       $location.path('stream');
-      $scope.$apply();
+      utils.apply($scope);;
     }
   });
 }
@@ -566,6 +565,6 @@ function HomeCtrl($scope, $location, angularFireCollection, $rootScope) {
 function UsersCtrl($scope, $location, $routeParams, angularFireCollection, utils) {
   fbRef.child("users").on('value', function(users) {
     $scope.users = utils.listValues(users.val());
-    $scope.$apply();
+    utils.apply($scope);;
   });
 }

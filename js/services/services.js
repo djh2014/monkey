@@ -115,6 +115,11 @@ mainApp
   cookiesService = $cookies;
 
   return {
+  	apply : function(scope) {
+  	  return scope.$$phase || scope.$apply();;
+  	},
+
+
   	log : function(event, extra) {
   		try
 		{
