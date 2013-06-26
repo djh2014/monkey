@@ -16,9 +16,7 @@ mainApp = angular.module('mainApp', ['ngCookies', 'firebase', '$strap.directives
   }).run(["$rootScope", "$location", "$modal", "$q", "$dialog","utils", "$cookies", "notify",
      function ($rootScope, $location, $modal, $q, $dialog, utils, $cookies, notify) {
       $rootScope.global = {};
-      $rootScope.$on("$routeChangeStart", function(event, next, current) {
-        utils.log('change page');        
-      });
+      utils.log('load_website');
      }
   ]);
 
@@ -26,65 +24,7 @@ function TestCtrl($rootScope, $scope, $location, utils, $cookies, $dialog) {
   watch('test');
 }
 
-function watch(watch_id, cb) {
-  // TEMP:
-  $(document).ready(function() {
-    var watchRef = fbRef.child('watch').child(watch_id);
-    var init = false;
-    watchRef.child('time').on('value', function(time) {
-      time = time.val();
-      if (!init) {
-        init = true;
-        if (time) {
-          $('#watch').stopwatch({startTime: time});
-        } else {
-          $('#watch').stopwatch();
-          watchRef.update({state:'start'});
-        }
-        watchRef.child('state').on('value', function(state) {
-        var state =state.val();
-        if (state) {
-          if (state == "start") {
-            $('#watch').stopwatch('start');
-          }
-          if (state == "stop") {
-            $('#watch').stopwatch('stop');
-          }
-          if (state == "reset") {
-            $('#watch').stopwatch('destroy');
-            $('#watch').stopwatch();
-            watchRef.update({state:'start', time:0});
-          }
-        }
-        });
-
-        $('#watch').bind('tick.stopwatch', function(e, elapsed) {
-        if ((elapsed % 1000) == 0) {
-            if(cb) {
-              cb(elapsed);
-            }
-            var time = $('#watch').stopwatch('getTime');
-            watchRef.update({time:time})
-          }
-        });
-
-        $('#start').click(function() {
-          watchRef.update({state:'start'});
-        });
-        $('#stop').click(function() {
-          watchRef.update({state:'stop'});
-        });
-        $('#reset').click(function() {
-          watchRef.update({state:'reset'});
-        });
-      }
-    });
-  });
-}
-
-
 function LoginCtrl($rootScope, $scope, $location, utils, $cookies, $dialog) {
-  utils.log('load_website');
   if ($cookies.currentUser) {
     $rootScope.currentUser = JSON.parse($cookies.currentUser);
     $rootScope.$broadcast("currentUserInit");
@@ -124,24 +64,42 @@ function LoginCtrl($rootScope, $scope, $location, utils, $cookies, $dialog) {
     }
   });
 
+  $rootScope.$on("$routeChangeStart", function(event, next, current) {
+    utils.log('change page');
+    if ((next.templateUrl != 'home.html') &&
+        (!$rootScope.currentUser || $rootScope.currentUser==null)) {
+        var d = $dialog.dialog({templateUrl: '/login-dialog.html',controller: 'LoginDialogCtrl',
+        backdrop: true, keyboard: false,backdropClick: false});
+        d.open().then(function(result){});
+    }
+  });
+
   $scope.openDialog = function() {
     utils.log('started registration dialog');
     var d = $dialog.dialog({templateUrl:  '/skills-dialog.html',controller: 'SkillsDialogCtrl',
-    backdrop: true, keyboard: false,backdropClick: false});
+      backdrop: true, keyboard: false,backdropClick: false});
     d.open().then(function(result){});
+    debugger;
     $location.path('stream/');
     utils.apply($scope);;
   }
 
-  $scope.facebookLogin = function() {
+  $rootScope.facebookLogin = function() {
     utils.log('click facebook login');
     $scope.authClient.login('facebook', {rememberMe: true});
   }
 
-  $scope.logOut = function() {
+  $rootScope.logOut = function() {
     utils.log('click logout');
     $scope.authClient.logout();
     $location.path('/');
+  }
+}
+
+function LoginDialogCtrl($rootScope, $scope, utils, dialog) {
+  $scope.loginAndClose = function() {
+    $rootScope.facebookLogin();
+    dialog.close();
   }
 }
 
@@ -554,12 +512,10 @@ function SkillsDialogCtrl($rootScope, $scope, utils, dialog, notify) {
 
 function HomeCtrl($scope, $location, angularFireCollection, $rootScope) {
   // navigate to users if login.
-  $rootScope.$on("currentUserInit", function() {
-    if ($rootScope.currentUser && $rootScope.currentUser.skills) {
-      $location.path('stream');
-      utils.apply($scope);;
-    }
-  });
+  if ($rootScope.currentUser) {
+    $location.path('stream');
+    utils.apply($scope);;
+  }
 }
 
 function UsersCtrl($scope, $location, $routeParams, angularFireCollection, utils) {
