@@ -111,71 +111,84 @@
 
     <!--<section id="main" class="container">--> <!--Moved to after top header -->
 
-                         <span ng-switch on="currentUser != null" >
-                              <span ng-switch-when="true">
-                              <!-- Login -->
-                            <div class="row inner-nav" id="no-margin" style="margin-bottom: 10px">
-                                <div class="span12 nav-header">
-                                    <table>
+                            <span ng-switch on="currentUser != null" >
+                                <span ng-switch-when="true">
+                                <!-- Login -->
+                                  <div class="row inner-nav" id="no-margin">
+                                      <div class="span12 nav-header">
+                                          <table>
+                                              <thead>
+                                              </thead>
+                                              <tbody>
+                                                  <tr>
+                                                      <td class="nav-left"><a href='/'><img src="img/badgertoolbar.png" alt=""/></a>
+                                                      </td>
+                                                      <td class="nav-left">
+
+                                                          <form class="search-bar" id="nav-search" >
+                                                              <input type="text" ng-model="global.search" placeholder="Search Skills" class="search-query span6" id="innernav-search">
+                                                              <a href="/#/users" class="btn btn-inverse"><i class="icon-search icon-white"></i></a>
+                                                          </form>
+                                                          
+                                                      </td>
+                                                      <td class="nav-right">
+                                                          <a href="/#/stream" class="btn btn-large btn-success">News feed</a>
+                                                      </td>
+                                                      <td class="nav-right">
+                                                          <a href="/#/users" class="btn btn-large btn-success">All Users</a>
+                                                      </td>
+                                                      <td class="nav-right">
+                                                          <a href="/#/messages/{{currentUser.id}}" class="btn btn-large btn-success">Messages</a>
+                                                      </td>
+                                                      <td class="nav-right">
+                                                          <profile user="currentUser"/>
+                                                          <a href="#/profile/{{currentUser.id}}" title="{{currentUser.name}}"></a>Logout(<a ng-click="()">logout</a>)
+                                                      </td>   
+                                                  </tr>
+                                              </tbody>
+                                          </table>
+                                      </div>
+                                  </div>
+                                </span>    
+                                <span ng-switch-default>
+                                 <!-- Not Login -->
+                                  <div class="row top-header">
+                                    <div class="span12 nav-header">
+                                      <table>
                                         <thead>
                                         </thead>
                                         <tbody>
-                                            <tr>
-                                                <td class="nav-left"><a href='/'><img src="img/badgertoolbar.png" alt=""/></a>
-                                                </td>
-                                                <td class="nav-left">
-
-                                                    <form class="search-bar" id="nav-search" >
-                                                        <input type="text" ng-model="global.search" placeholder="Search Skills" class="search-query span6" id="innernav-search">
-                                                        <a href="/#/users" class="btn btn-inverse"><i class="icon-search icon-white"></i></a>
-                                                    </form>
-                                                    
-                                                </td>
-                                                <td class="nav-right">
-                                                    <a href="/#/stream" class="btn btn-large btn-success">News feed</a>
-                                                </td>
-                                                <td class="nav-right">
-                                                    <a href="/#/users" class="btn btn-large btn-success">Find People</a>
-                                                </td>
-                                                <td class="nav-right">
-  <a ng-click="resetActiveNotifications()" href="/#/messages/{{currentUser.id}}"
-   class="btn btn-large btn-err {{(activeNotification.length > 0) && 'btn-danger' || 'btn-success'}}">Notifications 
-    <span  ng-show="activeNotification.length > 0">({{activeNotification.length}})</span>
-  </a>
-                                                </td>
-                                                <td class="nav-right">
-                                                    <profile user="currentUser"/>
-                                                    
-                                                </td>
-                                                <td>(<a ng-click="logOut()">logout</a>)</td>   
-                                            </tr>
+                                          <tr>
+                                            <td class="nav-left">
+                                              <a href='/'><img src="img/badgerlogo.png" alt="" /></a>
+                                            </td>
+                                            <td class="nav-right">
+                                              <a class="btn btn-danger home-button" ng-click="facebookLogin()">Register</a>
+                                            </td>
+                                            <td class="nav-right">
+                                              <a class="btn btn-success home-button" ng-click="facebookLogin()">Login</a>
+                                            </td>
+                                          </tr>
                                         </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                            </span>    
-                              <span ng-switch-default>
-                                 <!-- Not Login -->
-                            <div class="row top-header" id="no-margin" style="margin-bottom: 10px">
-                                    
-                                <div class="span3" id="logo-left"><a href='/'><img src="img/badgerlogo.png" alt="" /></a></div>
-                                        <div class="span9">
-                                            <ul>
-                                                <li class="register">
-
-
-                                      <a class="btn btn-danger home-button" ng-click="facebookLogin()">Register</a>
-                                      <a class="btn btn-success home-button" ng-click="facebookLogin()">Login</a>
-                                  
-                                                </li>
-
-                                            </ul>
-                                        </div>
-                                </div>
-
+                                      </table>
+                                    </div>
+                                  </div> 
+                                </span>
                               </span>
-                          </span>
+
+                                    <!--<div class="span3" id="logo-left"><a href='/'><img src="img/badgerlogo.png" alt="" /></a>
+                                    </div>
+                                    <div class="span9">
+                                      <ul>
+                                        <li class="register">
+                                            <a class="btn btn-danger home-button" ng-click="facebookLogin()">Register</a>
+                                            <a class="btn btn-success home-button" ng-click="facebookLogin()">Login</a>
+                                        </li>
+                                      </ul>
+                                    </div>
+                                  </div>
+                                </span>
+                            </span>-->
                           
     <section id="main" class="container">
 

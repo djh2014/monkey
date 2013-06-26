@@ -4,6 +4,7 @@ body {
     background: white;
     color: #999999;
     font-family: 'Arimo', sans-serif;
+    margin-bottom: 0px;
 }
 
 /**
@@ -21,10 +22,8 @@ body {
  }
 .inner-nav {
     background: #333;
-    border-bottom:2px solid #333;
-    padding-top: 1%;
-    padding-left: 2%;
     margin-bottom: 0px;
+    padding-top:1%;
  }
  #nav-search {
     margin:0px;
@@ -460,7 +459,8 @@ section#main .navbar-search ul#search-in-content label{
     width: 80px;    
 }
 
-#reviews_chart .top-row {
+#reviews_chart .top-
+ {
     padding-bottom: 2px;
 }
 #reviews_chart .bar-cell {
