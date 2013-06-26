@@ -35,8 +35,16 @@
  <!--    <button id="reset">reset</button> -->
 </div>              
 <div id="number_badgers">
-	<h4>Number of Badgers</h4>
+	<h4>Suggested number of Badgers:</h4>
     <img ng-repeat="badger in badgers" src="./img/numberbadgers.png"/>
+    
+	<div>
+		How many Badgers you wanna give:
+		<input type="number" ng-model="badgersToPay" /><br/>
+	    Badgers to give:
+	    <img ng-repeat="badger in badgersToPayArray" src="./img/numberbadgers.png"/>
+	    <a ng-click="giveBadgers()" class="btn">Give</a>
+    </div>
 </div>
 
 <!-- Chat -->

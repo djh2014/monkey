@@ -368,12 +368,48 @@ function VideoCtrl($rootScope, $routeParams, $scope, $location, utils, db, openT
 
 function MeetingCtrl($rootScope, $routeParams, $scope, $location, utils, db, openTok, notify) {
   var listKey = utils.genKey($routeParams.userId1, $routeParams.userId2);
+  
+  // Badgers stuff:
   watch(listKey, function(milliseconds) {
     $scope.$apply(function() {
       var badgers = Math.round( milliseconds / (1000*60*15) + 0.5 );
       $scope.badgers = utils.range(badgers);
     });
   });
+
+  $scope.badgersToPay = 0;
+  $scope.$watch('badgersToPay', function() {
+    $scope.badgersToPayArray = utils.range($scope.badgersToPay);
+  })
+
+  $scope.giveBadgers = function() {
+    
+    if($rootScope.currentUser.id == $routeParams.userId1) {
+      $scopeOtherUserId = $routeParams.userId2;
+    } else {
+      $scopeOtherUserId = $routeParams.userId1;
+    }
+    var badgersToPay = $scope.badgersToPay;
+    $scope.badgersToPay = 0; 
+    var otherUserRef = fbRef.child("users").child($scopeOtherUserId);
+    otherUserRef.once('value', function(user){
+      user = user.val();
+      var hisBadgers = (user.badgers || 0) + badgersToPay;
+      otherUserRef.update({badgers:hisBadgers});
+      debugger;
+      notify.event({
+        user: user,
+        text: "Cool you got" + badgersToPay + " brand new badgers"
+      });
+      notify.me("Cool we sent  " + badgersToPay + " badgers");
+    });
+
+    var mybadgers = ($rootScope.currentUser.badgers || 0) - badgersToPay;
+    fbRef.child("users").child($rootScope.currentUser.id).update({badgers:mybadgers});
+    
+  }
+
+
 
   if (BrowserDetect.browser == "Chrome" && Number(BrowserDetect.version) >= 23) {
     $scope.supportWebRTC = true;

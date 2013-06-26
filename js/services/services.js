@@ -44,8 +44,8 @@ mainApp
   	event : function(input) {
   	  fbRef.child('events').child(input.user.id).push(
       {text: input.text,
-       path: input.path,
-       notificationId: input.notificationId,
+       path: input.path || null,
+       notificationId: input.notificationId || null,
        alert: true});
   	},
 	email : function (input) {
