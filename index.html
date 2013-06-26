@@ -71,7 +71,12 @@
       }
     </script>
   <script type="application/javascript" src="http://jsonip.appspot.com/?callback=getip"> </script>
-    
+  <script src="lib/browserDetect.js"></script>
+  <!-- 
+  <script src="https://raw.github.com/nene/jintervals/master/jintervals.js"></script>
+   -->
+  <script src="lib/jquery.stopwatch.js"></script>
+
   <!--Application-->
   <script src="js/utils.js"></script>
   <script src="js/controllers/ctrls.js"></script>
@@ -101,8 +106,8 @@
   </script>
   
   </head>
-  <body ng-app="mainApp"  ng-controller="EventCtrl" >
-  <span ng-controller="LoginCtrl">
+  <body ng-app="mainApp" ng-controller="LoginCtrl" >
+  <span  ng-controller="EventCtrl">
 
     <!--<section id="main" class="container">--> <!--Moved to after top header -->
 

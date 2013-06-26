@@ -24,17 +24,17 @@ mainApp.directive('profileImg', function() {
 })
 .directive('calendar', function() {
   return {
-       templateUrl: 'calendar.html',
+      templateUrl: 'calendar.html',
       replace: true,
       restrict: 'E',
       scope: false,
       controller: 
-        function CalendarCtrl ($rootScope, $element, $attrs, $routeParams, $scope, $location, utils, db, $modal, $q) {
-          
+        function CalendarCtrl ($rootScope, $element, $attrs, $routeParams, $scope, $location, utils, db, $modal, $q) {    
+          // Create the default times:
           var DEFAULT_FREE_TIMES = ['Mondays', 'Tuesdays', 'wednesdays', 'thursdays', 'Fridays', 'Saturdays', 'Sundays']
             .map(function(day, index) {
               var times = {day:day, isAvailable:false , start:'06:00 PM', end:'10:00 PM'};
-              if(day == 'Mondays') {
+              if (day == 'Sundays') {
                 times.isAvailable = true;
               }
               return times;
@@ -47,7 +47,6 @@ mainApp.directive('profileImg', function() {
             } else {
               $scope.freeTimes = DEFAULT_FREE_TIMES;
             }
-            
             $scope.$apply();
           });
 
@@ -70,3 +69,59 @@ mainApp.directive('profileImg', function() {
       }
     };
 });
+
+function watch(watch_id, cb) {
+  // TEMP:
+  $(document).ready(function() {
+    var watchRef = fbRef.child('watch').child(watch_id);
+    var init = false;
+    watchRef.child('time').on('value', function(time) {
+      time = time.val();
+      if (!init) {
+        init = true;
+        if (time) {
+          $('#watch').stopwatch({startTime: time});
+        } else {
+          $('#watch').stopwatch();
+          watchRef.update({state:'start'});
+        }
+        watchRef.child('state').on('value', function(state) {
+        var state =state.val();
+        if (state) {
+          if (state == "start") {
+            $('#watch').stopwatch('start');
+          }
+          if (state == "stop") {
+            $('#watch').stopwatch('stop');
+          }
+          if (state == "reset") {
+            $('#watch').stopwatch('destroy');
+            $('#watch').stopwatch();
+            watchRef.update({state:'start', time:0});
+          }
+        }
+        });
+
+        $('#watch').bind('tick.stopwatch', function(e, elapsed) {
+        if ((elapsed % 1000) == 0) {
+            if(cb) {
+              cb(elapsed);
+            }
+            var time = $('#watch').stopwatch('getTime');
+            watchRef.update({time:time})
+          }
+        });
+
+        $('#start').click(function() {
+          watchRef.update({state:'start'});
+        });
+        $('#stop').click(function() {
+          watchRef.update({state:'stop'});
+        });
+        $('#reset').click(function() {
+          watchRef.update({state:'reset'});
+        });
+      }
+    });
+  });
+}

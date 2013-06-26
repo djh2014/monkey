@@ -13,41 +13,28 @@ mainApp = angular.module('mainApp', ['ngCookies', 'firebase', '$strap.directives
       when('/profile/:userId', {controller:ProfileCtrl, templateUrl:'profile.html'}).
       when('/test', {controller:TestCtrl, templateUrl:'test.html'}).
       otherwise({redirectTo:'/'});
-  }).run(["$rootScope", "$location", "$modal", "$q", "$dialog","utils", "$cookies",
-     function ($rootScope, $location, $modal, $q, $dialog, utils, $cookies) {
+  }).run(["$rootScope", "$location", "$modal", "$q", "$dialog","utils", "$cookies", "notify",
+     function ($rootScope, $location, $modal, $q, $dialog, utils, $cookies, notify) {
       $rootScope.global = {};
-      $rootScope.$on("$routeChangeStart", function(event, next, current) {
-        utils.log('change page');
-      });
+      utils.log('load_website');
      }
   ]);
 
-function TestCtrl($rootScope, $scope, $location, utils, $cookies, $dialog, $http, notify) {
-   debugger;
-   var user = JSON.parse($cookies.currentUser);
-    // notify.email({user:user, html:'hi?', subject:'test?'})
-    //   .done(function(res,r,s,t) { debugger; })
-    //   .fail(function(res,r,s,t) { debugger; });
-
-    notify.send({
-      text: 'Your meeting request with ' + user.name + ' was approve, we will send you both an email reminder one hour, and one day before your video meeting',
-      user: user,
-      path: 'messages/' + user.id,
-    })
-      .done(function(res,r,s,t) { debugger; })
-      .fail(function(res,r,s,t) { debugger; });    
+function TestCtrl($rootScope, $scope, $location, utils, $cookies, $dialog) {
+  watch('test');
 }
 
-function LoginCtrl($rootScope, $scope, $location, utils, $cookies, $dialog) {
-  utils.log('load_website');
+function LoginCtrl($rootScope, $scope, $location, utils, $cookies, $dialog, $route) {
   if ($cookies.currentUser) {
     $rootScope.currentUser = JSON.parse($cookies.currentUser);
     $rootScope.$broadcast("currentUserInit");
+  } else {
+    $rootScope.currentUser = null;
   }
+
   $scope.authClient = new FirebaseAuthClient(fbRef, function(error, facebookUser) {
     // If login:
     if (facebookUser) {
-      utils.log('auth_facebook_user', facebookUser.name);
       var id = utils.fbClean(facebookUser.username || facebookUser.id);
 
       var currentUserRef = fbRef.child("users").child(id);
@@ -64,105 +51,150 @@ function LoginCtrl($rootScope, $scope, $location, utils, $cookies, $dialog) {
               img: "http://graph.facebook.com/"+ facebookUser.id+"/picture?type=large" || ""});
             $scope.openDialog();
           }
-
-          $scope.$apply();
+          utils.apply($scope);
       }); 
     // Not login:
     } else {
       $rootScope.currentUser = null;
       delete $cookies.currentUser
       $rootScope.$broadcast("currentUserInit");
-      // not login user should go home.
-      $location.path('/');
-      $scope.$apply();
+      utils.apply($scope);;
     }
   });
+
+  $rootScope.openLoginDialog = function() {
+    var d = $dialog.dialog({templateUrl: '/login-dialog.html',controller: 'LoginDialogCtrl',
+        backdrop: true, keyboard: false,backdropClick: false});
+        d.open().then(function(result){});
+  }
+  $rootScope.$on("$routeChangeStart", function(event, next, current) {
+    utils.log('change page');
+    if ((next.templateUrl != 'home.html') &&
+        (!$rootScope.currentUser || $rootScope.currentUser==null)) {
+      $rootScope.openLoginDialog();
+    }
+  });  
 
   $scope.openDialog = function() {
     utils.log('started registration dialog');
     var d = $dialog.dialog({templateUrl:  '/skills-dialog.html',controller: 'SkillsDialogCtrl',
-    backdrop: true, keyboard: false,backdropClick: false});
+      backdrop: true, keyboard: false,backdropClick: false});
     d.open().then(function(result){});
     $location.path('stream/');
-    $scope.$apply(); 
+    utils.apply($scope);;
   }
 
-  $scope.facebookLogin = function() {
+  $rootScope.facebookLogin = function() {
     utils.log('click facebook login');
     $scope.authClient.login('facebook', {rememberMe: true});
   }
 
-  $scope.logOut = function() {
+  $rootScope.logOut = function() {
     utils.log('click logout');
     $scope.authClient.logout();
     $location.path('/');
   }
 }
 
+function LoginDialogCtrl($rootScope, $scope, utils, dialog) {
+  debugger;
+  $scope.loginAndClose = function() {
+    $rootScope.facebookLogin();
+    dialog.close();
+  }
+}
+
 function EventCtrl($rootScope, $scope, $location, utils, $cookies, $dialog, notify) {
+  $rootScope.activeNotification = [];
+  $scope.eventAlreadyNotified = [];
+
   $rootScope.$on("currentUserInit", function() {
-    if ($rootScope.currentUser) {
+    if($rootScope.currentUser) {
       $rootScope.myEventsRef = fbRef.child('events').child($rootScope.currentUser.id);
       $rootScope.myEventsRef.on('child_added', function(eventObject) {
         var newEvent = eventObject.val();
         newEvent.id = eventObject.name();
-        if(newEvent.alert == true) {
+
+        if ((newEvent.alert == true) &&
+            ($.inArray(newEvent.id, $scope.eventAlreadyNotified) == -1)) {
           $rootScope.processEvent(newEvent);
         }
       });
-      $scope.$apply();
+      utils.apply($scope);;
     }
   });
 
-  $rootScope.processEvent = function(newEvent) {
-    $rootScope.myEventsRef.child(newEvent.id).update({alert:false});
-    $scope.showMessage(newEvent.text);
-    $location.path(newEvent.path);
-    $scope.$apply();
+  $rootScope.resetActiveNotifications = function() {
+    $rootScope.activeNotification = [];
   }
 
-  // var modalPromise = $modal({template: 'message.html', show: false, scope: $rootScope});
-  $scope.showMessage = function(text) {
-    utils.log('showed notification', text);
-    var msgbox = $dialog.messageBox(text, '', [{label:'Cool', result: 'yes'}]);
-    msgbox.open().then(function(result){});  
+  $rootScope.processEvent = function(newEvent) {
+    $scope.eventAlreadyNotified.push(newEvent.id);
+    $rootScope.activeNotification.push(newEvent.notificationId);
+    $rootScope.myEventsRef.child(newEvent.id).update({alert:false});
+    notify.me(newEvent.text);
+    $location.path(newEvent.path);
+    utils.apply($scope);;
   }
 }
 
 function MeetingsCtrl ($rootScope, $routeParams, $scope, $location, utils, db, notify) {
-  db.get($scope, 'meetings', 'meetings', function() {
-    $scope.meetings = utils.listValues($scope.meetings);
-    $scope.meetings = $scope.meetings.filter(function(e, i) {
+  fbRef.child('meetings').on('value', function(meetingsObj) {
+    var meetings = utils.listValues(meetingsObj.val());
+    meetings = meetings.filter(function(e, i) {
       return e.teacher.id == $routeParams.userId || e.student.id == $routeParams.userId;
     });
-    $scope.meetings = utils.convertTime($scope.meetings, 'day');
-    $scope.$apply();
+    meetings = utils.convertTime(meetings, 'day');
+    $scope.meetings = meetings;
+    // empty active notification:
+    $scope.activeNotification = []
+    utils.apply($scope);;
   });
+
+  $scope.activeFirst = function(meeting) {
+    return (meeting.activeForUserId == $rootScope.currentUser.id)? 'a':'b';
+  }
 
   $scope.approve = function(meeting) {
     utils.log('approve meeting', meeting.id);
-    fbRef.child("meetings").child(meeting.id).update({status:"APPROVED"});
+    fbRef.child("meetings").child(meeting.id).update(
+      {status:"APPROVED", activeForUserId:meeting.student.id});
 
     notify.send({
       user: meeting.student,
       text: 'Your meeting request with ' + $rootScope.currentUser.name + ' was approved, we will send you both an email reminder one hour, and one day before your video meeting',
       path: 'messages/' + meeting.student.id,
+      notificationId: meeting.id,
     });
 
-    $scope.showMessage('Cool! we will send you both an email reminder one hour, and one day before the video meeting');
+    notify.me('Cool! we will send you both an email reminder one hour, and one day before the video meeting');
+    // Send reminders:
+    var data = 
+      {
+        date: meeting.day,
+        time: meeting.time,
+        user: meeting.student,
+        path: 'meeting/' + meeting.student.id +'/' + meeting.teacher.id,
+        message: 'you have a video meeting, we hope you are pump, and ready.'
+      };
+    notify.reminder(data);
+    data.user = meeting.teacher;
+    notify.reminder(data);
   }
 
-  $scope.reject = function(meeting) {
+  $scope.reject = function(meeting, status) {
     utils.log('rejact meeting', meeting.id);
-    fbRef.child("meetings").child(meeting.id).update({status:"REJECT"});
+    fbRef.child("meetings").child(meeting.id).update(
+      {status:"REJECT", activeForUserId:meeting.student.id});
     
     notify.send({
       user: meeting.student,
       text: 'Your meeting request with ' + $rootScope.currentUser.name + " was rejected, no worries, I'm sure another user would be able to help you",
       path: 'messages/' + meeting.student.id,
+      notificationId: meeting.id,
     });
 
-    $scope.showMessage('Oh well, next time.');
+    notify.me('Oh well, next time.');
   }
 }
 
@@ -187,7 +219,7 @@ function ProfileCtrl($scope, $rootScope, $location, $routeParams, db, utils, $di
     if($scope.user.requests) {
       $scope.user.requests = Object.keys($scope.user.requests);
     }
-    $scope.$apply();
+    utils.apply($scope);;
   });
 
   $scope.saveSkills = function() {
@@ -197,7 +229,7 @@ function ProfileCtrl($scope, $rootScope, $location, $routeParams, db, utils, $di
       if ($scope.user.skills && $scope.user.skills != '') {
         $scope.editSkillsMode = false;
       } else {
-        $scope.showMessage("For people to be able to ask for your advice let us know what are your skills.");
+        notify.me("For people to be able to ask for your advice let us know what are your skills.");
       }
     }
 
@@ -210,25 +242,18 @@ function ProfileCtrl($scope, $rootScope, $location, $routeParams, db, utils, $di
         if (result == 'ok') {
             utils.log('send meeting request', $scope.user.id);
             // Send event(notifacation).
-            notify.send({
-               user: $scope.user,
-               text: $rootScope.currentUser.name + ' wants to have a video session with you',
-               path:'messages/' + $scope.user.id,
-            });
-           $scope.showMessage('We notify ' + $scope.user.name + ". And we'll notify you via email once he approve.");
-           $location.path('messages/' + $rootScope.currentUser.id);
         } else {
           utils.log('close meeting request', $scope.user.id);
         }
       });
     } else {
-      $scope.showMessage("you need to sign in first");
+      notify.me("you need to sign in first");
     }
   }
 }
 
 // the dialog is injected in the specified controller
-function MeetingRequestDialogCtrl($rootScope, $location, $scope, utils, dialog, user) {
+function MeetingRequestDialogCtrl($rootScope, $location, $scope, utils, dialog, user, notify) {
   $scope.date = (new Date());
   $scope.message = "Hey let's have a video meeting.";
   $scope.time = "6:00 PM";
@@ -237,10 +262,20 @@ function MeetingRequestDialogCtrl($rootScope, $location, $scope, utils, dialog, 
     var meetingKey = utils.genKey(user.id, $rootScope.currentUser.id);
     $scope.date = $scope.date ? $scope.date.toString() : '';
     meeting[meetingKey] = {
+      'active':true,
       'teacher': user, 'student': $rootScope.currentUser,
       'status': "NEW", 'id': meetingKey, 'day':$scope.date.toString(), 'time':$scope.time,
-      'text': $scope.message, 'speaker': $rootScope.currentUser};
+      'text': $scope.message, 'speaker': $rootScope.currentUser, 'activeForUserId':user.id};
     fbRef.child('meetings').update(meeting);
+    notify.send({
+       user: user,
+       text: $rootScope.currentUser.name + ' wants to have a video session with you',
+       path:'messages/' + user.id,
+       notificationId: meetingKey,
+    });
+    notify.me('We notify ' + user.name + ". And we'll notify you via email once he approve.");
+    $location.path('messages/' + $rootScope.currentUser.id);
+
     dialog.close('ok');
   }
 } 
@@ -252,43 +287,88 @@ function VideoCtrl($rootScope, $routeParams, $scope, $location, utils, db, openT
   $scope.streams = [];
 
   TB.addEventListener("exception", exceptionHandler);
-    var session = TB.initSession(sessionAndToken.session);
-    session.addEventListener("sessionConnected", sessionConnectedHandler);
-    session.addEventListener("streamCreated", streamCreatedHandler);
-    session.connect(21551012, sessionAndToken.token);
+  var session = TB.initSession(sessionAndToken.session);
+  session.addEventListener("sessionConnected", sessionConnectedHandler);
+  session.addEventListener("streamCreated", streamCreatedHandler);
+  session.connect(21551012, sessionAndToken.token);
 
-    function sessionConnectedHandler(event) {
-       subscribeToStreams(event.streams);
+  function sessionConnectedHandler(event) {
+     subscribeToStreams(event.streams);
 
-      // var divProps = {width: 400, height:300, name:"your stream"};
-      var publisher = TB.initPublisher(21551012, 'publisher');//, divProps);
-       session.publish(publisher);
-    }
-    
-    function streamCreatedHandler(event) {
-      subscribeToStreams(event.streams);
-    }
-    
-    function subscribeToStreams(streams) {
-      for (var i = 0; i < streams.length; i++) {
-        var stream = streams[i];
-        if (stream.connection.connectionId != session.connection.connectionId) {
-          if ($.inArray(stream.id, $scope.streams) == -1) {
-            $scope.streams.push(stream.id);
-            session.subscribe(stream, 'stream')
-            //$scope.$apply();
-          }
+    // var divProps = {width: 400, height:300, name:"your stream"};
+    var publisher = TB.initPublisher(21551012, 'publisher');//, divProps);
+     session.publish(publisher);
+  }
+  
+  function streamCreatedHandler(event) {
+    subscribeToStreams(event.streams);
+  }
+  
+  function subscribeToStreams(streams) {
+    for (var i = 0; i < streams.length; i++) {
+      var stream = streams[i];
+      if (stream.connection.connectionId != session.connection.connectionId) {
+        if ($.inArray(stream.id, $scope.streams) == -1) {
+          $scope.streams.push(stream.id);
+          session.subscribe(stream, 'stream')
+          //utils.apply($scope);;
         }
       }
-    }      
-    function exceptionHandler(event) {
-      //alert(event.message);
     }
+  }      
+  function exceptionHandler(event) {
+    //alert(event.message);
+  }
 }
 
-function MeetingCtrl($rootScope, $routeParams, $scope, $location, utils, db, openTok) {
+function MeetingCtrl($rootScope, $routeParams, $scope, $location, utils, db, openTok, notify) {
   var listKey = utils.genKey($routeParams.userId1, $routeParams.userId2);
   
+  // Badgers stuff:
+  watch(listKey, function(milliseconds) {
+    $scope.$apply(function() {
+      var badgers = Math.round( milliseconds / (1000*60*15) + 0.5 );
+      $scope.badgers = utils.range(badgers);
+    });
+  });
+
+  $scope.badgersToPay = 0;
+  $scope.$watch('badgersToPay', function() {
+    $scope.badgersToPayArray = utils.range($scope.badgersToPay);
+  })
+
+  $scope.giveBadgers = function() {
+    
+    if($rootScope.currentUser.id == $routeParams.userId1) {
+      $scopeOtherUserId = $routeParams.userId2;
+    } else {
+      $scopeOtherUserId = $routeParams.userId1;
+    }
+    var badgersToPay = $scope.badgersToPay;
+    $scope.badgersToPay = 0; 
+    var otherUserRef = fbRef.child("users").child($scopeOtherUserId);
+    otherUserRef.once('value', function(user){
+      user = user.val();
+      var hisBadgers = (user.badgers || 0) + badgersToPay;
+      otherUserRef.update({badgers:hisBadgers});
+      debugger;
+      notify.event({
+        user: user,
+        text: "Cool you got" + badgersToPay + " brand new badgers"
+      });
+      notify.me("Cool we sent  " + badgersToPay + " badgers");
+    });
+
+    var mybadgers = ($rootScope.currentUser.badgers || 0) - badgersToPay;
+    fbRef.child("users").child($rootScope.currentUser.id).update({badgers:mybadgers});
+  }
+
+  if (BrowserDetect.browser == "Chrome" && Number(BrowserDetect.version) >= 23) {
+    $scope.supportWebRTC = true;
+  } else {
+    $scope.supportWebRTC = false;
+  }
+
   $scope.showVideo = false;
   $scope.showVideoSection = function() {
     $scope.showVideo = true;
@@ -314,7 +394,7 @@ function MeetingCtrl($rootScope, $routeParams, $scope, $location, utils, db, ope
       $scope.listRef.push($scope.newItem);
       $scope.newItem = {};      
     } else {
-      $scope.showMessage('sorry you are not a user');
+      notify.me('sorry you are not a user');
     }
   }
 }
@@ -335,7 +415,7 @@ function StreamCtrl($rootScope, $routeParams, $scope, $location, utils, db) {
           $scope.hiddenItems.unshift(item);
         }
      };
-     $scope.$apply();
+     utils.apply($scope);;
   });
 
   itemsRef.on('child_added', function(item) {
@@ -348,12 +428,12 @@ function StreamCtrl($rootScope, $routeParams, $scope, $location, utils, db) {
   var timer = setInterval(function() {
     $scope.items.unshift($scope.hiddenItems.pop());
     $scope.hiddenItems.unshift($scope.items.pop());
-    $scope.$apply();
+    utils.apply($scope);;
   }, 5000);
 
   $scope.accept = function(item) {
     $location.path('video/' + item.user.id + "/" + $rootScope.currentUser.id);
-    $scope.$apply();
+    utils.apply($scope);;
   }
 
   $scope.newItem = {}
@@ -366,7 +446,7 @@ function StreamCtrl($rootScope, $routeParams, $scope, $location, utils, db) {
 }
 
 // the dialog is injected in the specified controller
-function SkillsDialogCtrl($rootScope, $scope, utils, dialog) {
+function SkillsDialogCtrl($rootScope, $scope, utils, dialog, notify) {
   $scope.dialogMode = 'skills';
 
   // calendar stuff:
@@ -422,23 +502,21 @@ function SkillsDialogCtrl($rootScope, $scope, utils, dialog) {
   $scope.$on("calendar_saved",function() {
     utils.log('save available times in registration dialog');
     dialog.close();
-    $scope.showMessage("Thanks, now, you can request help from others");
+    notify.me("Thanks, now, you can request help from others");
   });
 }
 
 function HomeCtrl($scope, $location, angularFireCollection, $rootScope) {
   // navigate to users if login.
-  $rootScope.$on("currentUserInit", function() {
-    if ($rootScope.currentUser && $rootScope.currentUser.skills) {
-      $location.path('stream');
-      $scope.$apply();
-    }
-  });
+  if ($rootScope.currentUser) {
+    $location.path('stream');
+    utils.apply($scope);;
+  }
 }
 
 function UsersCtrl($scope, $location, $routeParams, angularFireCollection, utils) {
   fbRef.child("users").on('value', function(users) {
     $scope.users = utils.listValues(users.val());
-    $scope.$apply();
+    utils.apply($scope);;
   });
 }
