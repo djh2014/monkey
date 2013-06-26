@@ -370,7 +370,7 @@ function VideoCtrl($rootScope, $routeParams, $scope, $location, utils, db, openT
 function MeetingCtrl($rootScope, $routeParams, $scope, $location, utils, db, openTok, notify) {
   var listKey = utils.genKey($routeParams.userId1, $routeParams.userId2);
   watch(listKey);
-  
+
   if (BrowserDetect.browser == "Chrome" && Number(BrowserDetect.version) >= 23) {
     $scope.supportWebRTC = true;
   } else {
