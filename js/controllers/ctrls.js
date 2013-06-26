@@ -11,26 +11,76 @@ mainApp = angular.module('mainApp', ['ngCookies', 'firebase', '$strap.directives
       when('/messages/:userId', {controller:MeetingsCtrl, templateUrl:'meetings.html'}).
       when('/meeting/:userId1/:userId2', {controller:MeetingCtrl, templateUrl:'meeting.html'}).
       when('/profile/:userId', {controller:ProfileCtrl, templateUrl:'profile.html'}).
+      when('/test', {controller:TestCtrl, templateUrl:'test.html'}).
       otherwise({redirectTo:'/'});
   }).run(["$rootScope", "$location", "$modal", "$q", "$dialog","utils", "$cookies", "notify",
      function ($rootScope, $location, $modal, $q, $dialog, utils, $cookies, notify) {
       $rootScope.global = {};
-      // TEMP:
-      // var data = 
-      //   {
-      //     date: "Tue Jun 29 2013 12:50:38 GMT-0700 (PDT)",
-      //     time: "06:00 PM",
-      //     user: {email:'abgutman1@gmail.com', name: 'Guti'},
-      //     path: 'meeting/guti6/guti6',
-      //     message: 'Later dude.'
-      //   };
-      // notify.reminder(data);
-
       $rootScope.$on("$routeChangeStart", function(event, next, current) {
         utils.log('change page');        
       });
      }
   ]);
+
+function TestCtrl($rootScope, $scope, $location, utils, $cookies, $dialog) {
+  watch('test');
+}
+
+function watch(watch_id) {
+  // TEMP:
+  $(document).ready(function() {
+    var watchRef = fbRef.child('watch').child(watch_id);
+    var init = false;
+    watchRef.child('time').on('value', function(time) {
+      time = time.val();
+      if (!init) {
+        debugger;
+        init = true;
+        if (time) {
+          $('#watch').stopwatch({startTime: time});
+        } else {
+          $('#watch').stopwatch();
+          watchRef.update({state:'start'});
+        }
+        watchRef.child('state').on('value', function(state) {
+        var state =state.val();
+        if (state) {
+          if (state == "start") {
+            $('#watch').stopwatch('start');
+          }
+          if (state == "stop") {
+            $('#watch').stopwatch('stop');
+          }
+          if (state == "reset") {
+            debugger;
+            $('#watch').stopwatch('destroy');
+            $('#watch').stopwatch();
+            watchRef.update({state:'start', time:0});
+          }
+        }
+        });
+
+        $('#watch').bind('tick.stopwatch', function(e, elapsed) {
+        if ((elapsed % 1000) == 0) {
+            var time = $('#watch').stopwatch('getTime');
+            watchRef.update({time:time})
+          }
+        });
+
+        $('#start').click(function() {
+          watchRef.update({state:'start'});
+        });
+        $('#stop').click(function() {
+          watchRef.update({state:'stop'});
+        });
+        $('#reset').click(function() {
+          watchRef.update({state:'reset'});
+        });
+      }
+    });
+  });
+}
+
 
 function LoginCtrl($rootScope, $scope, $location, utils, $cookies, $dialog) {
   utils.log('load_website');
@@ -283,42 +333,43 @@ function VideoCtrl($rootScope, $routeParams, $scope, $location, utils, db, openT
   $scope.streams = [];
 
   TB.addEventListener("exception", exceptionHandler);
-    var session = TB.initSession(sessionAndToken.session);
-    session.addEventListener("sessionConnected", sessionConnectedHandler);
-    session.addEventListener("streamCreated", streamCreatedHandler);
-    session.connect(21551012, sessionAndToken.token);
+  var session = TB.initSession(sessionAndToken.session);
+  session.addEventListener("sessionConnected", sessionConnectedHandler);
+  session.addEventListener("streamCreated", streamCreatedHandler);
+  session.connect(21551012, sessionAndToken.token);
 
-    function sessionConnectedHandler(event) {
-       subscribeToStreams(event.streams);
+  function sessionConnectedHandler(event) {
+     subscribeToStreams(event.streams);
 
-      // var divProps = {width: 400, height:300, name:"your stream"};
-      var publisher = TB.initPublisher(21551012, 'publisher');//, divProps);
-       session.publish(publisher);
-    }
-    
-    function streamCreatedHandler(event) {
-      subscribeToStreams(event.streams);
-    }
-    
-    function subscribeToStreams(streams) {
-      for (var i = 0; i < streams.length; i++) {
-        var stream = streams[i];
-        if (stream.connection.connectionId != session.connection.connectionId) {
-          if ($.inArray(stream.id, $scope.streams) == -1) {
-            $scope.streams.push(stream.id);
-            session.subscribe(stream, 'stream')
-            //$scope.$apply();
-          }
+    // var divProps = {width: 400, height:300, name:"your stream"};
+    var publisher = TB.initPublisher(21551012, 'publisher');//, divProps);
+     session.publish(publisher);
+  }
+  
+  function streamCreatedHandler(event) {
+    subscribeToStreams(event.streams);
+  }
+  
+  function subscribeToStreams(streams) {
+    for (var i = 0; i < streams.length; i++) {
+      var stream = streams[i];
+      if (stream.connection.connectionId != session.connection.connectionId) {
+        if ($.inArray(stream.id, $scope.streams) == -1) {
+          $scope.streams.push(stream.id);
+          session.subscribe(stream, 'stream')
+          //$scope.$apply();
         }
       }
-    }      
-    function exceptionHandler(event) {
-      //alert(event.message);
     }
+  }      
+  function exceptionHandler(event) {
+    //alert(event.message);
+  }
 }
 
 function MeetingCtrl($rootScope, $routeParams, $scope, $location, utils, db, openTok, notify) {
   var listKey = utils.genKey($routeParams.userId1, $routeParams.userId2);
+  watch(listKey);
   
   if (BrowserDetect.browser == "Chrome" && Number(BrowserDetect.version) >= 23) {
     $scope.supportWebRTC = true;
