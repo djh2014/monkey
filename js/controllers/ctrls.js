@@ -182,17 +182,20 @@ function EventCtrl($rootScope, $scope, $location, utils, $cookies, $dialog, noti
 
 function MeetingsCtrl ($rootScope, $routeParams, $scope, $location, utils, db, notify) {
   fbRef.child('meetings').on('value', function(meetingsObj) {
-    $scope.$apply(function() {
-      var meetings = utils.listValues(meetingsObj.val());
-      meetings = meetings.filter(function(e, i) {
-        return e.teacher.id == $routeParams.userId || e.student.id == $routeParams.userId;
-      });
-      meetings = utils.convertTime(meetings, 'day');
-      $scope.meetings = meetings;
-
-      // empty active notification:
-      $scope.activeNotification = []
+    debugger;
+    var meetings = utils.listValues(meetingsObj.val());
+    meetings = meetings.filter(function(e, i) {
+      return e.teacher.id == $routeParams.userId || e.student.id == $routeParams.userId;
     });
+    meetings = utils.convertTime(meetings, 'day');
+    $scope.meetings = meetings;
+    // empty active notification:
+    $scope.activeNotification = []
+    $scope.$apply();
+  });
+
+  $scope.$watch('meetings', function(a,b,c) {
+    debugger;
   });
 
   $scope.activeFirst = function(meeting) {
