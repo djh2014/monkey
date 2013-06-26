@@ -26,7 +26,7 @@ function TestCtrl($rootScope, $scope, $location, utils, $cookies, $dialog) {
   watch('test');
 }
 
-function watch(watch_id) {
+function watch(watch_id, cb) {
   // TEMP:
   $(document).ready(function() {
     var watchRef = fbRef.child('watch').child(watch_id);
@@ -34,7 +34,6 @@ function watch(watch_id) {
     watchRef.child('time').on('value', function(time) {
       time = time.val();
       if (!init) {
-        debugger;
         init = true;
         if (time) {
           $('#watch').stopwatch({startTime: time});
@@ -52,7 +51,6 @@ function watch(watch_id) {
             $('#watch').stopwatch('stop');
           }
           if (state == "reset") {
-            debugger;
             $('#watch').stopwatch('destroy');
             $('#watch').stopwatch();
             watchRef.update({state:'start', time:0});
@@ -62,6 +60,9 @@ function watch(watch_id) {
 
         $('#watch').bind('tick.stopwatch', function(e, elapsed) {
         if ((elapsed % 1000) == 0) {
+            if(cb) {
+              cb(elapsed);
+            }
             var time = $('#watch').stopwatch('getTime');
             watchRef.update({time:time})
           }
@@ -212,9 +213,7 @@ function MeetingsCtrl ($rootScope, $routeParams, $scope, $location, utils, db, n
     });
 
     notify.me('Cool! we will send you both an email reminder one hour, and one day before the video meeting');
-
     // Send reminders:
-    debugger;
     var data = 
       {
         date: meeting.day,
@@ -369,7 +368,12 @@ function VideoCtrl($rootScope, $routeParams, $scope, $location, utils, db, openT
 
 function MeetingCtrl($rootScope, $routeParams, $scope, $location, utils, db, openTok, notify) {
   var listKey = utils.genKey($routeParams.userId1, $routeParams.userId2);
-  watch(listKey);
+  watch(listKey, function(milliseconds) {
+    $scope.$apply(function() {
+      var badgers = Math.round( milliseconds / (1000*60*15) + 0.5 );
+      $scope.badgers = utils.range(badgers);
+    });
+  });
 
   if (BrowserDetect.browser == "Chrome" && Number(BrowserDetect.version) >= 23) {
     $scope.supportWebRTC = true;
