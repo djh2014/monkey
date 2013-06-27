@@ -93,7 +93,6 @@ function LoginCtrl($rootScope, $scope, $location, utils, $cookies, $dialog, $rou
   }
 
   $rootScope.openLoginDialog = function(cantExit) {
-    debugger;
     if (!$rootScope.isLogin()) {
       var d = $dialog.dialog({templateUrl: '/login-dialog.html',controller: 'LoginDialogCtrl',
         backdrop: true, keyboard: cantExit || true ,backdropClick: cantExit || true});
@@ -123,6 +122,23 @@ function LoginDialogCtrl($rootScope, $scope, utils, dialog) {
   }
   $scope.showSignIn = function() {
     $scope.showSignUp = true;
+  }
+
+  $scope.user = {};
+  $scope.emailSignup = function() {
+    debugger;
+    if (!$scope.user.name) {
+      $scope.errorMessage = "Please fill in your first and last name";
+    }
+    else if (!$scope.user.email) {
+      $scope.errorMessage = "Please fill in your email address";
+    }
+    else if (!$scope.user.password) {
+      $scope.errorMessage = "Please fill in password";
+    } else {
+      $scope.errorMessage = "Good";
+    }
+    
   }
 }
 

@@ -5,10 +5,14 @@
 	<div ng-show="showSignUp">
    		<h5 class="form-heading">Sign Up</h5>
    		<form>
-   			First And Last Name <input type="text" placeholder="e.g Rob Gordon"><br/>
-   			Email <input type="text" placeholder="your@email.com"><br/>
-   			Password <input type="text" placeholder="your@email.com"><br/>
-   			<a class="btn btn-success" ng-click="emailSignIn">SignUp</a>
+   			First And Last Name <input ng-model="user.name" type="text" placeholder="e.g Rob Gordon"><br/>
+   			Email <input ng-model="user.email" type="text" placeholder="your@email.com"><br/>
+   			Password <input ng-model="user.password" type="password" placeholder="your@email.com"><br/>
+   			<a class="btn btn-success" ng-click="emailSignup()">SignUp</a>
+   			<div ng-show="errorMessage" class="alert alert-error">
+	            <button type="button" class="close" data-dismiss="alert">×</button>
+	            <strong>Access Denied!</strong> {{errorMessage}}
+            </div>
    		</form>
 <!-- 
 		Or
