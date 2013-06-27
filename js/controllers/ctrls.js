@@ -7,6 +7,7 @@ mainApp = angular.module('mainApp', ['ngCookies', 'firebase', '$strap.directives
     $routeProvider.
       when('/', {controller:HomeCtrl, templateUrl:'home.html'}).
       when('/stream', {controller:StreamCtrl, templateUrl:'stream.html'}).
+      when('/newsfeed', {templateUrl:'newsfeed.html'}).
       when('/users', {controller:UsersCtrl, templateUrl:'users.html'}).
       when('/messages/:userId', {controller:MeetingsCtrl, templateUrl:'meetings.html'}).
       when('/meeting/:userId1/:userId2', {controller:MeetingCtrl, templateUrl:'meeting.html'}).
