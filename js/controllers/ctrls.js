@@ -69,11 +69,7 @@ function LoginCtrl($rootScope, $scope, $location, utils, $cookies, $dialog, $rou
     }
   });
 
-  $rootScope.openLoginDialog = function() {
-    var d = $dialog.dialog({templateUrl: '/login-dialog.html',controller: 'LoginDialogCtrl',
-        backdrop: true, keyboard: false,backdropClick: false});
-        d.open().then(function(result){});
-  }
+
 
   $rootScope.$on("$routeChangeStart", function(event, next, current) {
     utils.log('change page');
@@ -90,6 +86,21 @@ function LoginCtrl($rootScope, $scope, $location, utils, $cookies, $dialog, $rou
     d.open().then(function(result){});
     $location.path('stream/');
     utils.apply($scope);;
+  }
+
+  $rootScope.isLogin = function() {
+    return $rootScope.currentUser && $rootScope.currentUser != null;
+  }
+
+  $rootScope.openLoginDialog = function(cantExit) {
+    debugger;
+    if (!$rootScope.isLogin()) {
+      var d = $dialog.dialog({templateUrl: '/login-dialog.html',controller: 'LoginDialogCtrl',
+        backdrop: true, keyboard: cantExit || true ,backdropClick: cantExit || true});
+        d.open().then(function(result){});
+    } else {
+      notify.me("you are already login");
+    }
   }
 
   $rootScope.facebookLogin = function() {
@@ -109,6 +120,9 @@ function LoginDialogCtrl($rootScope, $scope, utils, dialog) {
   $scope.loginAndClose = function() {
     $rootScope.facebookLogin();
     dialog.close();
+  }
+  $scope.showSignIn = function() {
+    $scope.showSignUp = true;
   }
 }
 

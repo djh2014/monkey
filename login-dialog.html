@@ -1,5 +1,26 @@
 <div class="modal-body">
-	<p>Sorry about that, you need to sign-in first</p>
-	<a class="btn btn-danger home-button" ng-click="loginAndClose()">Register</a>
-	                                      <a class="btn btn-success home-button" ng-click="loginAndClose()">Login</a>
+	<button ng-click="loginAndClose()" class="btn-large btn btn-facebook"><i class="icon-facebook"></i> | Connect with Facebook</button>
+	
+	
+	<div ng-show="showSignUp">
+   		<h5 class="form-heading">Sign Up</h5>
+   		<form>
+   			First And Last Name <input type="text" placeholder="e.g Rob Gordon"><br/>
+   			Email <input type="text" placeholder="your@email.com"><br/>
+   			Password <input type="text" placeholder="your@email.com"><br/>
+   			<a class="btn btn-success" ng-click="emailSignIn">SignUp</a>
+   		</form>
+<!-- 
+		Or
+   		<h4 class="form-heading">Sign In</h4>
+   		<form>
+   			Email <input type="text" placeholder="your@email.com"><br/>
+   			Password <input type="text"><br/>
+   			<a class="btn btn-success" ng-click="emailSignIn">SignIn</a>
+   		</form>
+   		 -->
+    </div>      
+    <a ng-click="showSignIn()" ng-hide="showSignUp"><h6>Or use email</h6></a>
 </div>
+
+
