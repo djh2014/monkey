@@ -138,12 +138,15 @@
                                                           <a href="/#/users" class="btn btn-large btn-success">All Users</a>
                                                       </td>
                                                       <td class="nav-right">
-                                                          <a href="/#/messages/{{currentUser.id}}" class="btn btn-large btn-success">Messages</a>
+  <a ng-click="resetActiveNotifications()" href="/#/messages/{{currentUser.id}}"
+   class="btn btn-large btn-err {{(activeNotification.length > 0) && 'btn-danger' || 'btn-success'}}">Notifications 
+    <span  ng-show="activeNotification.length > 0">({{activeNotification.length}})</span>
+  </a>
                                                       </td>
                                                       <td class="nav-right">
                                                           <profile user="currentUser"/>
-                                                          <a href="#/profile/{{currentUser.id}}" title="{{currentUser.name}}"></a>Logout(<a ng-click="()">logout</a>)
-                                                      </td>   
+                                                      </td> 
+                                                      <td>(<a ng-click="logOut()">logout</a>)</td>     
                                                   </tr>
                                               </tbody>
                                           </table>

@@ -32,6 +32,7 @@ function LoginCtrl($rootScope, $scope, $location, utils, $cookies, $dialog, $rou
     $rootScope.currentUser = null;
   }
 
+  var clickedLogin = false;
   $scope.authClient = new FirebaseAuthClient(fbRef, function(error, facebookUser) {
     // If login:
     if (facebookUser) {
@@ -52,6 +53,12 @@ function LoginCtrl($rootScope, $scope, $location, utils, $cookies, $dialog, $rou
             $scope.openDialog();
           }
           utils.apply($scope);
+          if (clickedLogin) {
+            if ($location.path() == '/') {
+              $location.path('stream/');
+            }
+            clickedLogin = false;
+          }
       }); 
     // Not login:
     } else {
@@ -67,9 +74,10 @@ function LoginCtrl($rootScope, $scope, $location, utils, $cookies, $dialog, $rou
         backdrop: true, keyboard: false,backdropClick: false});
         d.open().then(function(result){});
   }
+
   $rootScope.$on("$routeChangeStart", function(event, next, current) {
     utils.log('change page');
-    if ((next.templateUrl != 'home.html') &&
+    if ((next.templateUrl && next.templateUrl != 'home.html') &&
         (!$rootScope.currentUser || $rootScope.currentUser==null)) {
       $rootScope.openLoginDialog();
     }
@@ -86,10 +94,8 @@ function LoginCtrl($rootScope, $scope, $location, utils, $cookies, $dialog, $rou
 
   $rootScope.facebookLogin = function() {
     utils.log('click facebook login');
+    clickedLogin = true;
     $scope.authClient.login('facebook', {rememberMe: true});
-    if ($location.path() == '/') {
-      $location.path('stream/');
-    }
   }
 
   $rootScope.logOut = function() {
@@ -100,7 +106,6 @@ function LoginCtrl($rootScope, $scope, $location, utils, $cookies, $dialog, $rou
 }
 
 function LoginDialogCtrl($rootScope, $scope, utils, dialog) {
-  debugger;
   $scope.loginAndClose = function() {
     $rootScope.facebookLogin();
     dialog.close();
@@ -354,7 +359,6 @@ function MeetingCtrl($rootScope, $routeParams, $scope, $location, utils, db, ope
       user = user.val();
       var hisBadgers = (user.badgers || 0) + badgersToPay;
       otherUserRef.update({badgers:hisBadgers});
-      debugger;
       notify.event({
         user: user,
         text: "Cool you got" + badgersToPay + " brand new badgers"
