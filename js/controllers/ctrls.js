@@ -407,21 +407,25 @@ function MeetingCtrl($rootScope, $routeParams, $scope, $location, utils, db, ope
 }
 
 function StreamCtrl($rootScope, $routeParams, $scope, $location, utils, db) {
-  var LENGTH = 20;
+  var LENGTH = 50;
   var itemsRef = fbRef.child("requests");
   $scope.items = []
   $scope.hiddenItems = []
 
   itemsRef.once('value', function(items) {
-     $scope.items = []
-     for(var key in items.val()) {
-        var item = items.val()[key];
+     $scope.items = [];
+     debugger;
+     var allItems = utils.listValues(items.val())
+     utils.randomizeArray(allItems);
+
+     allItems.forEach(function(item, i) {
         if ($scope.items.length <= LENGTH) {
           $scope.items.unshift(item);
         } else {
           $scope.hiddenItems.unshift(item);
         }
-     };
+     })
+     
      utils.apply($scope);;
   });
 
@@ -436,7 +440,7 @@ function StreamCtrl($rootScope, $routeParams, $scope, $location, utils, db) {
     $scope.items.unshift($scope.hiddenItems.pop());
     $scope.hiddenItems.unshift($scope.items.pop());
     utils.apply($scope);;
-  }, 5000);
+  }, 15000);
 
   $scope.accept = function(item) {
     $location.path('video/' + item.user.id + "/" + $rootScope.currentUser.id);
