@@ -1,16 +1,21 @@
 <div class="modal-body">
 	<button ng-click="loginAndClose()" class="btn-large btn btn-facebook"><i class="icon-facebook"></i> | Connect with Facebook</button>
-	OR
+	
+	
+	<div ng-show="signUp">
+   		<h5 class="form-heading">Sign Up</h5>
    		<form>
+   			First And Last Name <input ng-model="userLogin.name" type="text" placeholder="e.g Rob Gordon"><br/>
    			Email <input ng-model="userLogin.email" type="text" placeholder="your@email.com"><br/>
    			Password <input ng-model="userLogin.password" type="password" placeholder="your@email.com"><br/>
-   			<a class="btn btn-success" ng-click="handleEmailLogin()">Login</a>
+   			<a class="btn btn-success" ng-click="emailSignup()">SignUp</a>
    			<div ng-show="errorMessage" class="alert alert-error">
 	            <button type="button" class="close" data-dismiss="alert">×</button>
 	            <strong>Access Denied!</strong> {{errorMessage}}
             </div>
    		</form>
     </div>      
+    <a ng-click="showSignUp()" ng-hide="signUp"><h6>Or use email</h6></a>
 </div>
 
 

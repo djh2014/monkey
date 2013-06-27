@@ -24,7 +24,7 @@ function TestCtrl($rootScope, $scope, $location, utils, $cookies, $dialog) {
   watch('test');
 }
 
-function LoginCtrl($rootScope, $scope, $location, utils, $cookies, $dialog, $route) {
+function LoginCtrl($rootScope, $scope, $location, utils, $cookies, $dialog, $route, notify) {
   if ($cookies.currentUser) {
     $rootScope.currentUser = JSON.parse($cookies.currentUser);
     $rootScope.$broadcast("currentUserInit");
@@ -33,10 +33,11 @@ function LoginCtrl($rootScope, $scope, $location, utils, $cookies, $dialog, $rou
   }
 
   var clickedLogin = false;
-  $scope.authClient = new FirebaseAuthClient(fbRef, function(error, facebookUser) {
+  $scope.authClient = new FirebaseAuthClient(fbRef, function(error, authUser) {
+    debugger;
     // If login:
-    if (facebookUser) {
-      var id = utils.fbClean(facebookUser.username || facebookUser.id);
+    if (authUser) {
+      var id = utils.fbClean(authUser.username || authUser.id);
 
       var currentUserRef = fbRef.child("users").child(id);
       currentUserRef.on('value', function(FBUser) {
@@ -46,12 +47,18 @@ function LoginCtrl($rootScope, $scope, $location, utils, $cookies, $dialog, $rou
           $rootScope.$broadcast("currentUserInit");
           
           // Handle new user: 
-          if (!$rootScope.currentUser.facebook) {
-            currentUserRef.update({
-              badgers:3, user: facebookUser.username || "", name: facebookUser.name || "", id: id, email: facebookUser.email || "", facebook: facebookUser || "",
-              img: "http://graph.facebook.com/"+ facebookUser.id+"/picture?type=large" || ""});
+          if (!$rootScope.currentUser.facebook && authUser.username) {
+            currentUserRef.update({init:true,
+              badgers:3, user: authUser.username || "", name: authUser.name || "", id: id, email: authUser.email || "", facebook: authUser || "",
+              img: "http://graph.facebook.com/"+ authUser.id+"/picture?type=large" || ""});
+            $scope.openDialog();
+          } else if (!$rootScope.currentUser.init && !authUser.username){
+            currentUserRef.update({init:true,
+              badgers:3, user: $rootScope.name || "", name: $rootScope.name || "", id: id, email: authUser.email || "",
+              img: "http://profile.ak.fbcdn.net/static-ak/rsrc.php/v2/yL/r/HsTZSDw4avx.gif" || ""});
             $scope.openDialog();
           }
+
           utils.apply($scope);
           if (clickedLogin) {
             if ($location.path() == '/') {
@@ -68,8 +75,6 @@ function LoginCtrl($rootScope, $scope, $location, utils, $cookies, $dialog, $rou
       utils.apply($scope);;
     }
   });
-
-
 
   $rootScope.$on("$routeChangeStart", function(event, next, current) {
     utils.log('change page');
@@ -102,10 +107,44 @@ function LoginCtrl($rootScope, $scope, $location, utils, $cookies, $dialog, $rou
     }
   }
 
+  $rootScope.openSignUpDialog = function(cantExit) {
+    if (!$rootScope.isLogin()) {
+      var d = $dialog.dialog({templateUrl: '/signup-dialog.html',controller: 'SignupDialogCtrl',
+        backdrop: true, keyboard: cantExit || true ,backdropClick: cantExit || true});
+        d.open().then(function(result){});
+    } else {
+      notify.me("you are already login");
+    }
+  }
+
   $rootScope.facebookLogin = function() {
     utils.log('click facebook login');
     clickedLogin = true;
     $scope.authClient.login('facebook', {rememberMe: true});
+  }
+
+  $rootScope.createEmailUser = function(user, dialog, scope) {
+    $rootScope.name = user.name;
+    utils.log('click email login');
+    clickedLogin = true;
+    $scope.authClient.createUser(user.email, user.password, function(error, user) {  
+      if (!error) {
+        dialog.close();
+        notify.me("Cool, you can now login");
+        $rootScope.openLoginDialog();
+      } else {
+        scope.errorMessage = error; 
+      }
+    });
+  }
+
+  $rootScope.emailLogin = function(user) {
+    $rootScope.name = user.name;
+    $scope.authClient.login('password', {
+      email: user.email,
+      password: user.password,
+      rememberMe: true,
+    });
   }
 
   $rootScope.logOut = function() {
@@ -115,30 +154,53 @@ function LoginCtrl($rootScope, $scope, $location, utils, $cookies, $dialog, $rou
   }
 }
 
+function SignupDialogCtrl($rootScope, $scope, utils, dialog) {
+  $scope.loginAndClose = function() {
+    $rootScope.facebookLogin();
+    dialog.close();
+  }
+
+  $scope.showSignUp = function() {
+    $scope.signUp = true;
+  }
+
+  $rootScope.userLogin = {};
+  $scope.emailSignup = function() {
+    if (!$rootScope.userLogin.name) {
+      $scope.errorMessage = "Please fill in your first and last name";
+    }
+    else if (!$rootScope.userLogin.email) {
+      $scope.errorMessage = "Please fill in your email address";
+    }
+    else if (!$rootScope.userLogin.password) {
+      $scope.errorMessage = "Please fill in password";
+    } else {
+      $rootScope.createEmailUser($rootScope.userLogin, dialog, $scope);
+    }
+  }
+}
+
 function LoginDialogCtrl($rootScope, $scope, utils, dialog) {
   $scope.loginAndClose = function() {
     $rootScope.facebookLogin();
     dialog.close();
   }
+
   $scope.showSignIn = function() {
-    $scope.showSignUp = true;
+    $scope.signIn = true;
   }
 
-  $scope.user = {};
-  $scope.emailSignup = function() {
+  $rootScope.userLogin = $rootScope.userLogin || {};
+  $scope.handleEmailLogin = function() {
     debugger;
-    if (!$scope.user.name) {
-      $scope.errorMessage = "Please fill in your first and last name";
-    }
-    else if (!$scope.user.email) {
+    if (!$rootScope.userLogin.email) {
       $scope.errorMessage = "Please fill in your email address";
-    }
-    else if (!$scope.user.password) {
+    } else if (!$rootScope.userLogin.password) {
       $scope.errorMessage = "Please fill in password";
     } else {
-      $scope.errorMessage = "Good";
+      $rootScope.emailLogin($rootScope.userLogin);
+      dialog.close();
     }
-    
   }
 }
 
@@ -444,7 +506,6 @@ function StreamCtrl($rootScope, $routeParams, $scope, $location, utils, db) {
 
   itemsRef.once('value', function(items) {
      $scope.items = [];
-     debugger;
      var allItems = utils.listValues(items.val())
      utils.randomizeArray(allItems);
 
