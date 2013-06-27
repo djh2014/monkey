@@ -48,7 +48,7 @@ function LoginCtrl($rootScope, $scope, $location, utils, $cookies, $dialog, $rou
           // Handle new user: 
           if (!$rootScope.currentUser.facebook) {
             currentUserRef.update({
-              user: facebookUser.username || "", name: facebookUser.name || "", id: id, email: facebookUser.email || "", facebook: facebookUser || "",
+              badgers:3, user: facebookUser.username || "", name: facebookUser.name || "", id: id, email: facebookUser.email || "", facebook: facebookUser || "",
               img: "http://graph.facebook.com/"+ facebookUser.id+"/picture?type=large" || ""});
             $scope.openDialog();
           }
