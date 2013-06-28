@@ -27,6 +27,9 @@
     <link rel="stylesheet" type="text/css" href="http://mgcrea.github.io/angular-strap/vendor/bootstrap-datepicker.css" media="screen">
     <link rel="stylesheet" type="text/css" href="http://mgcrea.github.io/angular-strap/vendor/bootstrap-timepicker.css" media="screen">
     <link rel="stylesheet" type="text/css" href="components/fullcalendar/fullcalendar.css" />
+    <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.min.css" rel="stylesheet">  
+    <link rel="stylesheet" type="text/css" href="css/social-buttons.css" />
+    
 
   <!-- OPEN TOK -->
   <meta http-equiv="X-UA-Compatible" content="chrome=1">
@@ -138,12 +141,15 @@
                                                           <a href="/#/users" class="btn btn-large btn-success">All Users</a>
                                                       </td>
                                                       <td class="nav-right">
-                                                          <a href="/#/messages/{{currentUser.id}}" class="btn btn-large btn-success">Messages</a>
+  <a ng-click="resetActiveNotifications()" href="/#/messages/{{currentUser.id}}"
+   class="btn btn-large btn-err {{(activeNotification.length > 0) && 'btn-danger' || 'btn-success'}}">Notifications 
+    <span  ng-show="activeNotification.length > 0">({{activeNotification.length}})</span>
+  </a>
                                                       </td>
                                                       <td class="nav-right">
                                                           <profile user="currentUser"/>
-                                                          <a href="#/profile/{{currentUser.id}}" title="{{currentUser.name}}"></a>Logout(<a ng-click="()">logout</a>)
-                                                      </td>   
+                                                      </td> 
+                                                      <td>(<a ng-click="logOut()">logout</a>)</td>     
                                                   </tr>
                                               </tbody>
                                           </table>
@@ -163,10 +169,9 @@
                                               <a href='/'><img src="img/badgerlogo.png" alt="" /></a>
                                             </td>
                                             <td class="nav-right">
-                                              <a class="btn btn-danger home-button" ng-click="facebookLogin()">Register</a>
-                                            </td>
-                                            <td class="nav-right">
-                                              <a class="btn btn-success home-button" ng-click="facebookLogin()">Login</a>
+                                              <a class="btn btn-success home-button" ng-click="openSignUpDialog()">Register
+                                                </a>
+                                              <a class="btn btn-danger home-button" ng-click="openLoginDialog()">Login</a>
                                             </td>
                                           </tr>
                                         </tbody>
@@ -181,8 +186,8 @@
                                     <div class="span9">
                                       <ul>
                                         <li class="register">
-                                            <a class="btn btn-danger home-button" ng-click="facebookLogin()">Register</a>
-                                            <a class="btn btn-success home-button" ng-click="facebookLogin()">Login</a>
+                                            <a class="btn btn-danger home-button" ng-click="openLoginDialog()">Register</a>
+                                            <a class="btn btn-success home-button" ng-click="openLoginDialog()">Login</a>
                                         </li>
                                       </ul>
                                     </div>
