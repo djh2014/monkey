@@ -7,6 +7,7 @@ mainApp = angular.module('mainApp', ['ngCookies', 'firebase', '$strap.directives
     $routeProvider.
       when('/', {controller:HomeCtrl, templateUrl:'home.html'}).
       when('/stream', {controller:StreamCtrl, templateUrl:'stream.html'}).
+      when('/newsfeed', {templateUrl:'newsfeed.html'}).
       when('/users', {controller:UsersCtrl, templateUrl:'users.html'}).
       when('/messages/:userId', {controller:MeetingsCtrl, templateUrl:'meetings.html'}).
       when('/meeting/:userId1/:userId2', {controller:MeetingCtrl, templateUrl:'meeting.html'}).
@@ -291,7 +292,7 @@ function MeetingsCtrl ($rootScope, $routeParams, $scope, $location, utils, db, n
         time: meeting.time,
         user: meeting.student,
         path: 'meeting/' + meeting.student.id +'/' + meeting.teacher.id,
-        message: 'you have a video meeting, we hope you are pump, and ready.'
+        message: 'you have a video meeting, we' + meeting.teacher.name + ' get pumped!'
       };
     notify.reminder(data);
     data.user = meeting.teacher;
