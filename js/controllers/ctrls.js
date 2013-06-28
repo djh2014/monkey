@@ -88,17 +88,15 @@ function LoginCtrl($rootScope, $scope, $location, utils, $cookies, $dialog, $rou
         $rootScope.mainPage = true;
       } else {
         $rootScope.mainPage = false;
-        if (!$rootScope.currentUser || $rootScope.currentUser==null) {
-          $rootScope.openLoginDialog();
-        }
       }
 
-      // if (next.templateUrl == 'sign-in.html' || next.templateUrl == 'sign-up.html') {
-      //   $rootScope.fixNavBar = true;
-      // } else {
-      //   $rootScope.fixNavBar = false;
-      // }
-
+      if(($.inArray(next.templateUrl,['home.html', 'sign-up.html', 'sign-in.html']) == -1) && 
+         (!$rootScope.currentUser || $rootScope.currentUser==null)) {
+        notify.me('please sign up first');
+        $location.path('sign-up');
+        //$rootScope.openLoginDialog();
+      }
+      
     }
   });  
 
