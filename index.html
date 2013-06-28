@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Business Template</title>
+	<title>Get Badgers</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	
@@ -30,16 +30,16 @@
                 <span class="icon-bar"></span>
             </a>
             <a class="brand" href="index.html">
-                <strong>CLEAN CANVAS</strong>
+                <strong>Get Badgers</strong>
             </a>
             <div class="nav-collapse collapse">
                 <ul class="nav pull-right">
                     <li><a class="active" href="/">HOME</a></li>
                     <li><a href="/#/stream">News Feed</a></li>
                     <li><a href="/#/users">All Users</a></li>
-                    <li><a href="/#/messages/{{currentUser.id}}">Messages</a></li>
-                    <li><a ng-click="logOut()" ng-hide="currentUser">Sign up</a></li>
-                    <li><a href="sign-in.html" ng-hide="currentUser">Sign in</a></li>    
+                    <li><a href="/#/messages/{{currentUser.id}}" class="{{(activeNotification.length > 0) && 'btn btn-danger' || ''}}">Messages</a></li>
+                    <li><a href="/#/signup" ng-hide="currentUser">Sign up</a></li>
+                    <li><a href="/#/signin" ng-hide="currentUser">Sign in</a></li>    
                     <li><a ng-click="logOut()" ng-show="currentUser">logout</a></li>
                 </ul>
             </div>
