@@ -83,9 +83,7 @@ function LoginCtrl($rootScope, $scope, $location, utils, $cookies, $dialog, $rou
     utils.log('change page');
     debugger;
     if (next.templateUrl) {
-      if (next.templateUrl == 'sign-in.html' || next.templateUrl == 'sign-up.html') {
-        $rootScope.fixNavBar = true;
-      }
+      
       if (next.templateUrl == 'home.html') {
         $rootScope.mainPage = true;
       } else {
@@ -94,6 +92,13 @@ function LoginCtrl($rootScope, $scope, $location, utils, $cookies, $dialog, $rou
           $rootScope.openLoginDialog();
         }
       }
+
+      // if (next.templateUrl == 'sign-in.html' || next.templateUrl == 'sign-up.html') {
+      //   $rootScope.fixNavBar = true;
+      // } else {
+      //   $rootScope.fixNavBar = false;
+      // }
+
     }
   });  
 
@@ -129,6 +134,7 @@ function LoginCtrl($rootScope, $scope, $location, utils, $cookies, $dialog, $rou
       notify.me("you are already login");
     }
   }
+
 
   $rootScope.facebookLogin = function() {
     utils.log('click facebook login');

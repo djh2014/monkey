@@ -24,9 +24,9 @@
       <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
 </head>
-<body ng-app="mainApp" ng-controller="LoginCtrl" class="{{mainPage && 'pull_top' || ''}}">
+<body ng-cloak ng-app="mainApp" ng-controller="LoginCtrl" class="{{mainPage && 'pull_top' || ''}}">
   <span ng-cloak ng-controller="EventCtrl">
-    <div class="navbar navbar-inverse {{fixNavBar && 'navbar-static-top' || 'transparent navbar-fixed-top'}}">
+    <div class="navbar navbar-inverse transparent navbar-fixed-top">
       <div class="navbar-inner">
         <div class="container">
             <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
