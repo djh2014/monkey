@@ -7,11 +7,13 @@ mainApp = angular.module('mainApp', ['ngCookies', 'firebase', '$strap.directives
     $routeProvider.
       when('/', {controller:HomeCtrl, templateUrl:'home.html'}).
       when('/stream', {controller:StreamCtrl, templateUrl:'stream.html'}).
-      when('/users', {controller:UsersCtrl, templateUrl:'users.html'}).
+      when('/userss', {controller:UsersCtrl, templateUrl:'users.html'}).
       when('/messages/:userId', {controller:MeetingsCtrl, templateUrl:'meetings.html'}).
       when('/meeting/:userId1/:userId2', {controller:MeetingCtrl, templateUrl:'meeting.html'}).
       when('/profile/:userId', {controller:ProfileCtrl, templateUrl:'profile.html'}).
       when('/test', {controller:TestCtrl, templateUrl:'test.html'}).
+      when('/sign-in', {templateUrl:'sign-in.html'}).
+      when('/sign-up', {templateUrl:'sign-up.html'}).
       otherwise({redirectTo:'/'});
   }).run(["$rootScope", "$location", "$modal", "$q", "$dialog","utils", "$cookies", "notify",
      function ($rootScope, $location, $modal, $q, $dialog, utils, $cookies, notify) {

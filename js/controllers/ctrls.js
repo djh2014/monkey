@@ -12,6 +12,8 @@ mainApp = angular.module('mainApp', ['ngCookies', 'firebase', '$strap.directives
       when('/meeting/:userId1/:userId2', {controller:MeetingCtrl, templateUrl:'meeting.html'}).
       when('/profile/:userId', {controller:ProfileCtrl, templateUrl:'profile.html'}).
       when('/test', {controller:TestCtrl, templateUrl:'test.html'}).
+      when('/sign-in', {templateUrl:'sign-in.html'}).
+      when('/sign-up', {templateUrl:'sign-up.html'}).
       otherwise({redirectTo:'/'});
   }).run(["$rootScope", "$location", "$modal", "$q", "$dialog","utils", "$cookies", "notify",
      function ($rootScope, $location, $modal, $q, $dialog, utils, $cookies, notify) {
@@ -81,6 +83,9 @@ function LoginCtrl($rootScope, $scope, $location, utils, $cookies, $dialog, $rou
     utils.log('change page');
     debugger;
     if (next.templateUrl) {
+      if (next.templateUrl == 'sign-in.html' || next.templateUrl == 'sign-up.html') {
+        $rootScope.fixNavBar = true;
+      }
       if (next.templateUrl == 'home.html') {
         $rootScope.mainPage = true;
       } else {
