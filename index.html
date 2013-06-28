@@ -38,9 +38,9 @@
                     <li><a href="/#/stream">News Feed</a></li>
                     <li><a href="/#/users">All Users</a></li>
                     <li><a href="/#/messages/{{currentUser.id}}">Messages</a></li>
-                    <li><a href="sign-up.html">Sign up</a></li>
-                    <li><a href="sign-in.html">Sign in</a></li>
-                    <li><a ng-click="logOut()">logout</a></li>
+                    <li><a ng-click="logOut()" ng-hide="currentUser">Sign up</a></li>
+                    <li><a href="sign-in.html" ng-hide="currentUser">Sign in</a></li>    
+                    <li><a ng-click="logOut()" ng-show="currentUser">logout</a></li>
                 </ul>
             </div>
         </div>
