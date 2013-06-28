@@ -16,6 +16,7 @@ mainApp = angular.module('mainApp', ['ngCookies', 'firebase', '$strap.directives
   }).run(["$rootScope", "$location", "$modal", "$q", "$dialog","utils", "$cookies", "notify",
      function ($rootScope, $location, $modal, $q, $dialog, utils, $cookies, notify) {
       $rootScope.global = {};
+
       utils.log('load_website');
      }
   ]);
@@ -34,7 +35,7 @@ function LoginCtrl($rootScope, $scope, $location, utils, $cookies, $dialog, $rou
 
   var clickedLogin = false;
   $scope.authClient = new FirebaseAuthClient(fbRef, function(error, authUser) {
-    debugger;
+
     // If login:
     if (authUser) {
       var id = utils.fbClean(authUser.username || authUser.id);
@@ -78,9 +79,16 @@ function LoginCtrl($rootScope, $scope, $location, utils, $cookies, $dialog, $rou
 
   $rootScope.$on("$routeChangeStart", function(event, next, current) {
     utils.log('change page');
-    if ((next.templateUrl && next.templateUrl != 'home.html') &&
-        (!$rootScope.currentUser || $rootScope.currentUser==null)) {
-      $rootScope.openLoginDialog();
+    debugger;
+    if (next.templateUrl) {
+      if (next.templateUrl == 'home.html') {
+        $rootScope.mainPage = true;
+      } else {
+        $rootScope.mainPage = false;
+        if (!$rootScope.currentUser || $rootScope.currentUser==null) {
+          $rootScope.openLoginDialog();
+        }
+      }
     }
   });  
 

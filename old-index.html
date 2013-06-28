@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+
+    <!-- Get badgers: -->
+    <title>Badgers</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- CSS -->
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <link href="css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="css/bootstrap-custom.css" rel="stylesheet">
+    <!--Font-->
+    <link href="css/font-ubuntu.css" rel="stylesheet">
+    <link href='css/font-arimo.css' rel='stylesheet' type='text/css'>
+    <!-- Le fav and touch icons -->
+    <link rel="shortcut icon" href="ico/favicon.ico">
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="ico/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="ico/apple-touch-icon-114-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="ico/apple-touch-icon-72-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" href="ico/apple-touch-icon-57-precomposed.png">
+    <!-- Slider-->
+    <link rel="stylesheet" type="text/css" href="css/slider.css" />
+    <!-- super fish menu -->
+    <link rel="stylesheet" type="text/css" href="css/superfish.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="http://mgcrea.github.io/angular-strap/vendor/bootstrap-datepicker.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="http://mgcrea.github.io/angular-strap/vendor/bootstrap-timepicker.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="components/fullcalendar/fullcalendar.css" />
+    <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.min.css" rel="stylesheet">  
+    <link rel="stylesheet" type="text/css" href="css/social-buttons.css" />
+    
+
+  
+  </head>
+  <body ng-app="mainApp" ng-controller="LoginCtrl" >
+  <span  ng-controller="EventCtrl">
+
+    <!--<section id="main" class="container">--> <!--Moved to after top header -->
+
+                            <span ng-switch on="currentUser != null" >
+                                <span ng-switch-when="true">
+                                <!-- Login -->
+                                  <div class="row inner-nav" id="no-margin">
+                                      <div class="span12 nav-header">
+                                          <table>
+                                              <thead>
+                                              </thead>
+                                              <tbody>
+                                                  <tr>
+                                                      <td class="nav-left"><a href='/'><img src="img/badgertoolbar.png" alt=""/></a>
+                                                      </td>
+                                                      <td class="nav-left">
+
+                                                          <form class="search-bar" id="nav-search" >
+                                                              <input type="text" ng-model="global.search" placeholder="Search Skills" class="search-query span6" id="innernav-search">
+                                                              <a href="/#/users" class="btn btn-inverse"><i class="icon-search icon-white"></i></a>
+                                                          </form>
+                                                          
+                                                      </td>
+                                                      <td class="nav-right">
+                                                          <a href="/#/stream" class="btn btn-large btn-success">News feed</a>
+                                                      </td>
+                                                      <td class="nav-right">
+                                                          <a href="/#/users" class="btn btn-large btn-success">All Users</a>
+                                                      </td>
+                                                      <td class="nav-right">
+  <a ng-click="resetActiveNotifications()" href="/#/messages/{{currentUser.id}}"
+   class="btn btn-large btn-err {{(activeNotification.length > 0) && 'btn-danger' || 'btn-success'}}">Notifications 
+    <span  ng-show="activeNotification.length > 0">({{activeNotification.length}})</span>
+  </a>
+                                                      </td>
+                                                      <td class="nav-right">
+                                                          <profile user="currentUser"/>
+                                                      </td> 
+                                                      <td>(<a ng-click="logOut()">logout</a>)</td>     
+                                                  </tr>
+                                              </tbody>
+                                          </table>
+                                      </div>
+                                  </div>
+                                </span>    
+                                <span ng-switch-default>
+                                 <!-- Not Login -->
+                                  <div class="row top-header">
+                                    <div class="span12 nav-header">
+                                      <table>
+                                        <thead>
+                                        </thead>
+                                        <tbody>
+                                          <tr>
+                                            <td class="nav-left">
+                                              <a href='/'><img src="img/badgerlogo.png" alt="" /></a>
+                                            </td>
+                                            <td class="nav-right">
+                                              <a class="btn btn-success home-button" ng-click="openSignUpDialog()">Register
+                                                </a>
+                                              <a class="btn btn-danger home-button" ng-click="openLoginDialog()">Login</a>
+                                            </td>
+                                          </tr>
+                                        </tbody>
+                                      </table>
+                                    </div>
+                                  </div> 
+                                </span>
+                              </span>
+
+                                    <!--<div class="span3" id="logo-left"><a href='/'><img src="img/badgerlogo.png" alt="" /></a>
+                                    </div>
+                                    <div class="span9">
+                                      <ul>
+                                        <li class="register">
+                                            <a class="btn btn-danger home-button" ng-click="openLoginDialog()">Register</a>
+                                            <a class="btn btn-success home-button" ng-click="openLoginDialog()">Login</a>
+                                        </li>
+                                      </ul>
+                                    </div>
+                                  </div>
+                                </span>
+                            </span>-->
+                          
+    <section id="main" class="container">
+
+            <!--<div class="navbar">
+                <div class="navbar-inner">
+                    <div class="container">
+                        <a data-target=".nav-collapse" data-toggle="collapse" class="btn btn-navbar">
+                            
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </a>
+
+                        <div class="nav-collapse">
+
+                            <form ng-controller="SearchCtrl" class="navbar-search pull-left" >
+                                <input type="text" ng-model="global.search" placeholder="Search" class="search-query span2">
+                                <a href="/#/users" class="btn btn-inverse"><i class="icon-search icon-white"></i></a>
+                            </form>
+                          <ul class="nav pull-right">
+                              
+                                <li class="divider-vertical"></li>
+                                <li class="dropdown main-menu-element">
+                                     
+
+  <!-- <a href="/#/stream" class="btn btn-large btn-info" >Stream</a> -->
+  
+
+
+                        <!--</div>
+                    </div>-->
+                <!--</div>-->
+            </div>
+            <div ng-view>
+            </div>
+            <section id="main" class="container">
+
+            <div class="pre-footer"></div>
+            <footer>
+                <div class="row">
+                    <div class="span4">
+                        <h2>About</h2>
+                        <p>We seek to leverage education and work experience to create a new knowledge based economy.</p>
+                    </div>
+                    <div class="span4">
+                        <h2>Company</h2>
+                        <p>FuckingBOLD Inc</p>
+                        <p>200 12th street San Francisco CA 94103</p>
+                    </div>
+                    <div class="span4">
+                        <h2>Contact</h2>
+                        <p>danny@getbadgers.com</p>
+                        <p>631-921-7522</p>
+                    </div>
+                </div>
+            </footer>
+    </section>
+
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+
+  </span>
+  </body>
+</html>
