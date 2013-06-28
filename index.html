@@ -42,9 +42,11 @@
                     <li><a class="active" href="/">HOME</a></li>
                     <li><a href="/#/stream">Earn</a></li>
                     <li><a href="/#/users">Spend</a></li>
+
                     <li><a href="/#/messages/{{currentUser.id}}" class="{{(activeNotification.length > 0) && 'btn btn-danger' || ''}}">Notifications</a></li>
                     <li><a href="/#/sign-up" ng-hide="currentUser">Sign up</a></li>
-                    <li><a href="/#/sign-in" ng-hide="currentUser">Sign in</a></li>    
+                    <li><a href="/#/sign-in" ng-hide="currentUser">Sign in</a></li>   
+                    <li><profile user="currentUser" ng-show="currentUser"/></li> 
                     <li><a ng-click="logOut()" ng-show="currentUser">logout</a></li>
                 </ul>
             </div>

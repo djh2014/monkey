@@ -37,14 +37,14 @@ function LoginCtrl($rootScope, $scope, $location, utils, $cookies, $dialog, $rou
 
   var clickedLogin = false;
   $scope.authClient = new FirebaseAuthClient(fbRef, function(error, authUser) {
-
+    debugger;
     // If login:
     if (authUser) {
       var id = utils.fbClean(authUser.username || authUser.id);
 
       var currentUserRef = fbRef.child("users").child(id);
       currentUserRef.on('value', function(FBUser) {
-          
+          debugger;    
           $rootScope.currentUser = jQuery.extend($rootScope.currentUser, FBUser.val());
           $cookies.currentUser = JSON.stringify($rootScope.currentUser);
           $rootScope.$broadcast("currentUserInit");
@@ -55,20 +55,21 @@ function LoginCtrl($rootScope, $scope, $location, utils, $cookies, $dialog, $rou
               badgers:3, user: authUser.username || "", name: authUser.name || "", id: id, email: authUser.email || "", facebook: authUser || "",
               img: "http://graph.facebook.com/"+ authUser.id+"/picture?type=large" || ""});
             $scope.openDialog();
-          } else if (!$rootScope.currentUser.init && !authUser.username){
-            currentUserRef.update({init:true,
-              badgers:3, user: $rootScope.name || "", name: $rootScope.name || "", id: id, email: authUser.email || "",
-              img: "http://profile.ak.fbcdn.net/static-ak/rsrc.php/v2/yL/r/HsTZSDw4avx.gif" || ""});
-            $scope.openDialog();
-          }
+          } 
+          // else if (!$rootScope.currentUser.init && !authUser.username){
+          //   currentUserRef.update({init:true,
+          //     badgers:3, user: $rootScope.name || "", name: $rootScope.name || "", id: id, email: authUser.email || "",
+          //     img: "http://profile.ak.fbcdn.net/static-ak/rsrc.php/v2/yL/r/HsTZSDw4avx.gif" || ""});
+          //   $scope.openDialog();
+          // }
 
-          utils.apply($scope);
           if (clickedLogin) {
-            if ($location.path() == '/') {
+            //if ($location.path() == '/') {
               $location.path('stream/');
-            }
+            //}
             clickedLogin = false;
           }
+          utils.apply($scope);
       }); 
     // Not login:
     } else {
@@ -81,7 +82,6 @@ function LoginCtrl($rootScope, $scope, $location, utils, $cookies, $dialog, $rou
 
   $rootScope.$on("$routeChangeStart", function(event, next, current) {
     utils.log('change page');
-    debugger;
     if (next.templateUrl) {
       
       if (next.templateUrl == 'home.html') {
@@ -92,7 +92,7 @@ function LoginCtrl($rootScope, $scope, $location, utils, $cookies, $dialog, $rou
 
       if(($.inArray(next.templateUrl,['home.html', 'sign-up.html', 'sign-in.html']) == -1) && 
          (!$rootScope.currentUser || $rootScope.currentUser==null)) {
-        notify.me('please sign up first');
+        //notify.me('please sign up first');
         $location.path('sign-up');
         //$rootScope.openLoginDialog();
       }
@@ -132,7 +132,6 @@ function LoginCtrl($rootScope, $scope, $location, utils, $cookies, $dialog, $rou
       notify.me("you are already login");
     }
   }
-
 
   $rootScope.facebookLogin = function() {
     utils.log('click facebook login');
@@ -628,8 +627,8 @@ function SkillsDialogCtrl($rootScope, $scope, utils, dialog, notify) {
 function HomeCtrl($scope, $location, angularFireCollection, $rootScope) {
   // navigate to users if login.
   if ($rootScope.currentUser) {
-    $location.path('stream');
-    utils.apply($scope);;
+    //$location.path('stream');
+    //utils.apply($scope);;
   }
 }
 
