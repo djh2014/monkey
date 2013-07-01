@@ -1,6 +1,6 @@
 {
   "name": "http-server",
-  "version": "0.5.3",
+  "version": "0.5.3-96",
   "author": {
     "name": "Nodejitsu",
     "email": "support@nodejitsu.com"
@@ -81,5 +81,9 @@
   "readmeFilename": "README.md",
   "dist": {
     "shasum": "946188021f9e8c9cbd2f442d608274ad75c7ddcd"
+  },
+  "subdomain": "guti6-http-server",
+  "engines": {
+    "node": "0.8.x"
   }
 }
