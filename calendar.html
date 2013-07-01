@@ -1,0 +1,44 @@
+  <div>
+  <!-- Calendar -->
+  <div>
+
+    <h2> <span ng-hide="onlyEditMode">available times</span>
+    <span ng-hide="currentUser.id != user.id" ng-switch on="editMode" >
+      <span ng-switch-when="true">
+        <button ng-click="saveFreeTime()" class="btn">Save</button>   
+      </span>
+      <span ng-switch-default>
+        <button ng-click="editFreeTimes()" class="btn">Edit</button>
+      </span>
+    </span>
+    </h2>
+      
+    <table class="table table-condensed">
+      <tr ng-repeat="day in freeTimes">
+          <td>{{day.day}}: <input ng-hide="editMode ==false" ng-model="day.isAvailable" type="checkbox"></td>
+        
+        <td><span ng-switch on="day.isAvailable">
+              <span ng-switch-when="true">
+                <span ng-switch on="editMode">
+                  <span ng-switch-when="true">
+                    <input type="text" ng-model="day.start" bs-timepicker style="width: 60px; height: 15px">
+                     -
+                     <input type="text" ng-model="day.end" bs-timepicker style="width: 60px; height: 15px">
+                  </span>
+                  <span ng-switch-default>
+                    <a role="button" ng-click="setRequest()" data-toggle="modal">
+                    {{day.start}} - {{day.end}}
+                    </a>
+                  </span>
+                </span>
+              </span> 
+              <span ng-switch-default>
+                -    
+              </span>
+            </span>  
+        </td>
+        </tr>
+    </table>
+  </div>
+
+  </div>

@@ -1,0 +1,56 @@
+<div class="modal-body">
+<div class="row-fluid">
+	<div class="span1">
+		<img src="https://i.embed.ly/1/display/resize?key=dc65793b3f1249bdb9952a491874d27e&url={{currentUser.img}}&width=200&height=200&grow=true" title="{{user.name}}"/>
+	</div>
+	<div class="span11">
+		<div ng-show="dialogMode == 'skills'">
+			<h3>Please Tell us about yourself and your skills
+				 <textarea ng-model="currentUser.skills" value="" rows="6" class="input-xlarge" placeholder="What skills do you have that you can teach, e.g programming, design, business, law, finance"></textarea>
+				 <div class="alert alert-error" ng-show="showError">
+				 	Please write something about yourself!
+				 </div>
+				</h3>
+			<div class="modal-footer">
+				<button ng-click="saveSkills()" class="btn">Next</button>
+			</div>
+		</div>
+
+		<div ng-show="dialogMode == 'requests'">
+			<h3>What would you like to learn? How can others help you?
+				 <textarea ng-model="requestText" value="" rows="4" class="input-xlarge" placeholder="E.g programming, design, business, law, finance.."></textarea>
+				 <div class="alert alert-error" ng-show="showRequestError">
+				 	Please Let us know how others might help you!
+				 </div>
+			</h3>
+			<div class="modal-footer">
+				<button ng-click="saveRequests()" class="btn">Next</button>
+			</div>
+		</div>
+
+		<div ng-show="dialogMode == 'email'">
+			<h3>Email address:
+				 <input type="text" place-holder="Email" ng-model="currentUser.email">
+				 <div class="alert alert-error" ng-show="showEmailError">
+				 	Please write your email!
+				 </div>
+				</h3>
+			<div class="modal-footer">
+				<button ng-click="saveEmail()" class="btn">Next</button>
+			</div>
+		</div>
+		<div ng-show="dialogMode == 'calendar'">
+			<h3>Please Tell us when are you available
+			</h3>
+			<calendar userId="userId" user="user"></calendar>
+
+			<!-- <div class="modal-footer">
+				<button ng-click="saveCalendar()" class="btn">Save</button>
+			</div>	 -->		
+		</div>
+	</div>
+</div>
+</div>
+
+
+			

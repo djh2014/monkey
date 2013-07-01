@@ -1,57 +1,36 @@
-<!doctype html>
-<html lang="en" >
-<head>
-  <title>Admin</title>
-  <script src="components/angular/angular.js"></script>
-  <script src="js/firebase.js"></script>
-  <script src="components/angular-fire/angularFire.js"></script>
-  <script src="js/controllers/usersCtrl.js"></script>
-</head>
-<body ng-app="mainApp" ng-controller="UserCtrl">
+<div class="container">
+<div class="row">
+<div class="span12 header">
+          
 
-  // TEMP, this will be replace by edit page soon.
-
-
-      Company:   Google
-Skills:  Machine Learning, data visulaization, Node JS, Python, Management, goal oriented thinking, Data Analytics, brainstorming, task prioritization
-Time Available:  5 Badgers
-Each Badger is a 15 minute time block
-      
-  <form>
-    <input ng-model="newUser.id" placeholder="ID">
-    <input ng-model="newUser.name" placeholder="Name">
-    <input ng-model="newUser.email" placeholder="Email">
-    <input ng-model="newUser.company" placeholder="Company">
-    <textarea ng-model="newUser.skills" placeholder="Skills"></textarea>
-    <textarea ng-model="newUser.time" placeholder="Time Available"></textarea>
-    <textarea ng-model="newUser.love" placeholder="What I Love"></textarea>
-    <textarea ng-model="newUser.ideas" placeholder="Ideas"></textarea>
-    <textarea ng-model="newUser.canDo" placeholder="What I can do"></textarea>
-
-    <input ng-model="newUser.img" placeholder="Image">
-    <img src="{{newUser.img}}">
-
-    <input ng-model="newUser.companyImg" placeholder="Company Image">
-    <img src="{{newUser.companyImg}}">
-
-    <button ng-click="saveNewUser(newUser)">Add</button>
-
-  </form>
-
-  <div ng-cloak ng-repeat="user in usersToEdit">
-      ID:{{user.id}}, 
-      Name:{{user.name}}, 
-      Email:{{user.email}},
-      Company:   {{user.company}}
-      Skills:  {{user.skills}}
-      Time Available:  {{user.time}}
-      Love:  {{user.love}}
-      Ideas:  {{user.ideas}}
-      What I can Do:  {{user.canDO}}
-    <img src="{{user.img}}">
-    <img src="{{user.companyImg}}">
-    <hr>
+<div class="row"> 
+  <div class="offset2">
+  <u><h1>Find people that can help you</h1></u>
+  Search: <input  ng-model="global.search" type="text">
   </div>
+</div>
+  
+<div class="row"> 
+<ul class="thumbnails">
+<li  class="span6 clearfix" ng-repeat="user in users | filter:global.search">
+  <div class="thumbnail clearfix">
+    
+    <a href="/#/profile/{{user.id}}">
+    <img src="http://i.embed.ly/1/image/crop?url={{user.img}}&amp;key=92b31102528511e1a2ec4040d3dc5c07&amp;width=200&amp;height=200" alt="?" class="pull-left span2 clearfix" style='margin-right:10px'></a>
 
-</body>
-</html>
+    <div class="caption" class="pull-left">
+      <a href="/#/profile/{{user.id}}" class="btn btn-primary icon  pull-right">Request</a>
+      <h4>      
+      <h3 href="/#/profile/{{user.id}}">{{user.name}}</h3>
+      </h4>
+      <p>{{user.skills}}</p>
+    </div>
+  </div>
+</li>  
+</ul>
+</div>
+
+</div>
+</div>
+</div>
+

@@ -1,58 +1,102 @@
- <script>
-(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
-ga('create', 'UA-41565562-1', 'getbadgers.com');
-ga('send', 'pageview');
-</script>
+    <section id="feature_slider" class="">
+        <!-- 
+            Each slide is composed by <img> and .info
+            - .info's position is customized with css in index.css
+            - each <img> parallax effect is declared by the following params inside its class:
+            
+            example: class="asset left-472 sp600 t120 z3"
+            left-472 means left: -472px from the center
+            sp600 is speed transition
+            t120 is top to 120px
+            z3 is z-index to 3
+            Note: Maintain this order of params
 
- <!-- Main hero unit for a primary marketing message or call to action -->
-<section id="slider">
-    <div id="ei-slider" class="ei-slider">
-        <ul class="ei-slider-large">
-                <a href="#"><img src="demo/slider/large/hero.png" alt="image06"/></a>
-        </ul>
-    </div><!-- ei-slider -->
-</section>
-<div class="row">
-                <div class="span12">
-                    <div class="page-header">
-                        <h2 class="title-center">Our Mission</h2>
-                            <p id="mission">
-                            Our goal is to have people share valuable skills.  To create a platform that would enable anybody to share strenghts.  Do what you are great at and leave your wallet at home.  Through our platform you gain Badgers, which are 15 minute units of time by helping out others.  You can then spend your Badgers on anything that would make you a more productive, happier, and overall better person.  
-                            </p>
-                    </div>
+            For the backgrounds, you can combine from the bgs folder :D
+        -->
+        <article class="slide" id="showcasing" style="background: url('demo/slider/large/updatedhero.png') repeat-x top center;">
+            <img class="asset left-30 sp600 t120 z1" src="img/no-dollar.png" />
+            <div class="info">
+                <h2>Trade skills not dollars</h2>
+            </div>
+        </article>
+        <article class="slide" id="ideas" style="background: url('img/backgrounds/aqua.jpg') repeat-x top center;">
+            <div class="info">
+                <h2 >Earn Badgers, by helping out others.</h2>
+            </div>
+            <img class="asset left-480 sp600 t260 z1" src="http://www.nativeamericananimalmedicine.com/files/QuickSiteImages/badger2.jpg" />
+            <img class="asset left-170 sp600 t213 z2" src="http://icons.iconarchive.com/icons/iconarchive/red-orb-alphabet/256/Math-equal-icon.png" />
+            <img class="asset left60 sp600 t260 z1" src="img/15-minutes.png" />
+        </article>
+       <!--  <article class="slide" id="tour" style="background: url('img/backgrounds/color-splash.jpg') repeat-x top center;">
+            <img class="asset left-472 sp650 t210 z3" src="img/slides/scene3/ipad.png" />
+            <img class="asset left-365 sp600 t270 z4" src="img/slides/scene3/iphone.png" />
+            <img class="asset left-350 sp450 t135 z2" src="img/slides/scene3/desktop.png" />
+            <img class="asset left-185 sp550 t220 z1" src="img/slides/scene3/macbook.png" />
+            <div class="info">
+                <h2>Fully Responsive theme</h2>
+                <a href="features.html">TOUR THE PRODUCT</a>
+            </div>
+        </article>
+        <article class="slide" id="responsive" style="background: url('img/backgrounds/indigo.jpg') repeat-x top center;">
+            <img class="asset left-472 sp600 t120 z3" src="img/slides/scene4/html5.png" />
+            <img class="asset left-190 sp500 t120 z2" src="img/slides/scene4/css3.png" />
+            <div class="info">
+                <h2>
+                    Responsive <strong>HTML5 & CSS3</strong>
+                    Theme
+                </h2>                
+            </div>
+        </article>         -->
+    </section>
+
+    <div id="features">
+        <div class="container">
+            <div class="section_header">
+                <h3>How does it work?</h3>
+            </div> 
+            <div class="row feature">
+                <div class="span6">
+                    <img src="img/no-dollar.png" />
+                </div>
+                <div class="span6 info">
+                    <h2>
+                        <img src="img/features-ico2.png" />
+                         No money
+                    </h2>
+                    <h3>
+                        Do what you are great at and leave your wallet at home.
+                    </h3>
                 </div>
             </div>
-<div class="row">
-    <div class="span12">
-        <div class="page-header">
-            <h2><span class="orange">Featured</span> People</h2>
+            <div class="row feature ss">
+                <div class="span6 info">
+                    <h2>
+                        <img src="img/features-ico2.png" />
+                        Earn Badgers
+                    </h2>
+                    <h3>
+                        Through our platform you earn Badgers, which are 15 minute units of time by helping out others.
+                    </h3>
+                </div>
+                <div class="span6">
+                    <img src="http://www.garythorley.co.uk/images/Badger_x.jpg" class="pull-right" />
+                </div>
+            </div>
+            <div class="row feature ss">
+                <div class="span6">
+                    <img src="http://cdnimg.visualizeus.com/thumbs/b1/54/badger,cartoon,whimsical-b1549b44d108b41c43248e26af20e2e1_h.jpg?ts=93246" />
+                </div>
+                <div class="span6 info">
+                    <h2>
+                        <img src="img/features-ico2.png" />
+                        Spend Badgers
+                    </h2>
+                    <h3>
+                        You can then spend your Badgers on anything that would make you a more productive, happier, and overall better person.
+                    </h3>
+                </div>
+            </div>
         </div>
     </div>
-</div>
-<div class="row">
-    <div class="span12">
-        <ul class="thumbnails">
-            <div ng-repeat="userGroup in userGroupsToView" class="row">
-            <li ng-repeat="user in userGroup" class="span{{user.spanSize}}">
-                <div class="thumbnail">
-                    <a href="#/detail/{{user.id}}" >
-                    <img alt="http://placehold.it/{{user.imgWidth}}x{{user.imgHeight}}"
-                     src="https://i.embed.ly/1/display/resize?key=dc65793b3f1249bdb9952a491874d27e&url={{user.img}}&width={{user.imgWidth}}&height={{user.imgHeight}}&grow=true"></a>
-                    <div class="caption">
-                        <p><span class="name">{{user.name}}<span>:</span></span>{{user.skills}}</p>
-                        <h4>{{user.canDO}}</h4>
-                        <p><span class="rating-static rating-45"></span></p>
-                        <p><a class="btn btn-primary" href="#/detail/{{user.id}}"><i class="icon-shopping-cart icon-white"></i> Request</a> <a class="btn pull-right" href="#/detail/{{user.id}}">more...</a></p>
-                    </div>
-                </div>
-            </li>
-            </div>
-        </ul>
-    </div>
-</div>
- <!-- / main container -->
-
+    <script type="text/javascript" src="js/index-slider.js"></script>   

@@ -1,0 +1,47 @@
+<h3>Chat with {{userToView.name}}</h3>
+
+	<form>
+		<profile user="currentUser"/>
+		<input type="text" ng-model="newItem.text">
+		<input ng-click="addNew()" class="btn btn-success" type="submit" value="Add">
+    <form>
+    <ul>
+    	<li ng-repeat="item in items">
+    		<profile user="item.user"/>:
+					{{item.text}}
+    	</li>
+    </ul>
+<hr/>
+<h3>Start the video hangout with {{userToView.name}} in 3 steps:</h3>
+<ol>
+	<li>
+		Copy {{userToView.name}}'s email: <u>{{userToView.email}}</u>. </li>
+	<li>
+		Start the hangout
+		<a href="https://plus.google.com/hangouts/_?gid=1033174975819" style="text-decoration:none;">
+		  <img src="https://ssl.gstatic.com/s2/oz/images/stars/hangout/1/gplus-hangout-15x79-normal.png"
+		    alt="Start a Hangout"
+		    style="border:0;width:79px;height:15px;"/>
+		</a>
+    </li>
+	<li>
+		Paste the email in the Hangout Add People.	
+	</li>
+<hr/>
+
+<<<<<<< HEAD
+	
+
+=======
+	<form class="well">
+		<profile user="currentUser"/>
+		<input type="text" ng-model="newItem.text">
+		<input ng-click="addNew()" class="btn btn-success" type="submit" value="Post">
+    </form>
+    
+	<div class="well" ng-repeat="item in items">
+		<profile user="item.user"/> <h3>{{item.text}}</h3>
+	</div>
+    
+>>>>>>> d0ccb1176e1e0b8d74a1f489fbd0e0c127b5cf13
+</ol>

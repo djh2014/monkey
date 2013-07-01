@@ -1,158 +1,183 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <title>Badgers</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="">
-    <meta name="author" content="">
+<html>
+<head>
+	<title>Get Badgers</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	
+    <!-- Styles -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/bootstrap-responsive.min.css" rel="stylesheet">
+    <link href="css/bootstrap-overrides.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="css/theme.css">
+    <link rel="stylesheet" href="css/index.css" type="text/css" media="screen" />
 
-    <!-- Le styles -->
-    <link href="css/bootstrap.css" rel="stylesheet">
-    <link href="css/bootstrap-responsive.css" rel="stylesheet">
-    <link href="css/bootstrap-custom.css" rel="stylesheet">
+    <link href='http://fonts.googleapis.com/css?family=Lato:300,400,700,900,300italic,400italic,700italic,900italic' rel='stylesheet' type='text/css'>
 
-    <!--Font-->
-    <link href="css/font-ubuntu.css" rel="stylesheet">
-    <link href='css/font-arimo.css' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="css/lib/animate.css" media="screen, projection">
+    
+    <!-- other pages: -->
+    <link rel="stylesheet" href="css/sign-in.css" type="text/css" media="screen" />
+    <link rel="stylesheet" href="css/sign-up.css" type="text/css" media="screen" />
 
-    <!-- Le fav and touch icons -->
-    <link rel="shortcut icon" href="ico/favicon.ico">
-    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="ico/apple-touch-icon-144-precomposed.png">
-    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="ico/apple-touch-icon-114-precomposed.png">
-    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="ico/apple-touch-icon-72-precomposed.png">
-    <link rel="apple-touch-icon-precomposed" href="ico/apple-touch-icon-57-precomposed.png">
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+</head>
+<body ng-cloak ng-app="mainApp" ng-controller="LoginCtrl" class="{{mainPage && 'pull_top' || ''}}">
+  <span ng-cloak ng-controller="EventCtrl">
+    <div class="navbar navbar-inverse transparent navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </a>
+            <a class="brand" href="index.html">
+                <strong>Get Badgers</strong>
+            </a>
+            <div class="nav-collapse collapse">
+                <ul class="nav pull-right">
+                    <li><a href="/#/stream" ng-show="currentUser">News feed</a></li>
+                    <li><a href="/#/users" ng-show="currentUser">Users</a></li>
 
-    <!--    Slider-->
-    <link rel="stylesheet" type="text/css" href="css/slider.css" />
+                    <li><a href="/#/messages/{{currentUser.id}}" class="{{(activeNotification.length > 0) && 'btn btn-danger' || ''}}" ng-show="currentUser">Notifications</a></li>
+                    <li><h2><a href="/#/sign-up" ng-hide="currentUser">Sign up</a></h2></li>
+                    <li><a href=""></a></li>
+                    <li><h2><a href="/#/sign-in" ng-hide="currentUser">Sign in</a></h2></li>   
+                    <li><profile user="currentUser" ng-show="currentUser"/></li> 
+                    <li><a ng-click="logOut()" ng-show="currentUser">logout</a></li>
+                </ul>
+            </div>
+        </div>
+      </div>
+    </div>
 
-    <!-- super fish menu -->
-    <link rel="stylesheet" type="text/css" href="css/superfish.css" media="screen">
+    <div>
+        <div class="">
+            <div class="">
+                <div class="">
+                    <div ng-view></div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-  <script src="components/angular/angular.js"></script>
-  <script src="js/firebase.js"></script>
-  <script src="components/angular-fire/angularFire.js"></script>
-  <script type='text/javascript'
-        src='https://cdn.firebase.com/v0/firebase-auth-client.js'>
-  </script>
-  <script src="js/controllers/ctrls.js"></script>
 
-  </head>
-
-  <body ng-app="mainApp" ng-controller="LoginCtrl">
-
-    <section id="main" class="container">
-        <div class="row" style="margin-bottom: 20px">
-                <div class="span6"><a href='/'><img src="img/badgerlogo.png" alt="" /></a></div>
-                <div class="span6">
-                    <ul class="socialize pull-right">
-                        <li>
-                            <a href="#" class="flickr"><span>Flickr</span></a>
-                        </li>
-                        <li>
-                            <a href="#" class="rss"><span>Rss Feed</span></a>
-                        </li>
-                        <li>
-                            <a href="#" class="twitter"><span>Twitter</span></a>
-                        </li>
-                        <li>
-                            <a href="#" class="facebook"><span>Facebook</span></a>
-                        </li>
-
+    <!-- starts footer -->
+    <footer id="footer">
+        <div class="container">
+            <div class="row info">
+                <div class="span6 residence">
+                    <ul>
+                        <li>101 10 Street. San Francisco, California.</li>
+                        <li>United States, 94103.</li>
+                    </ul>
+                </div>
+                <div class="span5 touch">
+                    <ul>
+                        <li><strong>P.</strong> 1 415 274 2933</li>
+                        <li><strong></strong><a href="#"> getbadgers.com</a></li>
                     </ul>
                 </div>
             </div>
-            <div class="navbar">
-                <div class="navbar-inner">
-                    <div class="container">
-                        <a data-target=".nav-collapse" data-toggle="collapse" class="btn btn-navbar">
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
-                        </a>
-
-                        <div class="nav-collapse">
-
-                            <form class="navbar-search pull-left" action="detail.html">
-                                <input type="text" placeholder="Search" class="search-query span2">
-                                <button type="submit" class="btn btn-inverse"><i class="icon-search icon-white"></i></button>
-                            </form>
-                          <ul class="nav pull-right">
-                                <!--<li class="main-menu-element"><a href="#"><i class="icon-shopping-cart"></i> Your Cart</a></li>-->
-                                <li class="divider-vertical"></li>
-                                <li class="dropdown main-menu-element">
-                                     <div ng-switch on="currentUser != null" >
-                                        <span ng-switch-when="true">
-                                            <img src="{{currentUser.img}}"/>
-                                            <a href="#/detail/{{currentUser.id}}">{{currentUser.name}}</a> (<a ng-click="logOut()">logout</a>)
-                                        </span>
-                                        <span ng-switch-default>
-                                            <a ng-click="facebookLogin()"><i class="icon-user"></i> Sign In</a>
-                                        </span>
-                                    </div>
-                                </li>
-                            </ul>
-
-                        </div><!-- /.nav-collapse -->
-                    </div>
-                </div><!-- /navbar-inner -->
-            </div>
-            <div ng-view>
-
-            </div>
-
-
-
-            <div class="pre-footer"></div>
-            <footer>
-                <div class="container">
-                    <div class="row">
-                        <div class="span6">
-                            <div class="page-header">
-                                <h2>About Us</h2>
-                            </div>
-                            <p>Why not leverage your skills and strenghts in order to imrove areas you are weak in? What if you could help others with your talent but get something in return.  What if you could eliminate the need for cash and instead trade talents? However, instead of a direct trade between two people, you accumulate virtual currency (Badgers) by helping others and you can spend that currency (Badgers) anyway you want.  No matching skill sets or give and return.  The currency is based on time and the more time you put in, the more you get out.</p>
-                            <address>
-                                <strong>FuckingBOLD, Inc.</strong><br>
-                                200 12th Street<br>
-                                San Francisco, CA 94103<br>
-                                <abbr title="Phone">P:</abbr> (631) 921-7522
-                            </address>
-                            <address>
-                                <strong>danny@getbadgers.com</strong><br>
-                                <a href="mailto:#">danny@getbadgers.com</a>
-                            </address>
-                        </div>                        
-                </div>
-                <div id="copyright">
-                    <div class="container">
-                        <div class="row">
-                            <div class="span12">
-                                <span class="pull-right">Copyright GetBadgers! &copy; 2013</span>
-                            </div>
+            <div class="row credits">
+                <div class="span12">
+                    <div class="row copyright">
+                        <div class="span12">
+                            © 2013 GetBadgers Inc. All rights reserved.
                         </div>
                     </div>
-                </div>
-            </footer>
+                </div>            
+            </div>
+        </div>
+    </footer>
 
-    </section>
+  <!-- OPEN TOK -->
+  
+  <script src="http://static.opentok.com/webrtc/v2.0/js/TB.min.js" type="text/javascript" charset="utf-8"></script>
+  
+  <!-- The main frameworks -->
+  <script type="text/javascript" src="components/jquery/jquery.js"></script>
+  <script type="text/javascript" src="components/jquery-ui/ui/jquery-ui.js"></script>
+  <script src="js/bootstrap.min.js"></script>
+  <script src="components/angular/angular.js"></script>
+  <script src="js/firebase.js"></script>
+  <script src="components/moment/moment.js"></script>
+  
 
-    <!-- Le javascript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script src="js/jquery.js"></script>
+  <script src="https://cdn.firebase.com/v0/firebase-auth-client.js"></script>
+  
+  
+  <!-- angular libs -->
+  <script src="components/angular-fire/angularFire.js"></script>
+  <script src="components/angular-cookies/angular-cookies.js"></script>
+
+  <!-- angular boostrap -->
+  <script src="components/angular-ui-bootstrap/src/transition/transition.js"></script>
+  <script src="components/angular-ui-bootstrap/src/dialog/dialog.js"></script>
+  <script src="components/fullcalendar/fullcalendar.js"></script>
+  <script src="components/fullcalendar/gcal.js"></script>
+  <script src="components/angular-ui-calendar/src/calendar.js"></script>
+
+  <script src="components/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+  <script src="http://mgcrea.github.io/angular-strap/vendor/bootstrap-timepicker.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/angular-strap/0.7.2/angular-strap.min.js"></script>
+
+  <!-- More libs -->
+  <script src="components/timezone-js/src/date.js"></script>
+  <script>
+    timezoneJS.timezone.zoneFileBasePath = '/tz';
+    timezoneJS.timezone.init();
+  </script>
+   <script type="application/javascript">
+      function getip(json) {
+        globalIp = json.ip; // alerts the ip address
+      }
+    </script>
+  <script type="application/javascript" src="http://jsonip.appspot.com/?callback=getip"> </script>
+  <script src="lib/browserDetect.js"></script>
+  <!-- 
+  <script src="https://raw.github.com/nene/jintervals/master/jintervals.js"></script>
+   -->
+  <script src="lib/jquery.stopwatch.js"></script>
+
+  <!--Application-->
+  <script src="js/utils.js"></script>
+  <script src="js/controllers/ctrls.js"></script>
+  <script src="js/directives/directives.js"></script>
+  <script src="js/services/services.js"></script>
+ 
+  <!-- Google Analytics -->
+   <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-41565562-1', 'getbadgers.com');
+  ga('send', 'pageview');
+  </script>
+  <!-- Mixpanel -->
+  <script type="text/javascript">(function(e,b){if(!b.__SV){var a,f,i,g;window.mixpanel=b;a=e.createElement("script");a.type="text/javascript";a.async=!0;a.src=("https:"===e.location.protocol?"https:":"http:")+'//cdn.mxpnl.com/libs/mixpanel-2.2.min.js';f=e.getElementsByTagName("script")[0];f.parentNode.insertBefore(a,f);b._i=[];b.init=function(a,e,d){function f(b,h){var a=h.split(".");2==a.length&&(b=b[a[0]],h=a[1]);b[h]=function(){b.push([h].concat(Array.prototype.slice.call(arguments,0)))}}var c=b;"undefined"!==
+  typeof d?c=b[d]=[]:d="mixpanel";c.people=c.people||[];c.toString=function(b){var a="mixpanel";"mixpanel"!==d&&(a+="."+d);b||(a+=" (stub)");return a};c.people.toString=function(){return c.toString(1)+".people (stub)"};i="disable track track_pageview track_links track_forms register register_once alias unregister identify name_tag set_config people.set people.set_once people.increment people.append people.track_charge people.clear_charges people.delete_user".split(" ");for(g=0;g<i.length;g++)f(c,i[g]);
+  b._i.push([a,e,d])};b.__SV=1.2}})(document,window.mixpanel||[]);
+  mixpanel.init("6a5001f8b2f1c995aec3591c49e80377");
+  </script>
+  <script type="text/javascript" src="https://www.proxino.com/p.js"></script>
+  <script type="text/javascript">
+    Proxino.key = "LdQJ6sBPfHjjWpkoj-237Q";
+    Proxino.track_errors();
+  </script>
+
+
+    <!-- Scripts -->
+    <script src="http://code.jquery.com/jquery-latest.js"></script>
     <script src="js/bootstrap.min.js"></script>
+    <script src="js/theme.js"></script>
 
-    <!--slider-->
-    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js"></script>
-    <script type="text/javascript" src="js/jquery.eislideshow.js"></script>
-    <script type="text/javascript" src="js/jquery.easing.1.3.js"></script>
-
-    <!--SuperFish menu-->
-    <script type="text/javascript" src="js/superfish.js"></script>
-
-    <!--Application-->
-    <script type="text/javascript" src="js/application.js"></script>
-
-  </body>
+    <script type="text/javascript" src="js/index-slider.js"></script>   
+</span>
+</body>
 </html>

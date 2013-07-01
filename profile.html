@@ -1,0 +1,54 @@
+<div class="container">
+<div class="row">
+<div class="span12 header">
+
+
+
+
+
+<div class="row-fluid">
+<div class="offset2 span3">
+     <div class="thumbnail clearfix">
+        <a href="/#/profile/{{user.id}}">
+        <img src="http://i.embed.ly/1/image/crop?url={{user.img}}&amp;key=92b31102528511e1a2ec4040d3dc5c07&amp;width=200&amp;height=200" alt="?" class="pull-left span2 clearfix" style='margin-right:10px'></a>
+        <div class="caption" class="pull-left">
+          <h4>      
+          <h3 href="/#/profile/{{user.id}}" >{{user.name}}</h3>
+          </h4>
+          
+          <p>Skills: 
+            <span ng-switch on="editSkillsMode">
+              <span ng-switch-when="true">
+                <textarea ng-model="user.skills" value="" rows="6" class="input-xlarge" placeholder="What skills do you have that you can teach, e.g programming, design, business, law, finance"></textarea>
+                <span>
+                  <button ng-click="saveSkills()" class="btn btn-primary">Save</button>
+                </span>
+              </span> 
+              <span ng-switch-default >
+                <blockquote>{{user.skills}}</blockquote>
+                <span ng-switch on="user.id == currentUser.id">
+                  <span ng-switch-when="true"><a ng-click="editSkills()" class="btn">Edit</a></span>
+                  <span ng-switch-default>
+                      <a role="button" ng-click="setRequest()" data-toggle="modal" class="btn btn-info"> Send Meeting Request</a>
+                  </span>
+                </span>
+              </span>
+            </span>
+          </p>
+
+        </div>
+    </div>
+      <div id="number_badgers">
+        <h4>Number of Badgers</h4>
+        <img ng-repeat="badger in user.badgersArray" src="./img/numberbadgers.png">
+      </div> 
+</div>
+<div class="span4">
+   <calendar userId="userId" user="user"></calendar>
+</div>
+</div>
+
+</div>
+</div>
+</div>
+

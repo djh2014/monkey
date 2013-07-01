@@ -1,0 +1,40 @@
+<div class="row-fluid"> 
+  <div class="offset2 span6">
+  <u><h3>Messages</h3></u>
+
+<div ng-repeat="meeting in meetings|orderBy:[activeFirst,'day']" class="row-fluid well {{(meeting.activeForUserId == currentUser.id) && 'alert-error' || ''}}" >
+
+	<div class="span3">
+	<profile user="meeting.teacher"/>
+	<profile user="meeting.student"/>
+	</div>
+	<div class="span8">
+	<br/>
+	<h3>{{meeting.speaker.name}} :<blockquote ng-show="meeting.text"> {{meeting.text}}</blockquote></h3>
+    <p ng-show="meeting.day">Date: {{meeting.day | date:'fullDate'}}</p>
+    <p ng-show="meeting.time">Time: {{meeting.time}}</p>
+	
+    status:
+	<span ng-switch on="meeting.status" >
+    <span ng-switch-when="APPROVED">Approve!</span>
+        <span ng-switch-when="REJECT">Rejected</span>
+        <span ng-switch-when="DONE">Meeting is finish :)</span>
+        <!-- Not Approved yet: -->
+        <span ng-switch-default>
+        	<span ng-switch on="meeting.teacher.id == currentUser.id" >
+        	  <span ng-switch-when="true">
+        	  	<br/>
+        	   <button ng-click="approve(meeting)" >Click To Approve</button>
+				<button ng-click="reject(meeting)" >Click To REJECT</button>
+        	  </span>
+        	  <span ng-switch-default> Waiting for {{meeting.teacher.name}} to apporved.</span>
+        	</span>
+        </span>
+    </span>
+
+    <br/>
+    <a href="/#/meeting/{{meeting.teacher.id}}/{{meeting.student.id}}">Go To Video Meeting Page(Chorme only)</a>
+	</div>
+</div>
+</div>
+</div>

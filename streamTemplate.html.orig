@@ -1,0 +1,24 @@
+<<<<<<< HEAD
+<div>
+	<form class="well">
+		<!-- TODO: I wonder why it is not working: -->
+		<profile user="currentUser"/>
+		<h4 class="status">Requests</h4>
+		<input size="350" type="text" ng-model="newItem.text" placeholder="Request What you would love to learn or need help in" style="width: 800px;"><br/><br/>
+		<input ng-click="addNew()" class="btn btn-primary" type="submit" value="Add">
+	</form>
+	<!-- <ul ng-animate="'slide'"> -->
+		<div ng-animate="'slide'" ng-cloak ng-repeat="item in items">
+			<div class="row-fluid well">
+				<span class="row">
+				<profile user="item.user"/><h3>{{item.text}}</h3>
+				</span>
+				<span class="row">
+					<input class="btn-min btn btn-success" ng-click="accept(item)" type="text" value="Request"/>
+				</span>
+			</div>
+		</div>
+	<!-- </ul> -->
+</div>
+=======
+>>>>>>> b4289d35ab030b8f6d7758fb3b0dcb8f1fc8d0ca

@@ -1,13 +1,157 @@
 body {
-    padding-top: 40px;
-    padding-bottom: 40px;
-    background: #1F1F1F url(../img/pattern.png) repeat top left;
+    /*padding-top: 40px;
+    padding-bottom: 40px;*/
+    background: white;
     color: #999999;
     font-family: 'Arimo', sans-serif;
+    margin-bottom: 0px;
 }
+
 /**
  *  Override some bootstrap style
  **/
+#logo-left {
+    margin-left: 4%;
+}
+ .top-header {
+    background: white;
+    border-bottom:2px solid #333;
+    padding-top: 1%;
+    padding-left: 2%;
+    margin-bottom: 0px;
+ }
+.inner-nav {
+    background: #333;
+    margin-bottom: 0px;
+    padding-top:1%;
+ }
+ #nav-search {
+    margin:0px;
+ }
+ .nav-left {
+    padding-left: 20px;
+    padding-right: 20px;
+ }
+.nav-right {
+
+ }
+.inner-header {
+    list-style-type: none;
+    display: block;
+}
+ .site-description {
+    position: absolute;
+    padding-top:10%;
+    padding-left: 15%;
+    float:left;
+ }
+
+ #innernav-search {
+    height:25px;
+    width:300px;
+ }
+ .money-text {
+    display: inline-block;
+    position: relative;
+    color: white;
+    font-size: 60px;
+ }
+
+ .money-description {
+    display: inline-block;
+    position: relative;
+    color:white;
+    font-size: 25px;
+    margin-top: 2px;
+ }
+ .search-bar {
+    position: relative;
+ }
+ #search-height {
+    height:25px;
+ }
+ #icon-box {
+    height:34px;
+ }
+ .register {
+    display: block;
+    text-decoration: none;
+    float:right;
+    list-style-type:none;
+    vertical-align: middle;
+    padding-top:35px;
+ }
+ .profile-pic {
+    background: red;
+    border:1px solid #333;
+ }
+
+.first-orange {
+    background-image: linear-gradient(to bottom, #ee5f5b, #bd362f);
+    background: -moz-linear-gradient(top,  #ee5f5b,  #bd362f);
+    background: -webkit-gradient(linear, left top, left bottom, from(#ee5f5b), to(#bd362f));
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#EE5F5B, endColorstr=#bd362f);
+    padding-right: 0px;
+    padding-left: 0px;
+}
+.first-name {
+    position: absolute;
+    margin-top: 10px;
+    padding-top: 20px;
+    padding-left: 10px;
+    color: white;
+    text-decoration: none;
+    font-family: Helvetica, Arial, sans-serif;
+    font-weight: 600;
+}
+.money-shot {
+    position: absolute;
+    display: block;
+    margin-top: -40px;
+    padding-left: 10px;
+    color: white;
+    text-decoration: none;
+    font-family:Helvetica, Arial, sans-serif;
+    font-weight:600;
+}
+.stars {
+    display: block;
+    position: absolute;
+    margin-top: -20px;
+    padding-left:10px;
+}
+.home-button {
+    margin-right:10px;
+    font-weight: bolder;
+}
+.white {
+    color:white;
+}
+#ourmission {
+    margin-top: 20px;
+}
+#number_badgers {
+    padding-bottom: 20px;
+}
+.large {
+    width: 360px;
+    height: 251px;
+    border:2px solid #333;
+    display:block;
+}
+.small {
+    width:360px;
+    height: 120px;
+    border:2px solid #333;
+    display: block;
+}
+.status {
+    font-weight: bolder;
+    color:black;
+}
+#no-margin {
+    margin-left: 0px;
+}
 h3 {
     font-size: 18px;
     line-height: 27px;
@@ -27,6 +171,47 @@ h3 small {
 
 div.page-header h3 small{
     font-size: 11px;
+}
+/**
+*Request Page 
+**/
+.request-container {
+    margin-left: auto;
+    margin-right: auto;
+}
+.message-box {
+    width: 350px;
+    display: block;
+    text-align: left;
+    border:1px solid #333;
+    padding:10px;
+    border-top-left-radius:4px;
+    border-top-right-radius:4px;
+    border-bottom-left-radius:4px;
+    border-bottom-right-radius: 4px;
+    background: whitesmoke;
+    margin-bottom: 20px;
+    margin-left:auto;
+    margin-right:auto;
+}
+#apply {
+    padding-left: 30px;
+}
+.description {
+    color:black;
+    font-weight:400;
+    /*float:left;*/
+}
+.date {
+    color: #333;
+    font-weight:400;
+}
+.date-title {
+    font-weight:800;
+    color: black;
+}
+.yes {
+    padding:5px;
 }
 /**
  * Social bar
@@ -108,9 +293,13 @@ ul.socialize li a.youtube{
 #mission {
     font-family: Helvetica, Arial, sans-serif;
     font-weight:400;
-    font-size: 16px;
+    font-size: 22px;
+    line-height: 2;
     color:black;
     text-align: center;
+}
+#form-one {
+    padding-top:20px;
 }
 
 /**
@@ -206,12 +395,12 @@ div.product-filter select{
  **/
 section#main{
     background-color:#FFFFFF;
-    padding: 20px 20px 0px 20px;
-    /*border-radius: 5px;*/
+    /*padding: 10px 20px 0px 20px;*/
+    border-radius: 5px;
 }
 
 section#main h2{
-    font-family: 'Ubuntu', sans-serif;
+    font-family: Arimo, sans-serif;
 }
 
 section#main h2 span.orange,
@@ -270,7 +459,8 @@ section#main .navbar-search ul#search-in-content label{
     width: 80px;    
 }
 
-#reviews_chart .top-row {
+#reviews_chart .top-
+ {
     padding-bottom: 2px;
 }
 #reviews_chart .bar-cell {
@@ -678,7 +868,7 @@ div.red .action a{
 .pre-footer{
     background: url("../img/back_stitch_dark.png") repeat-x scroll left bottom #252525;
     height: 65px;
-    margin: 0 -20px 0 -20px;
+    clear:both;
 }
 
 /** footer **/
@@ -686,13 +876,12 @@ footer{
     background: url("../img/shadow_big.png") no-repeat scroll center top #252525;
     padding-top: 20px;
     padding-bottom: 4px;
-    margin: 0 -20px 0 -20px;
 }
 
 footer .page-header{
     margin: 5px 0px 18px 0px;
     padding-bottom: 8px;
-    border-bottom: 1px solid #404040;
+    /*border-bottom: 1px solid #404040;*/
 }
 footer .page-header h2{
     font-family: 'Ubuntu', sans-serif;
@@ -721,4 +910,17 @@ footer div#copyright{
     padding: 10px 20px; 
     border-radius: 0px 0px 5px 5px; 
     background-color: rgb(255, 255, 255);
+}
+.no-left {
+    margin-left:0px;
+    margin-bottom:0px;
+}
+.column-left {
+    height:100%;
+    width:60px;
+    position:absolute;
+    left:0;
+    margin-left: 0px;
+    clear:both;
+    background: #08C;
 }

@@ -1,0 +1,53 @@
+ <script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-41565562-1', 'getbadgers.com');
+ga('send', 'pageview');
+</script>
+
+ <!-- Main hero unit for a primary marketing message or call to action -->
+<section id="slider">
+    <div id="ei-slider" class="ei-slider">
+        <ul class="ei-slider-large">
+            <span class="site-description">
+                <h1 class="money-text">Trade skills not dollars</h1></br>
+                <h4 class="money-description">Our alternative economy</h4>
+                
+                <form class="search-bar" >
+                    <input type="text" ng-model="global.search" placeholder="Search Talent" class="search-query span6" id="search-height">
+                    <a href="/#/users" class="btn btn-inverse"><i class="icon-search icon-white"></i></a>
+                </form>
+
+
+<!-- 
+                <form ng-controller="SearchCtrl"  >
+                    <input type="text" ng-model="query.text" placeholder="Search Talent" class="search-query span6" id="search-height">
+                    <button ng-click="search()" class="btn btn-inverse" id="icon-box"><i class="icon-search icon-white"></i></button>
+                </form> -->
+            </span>
+                <a href="/"><img src="https://i.embed.ly/1/display/resize?key=dc65793b3f1249bdb9952a491874d27e&url=http://getbadgers.com/demo/slider/large/updatedhero.png" alt="image06"/></a>
+        </ul>
+    </div><!-- ei-slider -->
+<!--<hr/>-->
+    <div>
+        <div class="span12 first-orange" id="no-margin">
+            <div class="page-header">
+                <h2 class="title-center"><span class="white">Our</span> Mission</h2>
+                    <p id="mission">
+                    Do what you are great at and leave your wallet at home.  Through our platform you earn Badgers, which are 15 minute units of time by helping out others.  You can then spend your Badgers on anything that would make you a more productive, happier, and overall better person.  Apply for an invite below.
+                    </p>
+                    <div class="row">
+                        <div class="span7 offset5" id="apply">
+                            <button class="btn btn-large btn-danger home-button"><a ng-click="openLoginDialog()"> Register</a>
+                            </button>
+                        </div>
+                    </div>
+            </div>
+        </div>
+    </div>
+</section>
+ <!-- / main container -->
+
